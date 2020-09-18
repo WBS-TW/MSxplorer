@@ -1,11 +1,22 @@
-
-# plot function to extract EIC from MS1 or MS2
-plotEIC <- function(filepath, featlist, err = 0.005, mserr = 0.005) {
-  data_prof <- readMSData(filepath, mode = "onDisk", centroided = TRUE)
-  hd <- fData(data_prof)
+ 
+#' Plot extracted ion chromatograms
+#'
+#'Plot the EIC from MS1 or MS2 from raw data using MSnbase
+#' @param filepath Path to the raw data file(s)
+#' @param featlist A data frame containing the columns: name, mz, ms_level
+#' @param diff A single value specifying the mass error
+#' @param mserr The mass error in Dalton
+#'
+#' @return Overlayed extracted chromatograms
+#' @export
+#'
+#' @examples
+plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
+  data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
+  hd <- MSnbase::fData(data_prof)
   ms1 <- which(hd$msLevel == 1)
   ms2 <- which(hd$msLevel == 2)
-  err <- err
+  diff <- diff
   mserr <- mserr
   
   rtselms1 <- hd$retentionTime[ms1]
@@ -13,22 +24,22 @@ plotEIC <- function(filepath, featlist, err = 0.005, mserr = 0.005) {
   
   M_plot <- vector("list", nrow(featlist))
   
-  p <- plot_ly() 
+  p <- plotly::plot_ly() 
   
   for (i in 1:nrow(featlist)) {
-    M <- MSmap(data_prof, 
+    M <- MSnbase::MSmap(data_prof, 
                scans = if(featlist$ms_level[i] == "ms1") {ms1[rtselms1]} 
                else if(featlist$ms_level[i] == "ms2") {ms2[rtselms2]}, 
-               lowMz = featlist$mz[i]-err, 
-               highMz = featlist$mz[i]+err, 
+               lowMz = featlist$mz[i]-diff, 
+               highMz = featlist$mz[i]+diff, 
                resMz = mserr, 
                hd = hd, 
                zeroIsNA = FALSE)
     M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
       replace(., is.na(.), 0) %>%
-      mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
-    p <- add_lines(p, x = M_plot[[i]][["rt"]], y = M_plot[[i]][["sum_int"]], name = paste0(featlist$mz[i], "_", featlist$ms_level[i])
-    ) # do not use $ dollarsign for subsetting list
+      dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
+    p <- plotly::add_lines(p, x = M_plot[[i]][["rt"]], y = M_plot[[i]][["sum_int"]], name = paste0(featlist$mz[i], "_", featlist$ms_level[i])
+    ) # do not use $ dollar sign for subsetting list
   }
-  p %>% config(showTips = FALSE)
+  p %>% plotly::config(showTips = FALSE)
 }
