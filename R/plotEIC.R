@@ -19,8 +19,8 @@ plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
   diff <- diff
   mserr <- mserr
   
-  rtselms1 <- hd$retentionTime[ms1]
-  rtselms2 <- hd$retentionTime[ms2]
+  rtselms1 <- hd$retentionTime[ms1] > hd$retentionTime[ms1][1] & hd$retentionTime[ms1] < tail(hd$retentionTime[ms1], n=1)
+  rtselms2 <- hd$retentionTime[ms2] > hd$retentionTime[ms2][1] & hd$retentionTime[ms2] < tail(hd$retentionTime[ms2], n=1)
   
   M_plot <- vector("list", nrow(featlist))
   
@@ -41,5 +41,6 @@ plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
     p <- plotly::add_lines(p, x = M_plot[[i]][["rt"]], y = M_plot[[i]][["sum_int"]], name = paste0(featlist$mz[i], "_", featlist$ms_level[i])
     ) # do not use $ dollar sign for subsetting list
   }
-  p %>% plotly::config(showTips = FALSE)
+  p %>% plotly::config(showTips = FALSE) 
+  #%>% plotly::layout(title = grepl(filepath, ))
 }
