@@ -16,9 +16,7 @@ plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
   hd <- MSnbase::fData(data_prof)
   ms1 <- which(hd$msLevel == 1)
   ms2 <- which(hd$msLevel == 2)
-  diff <- diff
-  mserr <- mserr
-  
+
   rtselms1 <- hd$retentionTime[ms1] > hd$retentionTime[ms1][1] & hd$retentionTime[ms1] < tail(hd$retentionTime[ms1], n=1)
   rtselms2 <- hd$retentionTime[ms2] > hd$retentionTime[ms2][1] & hd$retentionTime[ms2] < tail(hd$retentionTime[ms2], n=1)
   
