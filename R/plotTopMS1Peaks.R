@@ -16,13 +16,11 @@
 #' plotTopMS1Peaks(filepath = fl, flagfragments = PFSA_frags, numTopIons = 3)
 plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.5) {
   
-  ui <- miniPage(
-    gadgetTitleBar("Select retention time of MS2 fragment ions"),
-    miniContentPanel(
-      # The brush="brush" argument means we can listen for
-      # brush events on the plot using input$brush.
-      plotlyOutput("plot1", height = "40%"),
-      plotlyOutput("plot2", height = "60%")
+  ui <- miniUI::miniPage(
+    miniUI::gadgetTitleBar("Select retention time of MS2 fragment ions"),
+    miniUI::miniContentPanel(
+      plotly::plotlyOutput("plot1", height = "40%"),
+      plotly::plotlyOutput("plot2", height = "60%")
     )
   )
   
@@ -30,29 +28,29 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
     
     data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
     
-    output$plot1 <- renderPlotly({
+    output$plot1 <- plotly::renderPlotly({
       MSXploreR::plotEIC(filepath = filepath, featlist = flagfragments, diff = diff, mserr = mserr)
     })  
     
     rtr <- NULL
 
    # Output the clicked point to be input in next plot
-    observeEvent(event_data("plotly_click"), {
-      rtr <- as.data.frame(event_data("plotly_click"))[[3]]
+    shiny::observeEvent(plotly::event_data("plotly_click"), {
+      rtr <- as.data.frame(plotly::event_data("plotly_click"))[[3]]
       rtr <- c(round((rtr - rtrange), 1), round((rtr+ rtrange), 1))
       rtr <<- rtr
-      #print(rtr)
+      print(rtr)
       
     })
     
 
     # Plot new EIC of MS1 from the clicked point, when we press "done"
-    observeEvent(input$done, {
+    shiny::observeEvent(input$done, {
       MS1 <- data_prof %>%
         MSnbase::filterRt(rtr) %>%
         MSnbase::filterMsLevel(1)
       
-      print(MS1)
+      #print(MS1)
      
       
       MS1_spec <- data.frame(mz = MS1[[1]]@mz, intensity = MS1[[1]]@intensity) %>%
@@ -66,7 +64,7 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
 
       featlist <- featlist %>% dplyr::bind_rows(flagfragments)
       
-      output$plot2 <- renderPlotly({
+      output$plot2 <- plotly::renderPlotly({
         MSXploreR::plotEIC(filepath = fl, featlist = featlist, diff = diff, mserr = diff)
       })
       
@@ -75,6 +73,6 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
   }
   
   #runGadget(ui, server, viewer = dialogViewer("MS2 EIC", width = 700, height = 700))
-  runGadget(ui, server, viewer = browserViewer())
+  shiny::runGadget(ui, server, viewer = shiny::browserViewer())
 }
 

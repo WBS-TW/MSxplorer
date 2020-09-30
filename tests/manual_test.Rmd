@@ -1,0 +1,16 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(MSXploreR)
+fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
+PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
+plotTopMS1Peaks(filepath = fl, flagfragments = PFSA_frags, numTopIons = 3)
+
+
+```
+
