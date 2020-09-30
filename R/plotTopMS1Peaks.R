@@ -14,7 +14,7 @@
 #' fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
 #' PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
 #' plotTopMS1Peaks(filepath = fl, flagfragments = PFSA_frags, numTopIons = 3)
-plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.5) {
+plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.3) {
   
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Done"),

@@ -10,7 +10,7 @@ plotTopMS1Peaks(
   numTopIons = 10,
   diff = 0.01,
   mserr = 0.01,
-  rtrange = 0.5
+  rtrange = 0.3
 )
 }
 \arguments{

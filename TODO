@@ -1,0 +1,6 @@
+TODO
+
+- Add another button to send selected fragments to Metfrag OR copy the fragments in format to directly copy to Metfrag.
+- Find way to extract MS1 peaks in spectrum and calculate Pearson correlation or cosine score with MS2 diagnostic ions within a selected time window. 
+Only top "n"" hits will be shown.
+
