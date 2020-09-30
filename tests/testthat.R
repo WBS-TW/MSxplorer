@@ -1,4 +1,4 @@
 library(testthat)
-library(MSXploR)
+library(MSXploreR)
 
-test_check("MSXploR")
+test_check("MSXploreR")

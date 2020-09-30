@@ -1,6 +1,6 @@
 Package: MSXploreR
 Type: Package
-Title: Explore raw MSn data
+Title: Interactively explore raw MSn data
 Version: 0.1.0
 Author: Thanh Wang
 Maintainer: Thanh Wang <thanh.wang@oru.se>
@@ -12,8 +12,11 @@ LazyData: true
 RoxygenNote: 7.1.1
 Suggests: 
     testthat
+biocViews:
 Imports: 
     MSnbase,
     plotly,
     dplyr,
-    magrittr
+    magrittr,
+    shiny,
+    miniUI

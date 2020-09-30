@@ -4,13 +4,17 @@
 #'Plot the EIC from MS1 or MS2 from raw data using MSnbase
 #' @param filepath Path to the raw data file(s)
 #' @param featlist A data frame containing the columns: name, mz, ms_level
-#' @param diff A single value specifying the mass error
+#' @param diff A single value specifying the mass range from the specified m/z values in featlist (mz-diff, mz+diff)
 #' @param mserr The mass error in Dalton
 #'
 #' @return Overlayed extracted chromatograms
 #' @export
 #'
 #' @examples
+#' fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
+#' featlist <- readxl::read_xlsx("D:\\R_projects\\MSXploreR\\tests\\featlist.xlsx", sheet = "PFSAs")
+#' plotEIC(filepath = filepath, featlist = featlist)
+
 plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
   data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
   hd <- MSnbase::fData(data_prof)
