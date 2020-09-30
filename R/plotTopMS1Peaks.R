@@ -21,6 +21,9 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
     miniUI::miniContentPanel(
       plotly::plotlyOutput("plot1", height = "40%"),
       plotly::plotlyOutput("plot2", height = "60%")
+    ),
+    miniUI::miniButtonBlock(
+      shiny::actionButton("export", "Export selection")
     )
   )
   
