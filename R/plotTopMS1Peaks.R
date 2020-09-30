@@ -17,7 +17,7 @@
 plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.5) {
   
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Select retention time of MS2 fragment ions"),
+    miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Done"),
     miniUI::miniContentPanel(
       plotly::plotlyOutput("plot1", height = "40%"),
       plotly::plotlyOutput("plot2", height = "60%")
