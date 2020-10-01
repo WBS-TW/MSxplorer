@@ -19,8 +19,14 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Get MS1"),
     miniUI::miniContentPanel(
-      plotly::plotlyOutput("plot1", height = "40%"), 
-      plotly::plotlyOutput("plot2", height = "60%")
+      fillRow(flex = c(NA,1),
+              fillCol(width = "100px",
+                      selectInput("degree", "Polynomial degree", c(1, 2, 3, 4))),
+              fillCol(flex = c(1),
+                      plotly::plotlyOutput("plot1"), 
+                      plotly::plotlyOutput("plot2")
+                      )
+              )
       ),
     miniUI::miniButtonBlock(
       shiny::actionButton("getMS1", "Get MS1"),
