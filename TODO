@@ -5,3 +5,22 @@ TODO
 Only top "n"" hits will be shown.
 - Sync the two plots at x-axis (same retention time scale during zooming). Put to sync buttons on left panel to sync either first or second plots.
 
+ MS1 <- data_prof %>%
+        MSnbase::filterRt(rtr) %>%
+        MSnbase::filterMsLevel(1)
+      
+      
+      
+      MS1_spec <- data.frame(mz = MS1[[1]]@mz, intensity = MS1[[1]]@intensity) %>%
+        dplyr::arrange(desc(intensity)) %>%
+        dplyr::slice_head(n = numTopIons)
+      
+      featlist <- MS1_spec %>%
+        dplyr::mutate(name = paste0("S", 1:numTopIons), mz = MS1_spec$mz, ms_level = "ms1") %>%
+        dplyr::select(name, mz, ms_level, -intensity)
+      
+      
+      featlist <- featlist %>% dplyr::bind_rows(flagfragments)
+      
+      output$plot2 <- plotly::renderPlotly({
+        MSXploreR::plotEIC(filepath = fl, featlist = featlist, diff = diff, mserr = diff)
