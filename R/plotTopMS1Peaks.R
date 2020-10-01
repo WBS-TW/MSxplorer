@@ -27,7 +27,7 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
               shiny::fillCol(width = "110px",
                       shiny::textOutput("rtselect"),
                       shiny::actionButton("sync1", "Sync 1<-2"),
-                      shiny::actionButton("sync1", "Sync 2<-1")),
+                      shiny::actionButton("sync2", "Sync 2<-1")),
               shiny::fillCol(flex = c(1),
                       plotly::plotlyOutput("plot1"), 
                       plotly::plotlyOutput("plot2")
@@ -54,9 +54,11 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     M_plot <- vector("list", nrow(featlist))
     rtr <- NULL
     rtselection <- NULL
+    p1 <- plotly::plot_ly() 
+    p2 <- plotly::plot_ly() 
     
     output$plot1 <- plotly::renderPlotly({
-      p <- plotly::plot_ly() 
+      
       
       for (i in 1:nrow(featlist)) {
         M <- MSnbase::MSmap(data_prof, 
@@ -70,13 +72,13 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
         M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
           replace(., is.na(.), 0) %>%
           dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
-        p <- plotly::add_lines(p, 
+        p1 <- plotly::add_lines(p1, 
                                x = M_plot[[i]][["rt"]], 
                                y = M_plot[[i]][["sum_int"]], 
                                name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
         ) # do not use $ dollar sign for subsetting list
       }
-      p %>% plotly::config(showTips = FALSE) 
+      p1 %>% plotly::config(showTips = FALSE) 
       })  
     
     
@@ -111,8 +113,6 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
       featlist <- featlist %>% dplyr::bind_rows(featlist)
       
       output$plot2 <- plotly::renderPlotly({
-        p <- plotly::plot_ly() 
-        
         for (i in 1:nrow(featlist)) {
           M <- MSnbase::MSmap(data_prof, 
                               scans = if(featlist$ms_level[i] == "ms1") {ms1[rtselms1]} 
@@ -125,21 +125,28 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
           M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
             replace(., is.na(.), 0) %>%
             dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
-          p <- plotly::add_lines(p, 
+          p2 <- plotly::add_lines(p2, 
                                  x = M_plot[[i]][["rt"]], 
                                  y = M_plot[[i]][["sum_int"]], 
                                  name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
           ) # do not use $ dollar sign for subsetting list
         }
-        p %>% plotly::config(showTips = FALSE) 
+        p2 %>% plotly::config(showTips = FALSE) 
       })  
       
     })
     
     # Get ranges of plotly 
     shiny::observeEvent(input$sync1, {
-      rtselection <- plotly::event_data("plotly_relayout")
-      print(rtselection)
+      rtselection1 <- plotly::event_data("plotly_relayout")
+      rtselection1 <- c(rtselection1[1], rtselection1[2])
+      print(rtselection1)
+    })
+    
+    shiny::observeEvent(input$sync2, {
+      rtselection2 <- plotly::event_data("plotly_relayout")
+      rtselection2 <- c(rtselection2[1], rtselection2[2])
+      print(rtselection2)
     })
     
     
