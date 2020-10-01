@@ -19,10 +19,10 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Get MS1"),
     miniUI::miniContentPanel(
-      fillRow(flex = c(NA,1),
-              fillCol(width = "100px",
-                      selectInput("degree", "Polynomial degree", c(1, 2, 3, 4))),
-              fillCol(flex = c(1),
+      shiny::fillRow(flex = c(NA,1),
+              shiny::fillCol(width = "100px",
+                      shiny::textOutput("rtselect")),
+              shiny::fillCol(flex = c(1),
                       plotly::plotlyOutput("plot1"), 
                       plotly::plotlyOutput("plot2")
                       )
@@ -50,19 +50,19 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
       rtr <- as.data.frame(plotly::event_data("plotly_click"))[[3]]
       rtr <- c(round((rtr - rtrange), 1), round((rtr+ rtrange), 1))
       rtr <<- rtr
-      print(rtr)
+      
+      output$rtselect <- renderText(paste0("RT:", rtr[1], "-", rtr[2]))
       
     })
     
 
-    # Plot new EIC of MS1 from the clicked point, when we press "done"
+    # Plot new EIC of MS1 from the clicked point, when pressing "Get MS1"
     shiny::observeEvent(input$getMS1, {
       MS1 <- data_prof %>%
         MSnbase::filterRt(rtr) %>%
         MSnbase::filterMsLevel(1)
       
-      #print(MS1)
-     
+    
       
       MS1_spec <- data.frame(mz = MS1[[1]]@mz, intensity = MS1[[1]]@intensity) %>%
         dplyr::arrange(desc(intensity)) %>%
