@@ -28,9 +28,9 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                                     shiny::textOutput("rtselect"),
                                     shiny::actionButton("sync1", "Sync 1<-2"),
                                     shiny::actionButton("sync2", "Sync 2<-1")),
-                     shiny::fillCol(flex = c(1),
-                                    plotly::plotlyOutput("plot1"), 
-                                    plotly::plotlyOutput("plot2")
+                     shiny::fillCol(flex = c(1, 1),
+                                    plotly::plotlyOutput("plot1" ,height = "100%"), 
+                                    plotly::plotlyOutput("plot2", height = "100%")
                      )
       )
     ),
