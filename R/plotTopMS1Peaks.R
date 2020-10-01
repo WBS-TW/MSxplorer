@@ -1,9 +1,9 @@
 #' Extract most intense MS1 ions from MS2 EIC 
 #'
 #' @param filepath string. Path to mzML file
-#' @param flagfragments data.frame. Variable names should be: name, mz, ms_level (has to be either "ms1, "ms2) 
+#' @param featlist data.frame. Variable names should be: name, mz, ms_level (has to be either "ms1, "ms2) 
 #' @param numTopIons num number of most intensive MS1 ions to extract
-#' @param diff num range of mass (Da) to extract from the mz specified in flagfragments (mz-diff, mz+diff)
+#' @param diff num range of mass (Da) to extract from the mz specified in featlist (mz-diff, mz+diff)
 #' @param mserr num mass error (Da) of the range boundaries specified in diff (mz-diff+-mserr, mz+dif+-mserr)
 #' @param rtrange num the retention time range to extract MS1 EIC (in sec). Error occurs if set too low.
 #'
@@ -15,10 +15,10 @@
 #' 
 #' PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
 #' 
-#' plotTopMS1Peaks(filepath = fl, flagfragments = PFSA_frags, numTopIons = 3)
+#' plotTopMS1Peaks(filepath = fl, featlist = PFSA_frags, numTopIons = 3)
 
 
-plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.3) {
+plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.3) {
   
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Get MS1"),
@@ -46,7 +46,7 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
     data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
     
     output$plot1 <- plotly::renderPlotly({
-      MSXploreR::plotEIC(filepath = filepath, featlist = flagfragments, diff = diff, mserr = mserr)
+      MSXploreR::plotEIC(filepath = filepath, featlist = featlist, diff = diff, mserr = mserr)
     })  
     
     rtr <- NULL
@@ -78,7 +78,7 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
         dplyr::select(name, mz, ms_level, -intensity)
 
 
-      featlist <- featlist %>% dplyr::bind_rows(flagfragments)
+      featlist <- featlist %>% dplyr::bind_rows(featlist)
       
       output$plot2 <- plotly::renderPlotly({
         MSXploreR::plotEIC(filepath = fl, featlist = featlist, diff = diff, mserr = diff)
