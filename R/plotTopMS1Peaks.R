@@ -140,13 +140,13 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     # Get ranges of plotly 
     shiny::observeEvent(input$sync1, {
       rtselection1 <- plotly::event_data("plotly_relayout")
-      rtselection1 <<- c(rtselection1[1], rtselection1[2])
+      rtselection1 <- c(rtselection1[1], rtselection1[2])
       print(rtselection1)
     })
     
     shiny::observeEvent(input$sync2, {
       rtselection2 <- plotly::event_data("plotly_relayout")
-      rtselection2 <<- c(rtselection2[1], rtselection2[2])
+      rtselection2 <- c(rtselection2[1], rtselection2[2])
       print(rtselection2)
     })
     
