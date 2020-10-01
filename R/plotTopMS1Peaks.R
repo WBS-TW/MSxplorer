@@ -17,15 +17,17 @@
 plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.3) {
   
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Done"),
+    miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Get MS1"),
     miniUI::miniContentPanel(
-      plotly::plotlyOutput("plot1", height = "40%"),
+      plotly::plotlyOutput("plot1", height = "40%"), 
       plotly::plotlyOutput("plot2", height = "60%")
-    ),
+      ),
     miniUI::miniButtonBlock(
-      shiny::actionButton("export", "Export selection")
+      shiny::actionButton("getMS1", "Get MS1"),
+      shiny::actionButton("exp_excel", "Export selection to Excel"),
+      shiny::actionButton("exp_metfrag", "Copy selection in Metfrag format")
+      )
     )
-  )
   
   server <- function(input, output, session) {
     
@@ -48,7 +50,7 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
     
 
     # Plot new EIC of MS1 from the clicked point, when we press "done"
-    shiny::observeEvent(input$done, {
+    shiny::observeEvent(input$getMS1, {
       MS1 <- data_prof %>%
         MSnbase::filterRt(rtr) %>%
         MSnbase::filterMsLevel(1)
@@ -73,7 +75,10 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
       
     })
     
-  }
+    shiny::observeEvent(input$done, {
+      shiny::stopApp()
+    })
+    }
   
   #runGadget(ui, server, viewer = dialogViewer("MS2 EIC", width = 700, height = 700))
   shiny::runGadget(ui, server, viewer = shiny::browserViewer())
