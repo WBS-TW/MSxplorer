@@ -1,7 +1,7 @@
 #' Extract most intense MS1 ions from MS2 EIC 
 #'
-#' @param filepath string path to mzML file
-#' @param flagfragments data.frame with variables: name, mz, ms_level ("ms1, "ms2) 
+#' @param filepath string. Path to mzML file
+#' @param flagfragments data.frame. Variable names should be: name, mz, ms_level (has to be either "ms1, "ms2) 
 #' @param numTopIons num number of most intensive MS1 ions to extract
 #' @param diff num range of mass (Da) to extract from the mz specified in flagfragments (mz-diff, mz+diff)
 #' @param mserr num mass error (Da) of the range boundaries specified in diff (mz-diff+-mserr, mz+dif+-mserr)
@@ -12,8 +12,12 @@
 #'
 #' @examples
 #' fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
+#' 
 #' PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
+#' 
 #' plotTopMS1Peaks(filepath = fl, flagfragments = PFSA_frags, numTopIons = 3)
+
+
 plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.01, mserr = 0.01, rtrange = 0.3) {
   
   ui <- miniUI::miniPage(

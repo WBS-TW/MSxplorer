@@ -3,5 +3,5 @@ TODO
 - Add another button to send selected fragments to Metfrag OR copy the fragments in format to directly copy to Metfrag.
 - Find way to extract MS1 peaks in spectrum and calculate Pearson correlation or cosine score with MS2 diagnostic ions within a selected time window. 
 Only top "n"" hits will be shown.
-- Sync the two plots at x-axis (same retention time scale during zooming)
-- Left panel: put a output with selected retention times
+- Sync the two plots at x-axis (same retention time scale during zooming). Put to sync buttons on left panel to sync either first or second plots.
+
