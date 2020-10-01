@@ -10,11 +10,11 @@ library(MSXploreR)
 fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/6Rplant_1_C,2_1.mzML"
 # fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/14RInsect_1_D,7_1.mzML"
-#fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/QA_QC_1_F,3_1.mzML"
+fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/QA_QC_1_F,3_1.mzML"
 PFSA_frags <- data.frame(name = c("FSO3", "SO3"), 
                          mz = c(98.9552, 79.9558), 
                          ms_level = c("ms2", "ms2"))
-plotTopMS1Peaks(filepath = fl, featlist = PFSA_frags, numTopIons = 3)
+plotTopMS1Peaks(filepath = fl, featlist = PFSA_frags, numTopIons = 3, diff = 0.001, mserr = 0.008, rtrange = 0.3)
 
 
 ```
