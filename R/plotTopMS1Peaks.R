@@ -26,8 +26,8 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
       shiny::fillRow(flex = c(NA,1),
                      shiny::fillCol(width = "110px",
                                     shiny::textOutput("rtselect"),
-                                    shiny::actionButton("sync1", "Sync 1<-2"),
-                                    shiny::actionButton("sync2", "Sync 2<-1")),
+                                    shiny::textOutput("rtrange"),
+                                    shiny::actionButton("sync1", "Sync 1 <- 2")),
                      shiny::fillCol(flex = c(1, 1),
                                     plotly::plotlyOutput("plot1" ,height = "100%"), 
                                     plotly::plotlyOutput("plot2", height = "100%")
@@ -41,6 +41,8 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     )
   )
   
+#----------SERVER--------------------------------------------
+
   server <- function(input, output, session) {
     
     data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
@@ -54,7 +56,7 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     M_plot <- vector("list", nrow(featlist))
     rtr <- NULL
     rtselection1 <- NULL
-    rtselection2 <- NULL
+
     p1 <- plotly::plot_ly() 
     p2 <- plotly::plot_ly() 
     
@@ -84,7 +86,7 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     
     
     
-    # Output the clicked point to be input in next plot
+#### Show the clicked point to be input in next plot
     shiny::observeEvent(plotly::event_data("plotly_click"), {
       rtr <- as.data.frame(plotly::event_data("plotly_click"))[[3]]
       rtr <- c(round((rtr - rtrange), 1), round((rtr+ rtrange), 1))
@@ -94,10 +96,10 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
       
     })
     
-    # Plot new EIC of MS1 from the clicked point, when pressing "Get MS1"
+#### Plot new EIC of MS1 from the clicked point, when pressing "Get MS1"
     shiny::observeEvent(input$getMS1, {
       MS1 <- data_prof %>%
-        MSnbase::filterRt(rtr) %>%
+        MSnbase::filterRt(rtr) %>% #rtr is from taken from the global environment rtr <<-
         MSnbase::filterMsLevel(1)
       
       
@@ -133,22 +135,57 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
           ) # do not use $ dollar sign for subsetting list
         }
         p2 %>% plotly::config(showTips = FALSE) 
+    
       })  
       
     })
+
     
-    # Get ranges of plotly 
+#### Show selected rt range
+    #### Sync ranges of plotly1 <- plotly2 
+    shiny::observeEvent(plotly::event_data("plotly_relayout"), {
+      rtselection1 <- plotly::event_data("plotly_relayout")
+      rtselection1 <- c(rtselection1[1], rtselection1[2])
+      output$rtrange <- shiny::renderText(paste0("RT range:", "\n", rtselection1))
+    })
+    
+    
+#### Sync ranges of plotly1 <- plotly2 
     shiny::observeEvent(input$sync1, {
       rtselection1 <- plotly::event_data("plotly_relayout")
       rtselection1 <- c(rtselection1[1], rtselection1[2])
       print(rtselection1)
+      output$rtrange <- shiny::renderText(paste0(rtselection1))
+      
+      output$plot1 <- plotly::renderPlotly({
+        
+        
+        for (i in 1:nrow(featlist)) {
+          M <- MSnbase::MSmap(data_prof, 
+                              scans = if(featlist$ms_level[i] == "ms1") {ms1[rtselms1]} 
+                              else if(featlist$ms_level[i] == "ms2") {ms2[rtselms2]}, 
+                              lowMz = featlist$mz[i]-diff, 
+                              highMz = featlist$mz[i]+diff, 
+                              resMz = mserr, 
+                              hd = hd, 
+                              zeroIsNA = FALSE)
+          M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
+            replace(., is.na(.), 0) %>%
+            dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
+          p1 <- plotly::add_lines(p1, 
+                                  x = M_plot[[i]][["rt"]], 
+                                  y = M_plot[[i]][["sum_int"]], 
+                                  name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
+          ) # do not use $ dollar sign for subsetting list
+        }
+        p1 %>% 
+          plotly::config(showTips = FALSE) %>%
+          plotly::layout(xaxis = list(range = c(rtselection1[[1]], rtselection1[[2]])))
+          
+      })  
+      
     })
-    
-    shiny::observeEvent(input$sync2, {
-      rtselection2 <- plotly::event_data("plotly_relayout")
-      rtselection2 <- c(rtselection2[1], rtselection2[2])
-      print(rtselection2)
-    })
+
     
     
     shiny::observeEvent(input$done, {
