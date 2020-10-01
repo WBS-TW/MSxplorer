@@ -24,8 +24,10 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
     miniUI::gadgetTitleBar("Click on the peaks ions to select retention time and then click Get MS1"),
     miniUI::miniContentPanel(
       shiny::fillRow(flex = c(NA,1),
-              shiny::fillCol(width = "100px",
-                      shiny::textOutput("rtselect")),
+              shiny::fillCol(width = "110px",
+                      shiny::textOutput("rtselect"),
+                      shiny::actionButton("sync1", "Sync 1<-2"),
+                      shiny::actionButton("sync1", "Sync 2<-1")),
               shiny::fillCol(flex = c(1),
                       plotly::plotlyOutput("plot1"), 
                       plotly::plotlyOutput("plot2")
@@ -58,7 +60,6 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
       output$rtselect <- renderText(paste0("RT:", rtr[1], "-", rtr[2]))
       
     })
-    
 
     # Plot new EIC of MS1 from the clicked point, when pressing "Get MS1"
     shiny::observeEvent(input$getMS1, {
@@ -84,6 +85,13 @@ plotTopMS1Peaks <- function(filepath, flagfragments, numTopIons = 10, diff = 0.0
       })
       
     })
+    
+    
+    shiny::observeEvent(input$sync1, {
+      rtselection1 <- plotly::event_data("plotly_relayout")
+      print(rtselection1)
+    })
+    
     
     shiny::observeEvent(input$done, {
       shiny::stopApp()
