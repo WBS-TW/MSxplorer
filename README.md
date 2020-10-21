@@ -8,7 +8,8 @@
 <!-- badges: end -->
 
 The goal of MSXploreR is to provide interactive tools to explore MSn
-data from LC-HRMS (currently only tested on Waters MSe data).
+data from LC/GC-HRMS (currently only tested on Waters MSe data), 
+using MSnbase
 
 ## Installation
 
