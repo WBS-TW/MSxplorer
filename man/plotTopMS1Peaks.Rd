@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTopMS1Peaks.R
 \name{plotTopMS1Peaks}
 \alias{plotTopMS1Peaks}
-\title{Extract most intense MS1 ions from MS2 EIC}
+\title{Extract most intense MS1 ions from MS2 EIC using Shiny}
 \usage{
 plotTopMS1Peaks(
   filepath,
@@ -10,7 +10,7 @@ plotTopMS1Peaks(
   numTopIons = 10,
   diff = 0.01,
   mserr = 0.01,
-  rtrange = 0.3
+  rtWindow = 0.3
 )
 }
 \arguments{
@@ -24,13 +24,13 @@ plotTopMS1Peaks(
 
 \item{mserr}{num mass error (Da) of the range boundaries specified in diff (mz-diff+-mserr, mz+dif+-mserr)}
 
-\item{rtrange}{num the retention time range to extract MS1 EIC (in sec). Error occurs if set too low.}
+\item{rtWindow}{num the retention time range to extract MS1 EIC (in sec). Error occurs if set too low.}
 }
 \value{
-overlaid EIC from MS2 and MS1
+overlaid EIC from MS2 and MS1 in an interactive Shiny environment
 }
 \description{
-Extract most intense MS1 ions from MS2 EIC
+Extract most intense MS1 ions from MS2 EIC using Shiny
 }
 \examples{
 fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
