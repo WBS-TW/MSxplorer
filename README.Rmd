@@ -22,11 +22,11 @@ The goal of MSXploreR is to provide interactive tools to explore MSn data from L
 
 ## Installation
 
-You can install the released version of MSXploreR from [CRAN](https://CRAN.R-project.org) with:
+<!-- You can install the released version of MSXploreR from [CRAN](https://CRAN.R-project.org) with: -->
 
-``` r
-install.packages("MSXploreR")
-```
+<!-- ``` r -->
+<!-- install.packages("MSXploreR") -->
+<!-- ``` -->
 
 And the development version from [GitHub](https://github.com/) with:
 
