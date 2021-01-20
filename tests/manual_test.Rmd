@@ -11,13 +11,13 @@ library(MSXploreR)
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/6Rplant_1_C,2_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/14RInsect_1_D,7_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/QA_QC_1_F,3_1.mzML"
-fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/11Rwater_1_B,5_1.mzML"
-#fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_centr_mzXML/V3.mzXML"
+#fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/11Rwater_1_B,5_1.mzML"
+fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_centr_mzXML/V5.mzXML"
 #fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_mzML/N1.mzML"
 #fl <- "D:/Raw_data/Dust_Florian/LC/LC_pos_mzML/G1.mzML"
-#fl <- "D:/R_projects/MSXploreR/data/12Media.mzML"
+
 PFSA_frags <- data.frame(name = c("FSO3", "SO3"), 
-                         mz = c(98.9552, 79.9558), 
+                         mz = c(98.9552, 79.9568), 
                          ms_level = c("ms2", "ms2"))
 
 #PFCA_frag <- data.frame(name = c("C2F5", "C3F5", "C2F3O2"),
@@ -73,6 +73,15 @@ featlist <- Phthalate
 
 
 plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 3, diff = 0.008, mserr = 0.001, rtrange = 1)
+
+```
+
+
+```{r}
+library(MetNet)
+data("x_test", package = "MetNet")
+x_test <- as.matrix(x_test)
+
 
 ```
 

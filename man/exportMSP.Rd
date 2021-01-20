@@ -2,12 +2,13 @@
 % Please edit documentation in R/exportMSP.R
 \name{exportMSP}
 \alias{exportMSP}
-\title{Export to NIST msp format}
+\title{Export to NIST msp format
+Code modified from Stettin et al. doi: 10.3390/metabo10040143}
 \usage{
-exportMSP(data, RTI = NULL)
+exportMSP(data, min.clustersize = 15, num.files, RTI = NULL)
 }
 \arguments{
-\item{data}{dataframe}
+\item{data}{an XSAnnotate object generated from CAMERA}
 
 \item{RTI}{dataframe containing: CNum (carbon number of the alkane) and RT (retention time in minutes).}
 }
@@ -16,6 +17,7 @@ exportMSP(data, RTI = NULL)
 }
 \description{
 Export to NIST msp format
+Code modified from Stettin et al. doi: 10.3390/metabo10040143
 }
 \examples{
 
