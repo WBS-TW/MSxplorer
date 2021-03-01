@@ -7,6 +7,7 @@ ADD
 - Add textOutput to display the calculated mz diff and error?
 - Add a checkbox/inputmenu option to do smoothing
 - Add function to omit deselected m/z trace. Then another press on Get MS1 would find new highest ions without these delected m/z.
+- Whenever a trace (EIC) is deleted then another one appear as replacement -> iterative selection -> low abundance ions can be visible to correlate with chosen ions.
 
 
 CHECK
