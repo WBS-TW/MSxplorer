@@ -50,7 +50,7 @@ ui <- shiny::navbarPage(
                  inputId = "single",
                  label = "Single or Double plots",
                  choices = c("Single", "Double"),
-                 selected = "Single",
+                 selected = "Double",
                  inline = TRUE
                ),
               shiny::checkboxInput('ins', 'Show intensity as size', F),
