@@ -21,4 +21,9 @@ Imports:
     miniUI,
     metaMS,
     xcms,
-    CAMERA
+    CAMERA,
+    vroom,
+    shinythemes,
+    DT,
+    crosstalk,
+    rcdk
