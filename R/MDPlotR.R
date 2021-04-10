@@ -3,6 +3,20 @@
 
 #------ShinyApp------------------------------
 
+#' MDPlotR
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
 MDPlotR <- function() {
 #require(shiny, dplyr, vroom, shinythemes, DT, plotly, crosstalk, rcdk)
 
