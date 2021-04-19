@@ -791,7 +791,7 @@ server = function(input, output, session) {
     
     # Function to normalize to the highest intensity of selected features
     nperc <- function(x) {
-      norm <- x/max(x) * 100
+      norm <- round(x/max(x) * 100, 1)
       return(norm)
     }
     # generate the barplot only when selecting data
