@@ -26,4 +26,5 @@ Imports:
     shinythemes,
     DT,
     crosstalk,
-    rcdk
+    rcdk,
+    scales

@@ -64,7 +64,9 @@ ui <- shiny::navbarPage(
              ),
              shiny::mainPanel(
                shiny::uiOutput("plot"),
+               shiny::tags$br(),
                DT::DTOutput("x1"),
+               plotly::plotlyOutput("barplot"),
                shiny::fluidRow(shiny::column(
                  3, shiny::downloadButton("x3", "Export Data")
                )),
@@ -519,7 +521,8 @@ server = function(input, output, session) {
     }
     
   })
-  #### For MD Plot Panel ####
+ 
+#------For MD Plot Panel-----
   
   #OE#
   shiny::observeEvent(input$go, {
@@ -770,7 +773,19 @@ server = function(input, output, session) {
       }
     })
     
-    # exporting the annotated data
+# Barplot
+    output$barplot <- plotly::renderPlotly({
+      bar_out <- m[d$selection(), ]
+      
+      pbar <-  plotly::plot_ly() %>%
+          plotly::add_trace(
+            data = bar_out,
+            x = bar_out$mz,
+            y = scales::rescale(bar_out$intensity, to = c(0, 100)), 
+            type = "bar")
+      })
+    
+# exporting the annotated data
     output$x3 <- shiny::downloadHandler(
       'MDplot_annotated_export.csv',
       content = function(file) {
