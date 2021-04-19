@@ -2,11 +2,11 @@ TODO
 
 
 
-MDPlotR
+//MDPlotR//
 - Add selection to choose round, ceiling, floor
 
 
-plotEIC/plotTopMS1Peaks/plotTopMS2Peaks
+//plotEIC/plotTopMS1Peaks/plotTopMS2Peaks//
 
 - Add another button to send selected fragments to Metfrag OR copy the fragments in format to directly copy to Metfrag.
 - Find way to extract MS1 peaks in spectrum and calculate Pearson correlation or cosine score with MS2 diagnostic ions within a selected time window. 
@@ -21,6 +21,10 @@ plotEIC/plotTopMS1Peaks/plotTopMS2Peaks
 CHECK
 - Theoretical formulas for 98.9552,(FSO3) and 79.9558 (SO3). Use: https://www.chemcalc.org/mf-finder. Range: C0-10 H0-20 N0-2 O0-5 Si0-3 F0-6 S0-2
 
+
+//ExportMSP//
+- Change to input file; excel or csv with variables (MS DIAL format): Num, RT (min)
+- Update the calculation based on the input number of carbons
 
 
 FIXED: Only top "n"" hits will be shown.
