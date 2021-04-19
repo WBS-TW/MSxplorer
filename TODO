@@ -1,17 +1,26 @@
 TODO
 
-ADD
+
+
+MDPlotR
+- Add selection to choose round, ceiling, floor
+
+
+plotEIC/plotTopMS1Peaks/plotTopMS2Peaks
+
 - Add another button to send selected fragments to Metfrag OR copy the fragments in format to directly copy to Metfrag.
 - Find way to extract MS1 peaks in spectrum and calculate Pearson correlation or cosine score with MS2 diagnostic ions within a selected time window. 
 - Add average MS1 and MS2 spectra of selected rt range
 - Add textOutput to display the calculated mz diff and error?
 - Add a checkbox/inputmenu option to do smoothing
 - Add function to omit deselected m/z trace. Then another press on Get MS1 would find new highest ions without these delected m/z.
+
 - Whenever a trace (EIC) is deleted then another one appear as replacement -> iterative selection -> low abundance ions can be visible to correlate with chosen ions.
 
 
 CHECK
 - Theoretical formulas for 98.9552,(FSO3) and 79.9558 (SO3). Use: https://www.chemcalc.org/mf-finder. Range: C0-10 H0-20 N0-2 O0-5 Si0-3 F0-6 S0-2
+
 
 
 FIXED: Only top "n"" hits will be shown.
