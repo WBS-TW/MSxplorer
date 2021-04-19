@@ -27,5 +27,4 @@ Imports:
     DT,
     crosstalk,
     rcdk,
-    scales,
     rJava

@@ -18,7 +18,6 @@
 #' 
 #' 
 MDPlotR <- function() {
-#require(shiny, dplyr, vroom, shinythemes, DT, plotly, crosstalk, rcdk)
 
 ui <- shiny::navbarPage(
   "MDPlotR: interactive mass defect plots",
@@ -90,12 +89,12 @@ ui <- shiny::navbarPage(
 
 
 
-#-----------------------Shiny Server functon----------#
+#-----------------------Shiny Server function----------#
 
 
 #--MASS DEFECT FUNCTIONS---------------------------
 
-# Initiate functions parsed from EnviGCMS #
+# Initiate rcdk functions parsed from EnviGCMS #
 getmass <- function(data) {
   if (grepl('-', data)) {
     name <- unlist(strsplit(data, '-'))
@@ -327,12 +326,12 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
 
 server = function(input, output, session) {
   MD_data <- reactive({
-    #  require that the input is available
-    req(input$file1)
+    req(input$file1) #  require that the input is available
     df <- vroom::vroom(input$file1$datapath)
     df$RMD <- round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
     df$OMD <- round((round(df$mz) - df$mz) * 10 ^ 3)
-    # high order mass defect computation
+    
+    # high order mass defect calculation
     
     mdh1 <- getmdh(df$mz,cus = input$cus1)
     mdh2 <- getmdh(df$mz,cus = input$cus2)
@@ -570,7 +569,7 @@ server = function(input, output, session) {
       
     }
     
-    # highlight selected rows in the scatterplot
+#-----Plot 1-------
     output$DTPlot1 <- plotly::renderPlotly({
       s <- input$x1_rows_selected
       if (!length(s)) {
@@ -662,7 +661,7 @@ server = function(input, output, session) {
       
     })
     
-    # Plot 2
+#-----Plot 2-------
     if (input$single == "Double") {
       output$DTPlot2 <- plotly::renderPlotly({
         t <- input$x1_rows_selected
@@ -756,16 +755,31 @@ server = function(input, output, session) {
         
       })
     }
-    # highlight selected rows in the table
+
+#----- Datatable of selected rows--------
+    
+    ## TO FIX: if highlighted twice then the DT does not index correctly
+    
     output$x1 <- DT::renderDT({
-      T_out1 <- m[d$selection(), ]
+      T_out1 <- DT::datatable(
+        m[d$selection(), ],
+        editable = TRUE,
+        rownames = FALSE,
+        filter = "top",
+        options = list(
+          scrollX = TRUE)
+      )
+      
       dt <-
         DT::datatable(
           m,
           editable = TRUE,
           rownames = FALSE,
-          filter = "top"
+          filter = "top",
+          options = list(
+            scrollX = TRUE)
         )
+      
       if (NROW(T_out1) == 0) {
         dt
       } else {
@@ -773,7 +787,14 @@ server = function(input, output, session) {
       }
     })
     
-# Barplot
+#-----Barplot------
+    
+    # Function to normalize to the highest intensity of selected features
+    nperc <- function(x) {
+      norm <- x/max(x) * 100
+      return(norm)
+    }
+    # generate the barplot only when selecting data
     output$barplot <- plotly::renderPlotly({
       bar_out <- m[d$selection(), ]
       
@@ -781,11 +802,14 @@ server = function(input, output, session) {
           plotly::add_trace(
             data = bar_out,
             x = bar_out$mz,
-            y = scales::rescale(bar_out$intensity, to = c(0, 100)), 
+            y = nperc(bar_out$intensity), 
             type = "bar")
       })
     
-# exporting the annotated data
+#-----Exporting the annotated data------
+    
+    ##NOT WORKING YET###
+    
     output$x3 <- shiny::downloadHandler(
       'MDplot_annotated_export.csv',
       content = function(file) {
