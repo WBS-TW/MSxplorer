@@ -91,7 +91,7 @@ ui <- shiny::navbarPage(
 #-----------------------Shiny Server functon----------#
 
 
-#--FUNCTIONS---------------------------
+#--MASS DEFECT FUNCTIONS---------------------------
 
 # Initiate functions parsed from EnviGCMS #
 getmass <- function(data) {
@@ -321,7 +321,7 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
   return(re)
 }
 
-
+#------SERVER FUNCTION-------------------------
 
 server = function(input, output, session) {
   MD_data <- reactive({
