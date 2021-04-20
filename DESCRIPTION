@@ -1,7 +1,7 @@
 Package: MSXploreR
 Type: Package
 Title: Various tools to explore HRMS data
-Version: 0.1.0
+Version: 0.2.0
 Author: Thanh Wang
 Maintainer: Thanh Wang <thanh.wang@oru.se>
 Description: Exploring mass spectrometric data in mzML format

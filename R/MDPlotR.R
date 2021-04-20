@@ -89,7 +89,7 @@ ui <- shiny::navbarPage(
 
 #--MASS DEFECT FUNCTIONS---------------------------
 
-# Initiate rcdk functions parsed from EnviGCMS #
+# Initiate rcdk functions parsed from EnviGCMS
 getmass <- function(data) {
   if (grepl('-', data)) {
     name <- unlist(strsplit(data, '-'))
