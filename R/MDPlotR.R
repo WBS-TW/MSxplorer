@@ -47,6 +47,13 @@ ui <- shiny::navbarPage(
                  selected = "Double",
                  inline = TRUE
                ),
+              shiny::radioButtons(
+                inputId = "rounding",
+                label = "Rounding",
+                choices = c("round", "ceiling", "floor"),
+                selected = "round",
+                inline = TRUE
+              ),
               shiny::checkboxInput('ins', 'Show intensity as size', F),
               shiny::checkboxInput("show_leg", "Show plot legends", T),
               shiny::uiOutput("plotctr"),
@@ -328,8 +335,8 @@ server = function(input, output, session) {
     
     # high order mass defect calculation
     
-    mdh1 <- getmdh(df$mz,cus = input$cus1)
-    mdh2 <- getmdh(df$mz,cus = input$cus2)
+    mdh1 <- getmdh(df$mz,cus = input$cus1, method = input$rounding)
+    mdh2 <- getmdh(df$mz,cus = input$cus2, method = input$rounding)
     # change colname
     name1 <- paste0(colnames(mdh1),'_p1')
     name2 <- paste0(colnames(mdh2),'_p2')
