@@ -47,6 +47,7 @@ ui <- shiny::navbarPage(
                  selected = "Double",
                  inline = TRUE
                ),
+              shiny::br(),
               shiny::radioButtons(
                 inputId = "rounding",
                 label = "Rounding",
@@ -129,7 +130,7 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
     sumd <- cus[2] * round(cus[1]) / cus[1]
     
     if (method == 'round') {
-      
+      # First order using "round" instead of ceiling as Roach et al. did
       MD1 <-
         round(round(omd) - omd,
               digits = 6)
@@ -140,6 +141,7 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
         round(round(smd) - smd,
               digits = 6)
       re <- cbind.data.frame(mz,MD1,MD2)
+      
       
     } else if (method == 'floor') {
       MD1 <-
