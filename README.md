@@ -1,14 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MSXploreR
+# MSxplorer
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
-The goal of MSXploreR is to provide interactive tools to explore MSn
-data from LC-HRMS (currently only tested on Waters MSe data).
+The goal of MSxplorer is to provide interactive tools to explore data independent analysis (DIA) LC-HRMS runs (currently only tested on Waters MSe data).
 
 ## Installation
 
@@ -24,14 +23,13 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("WBS-TW/MSXploreR")
+devtools::install_github("WBS-TW/MSxplorer")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(MSXploreR)
+library(MSxplorer)
 ## basic example code
 ```
