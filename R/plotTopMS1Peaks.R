@@ -16,6 +16,10 @@
 #' PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
 #' 
 #' plotTopMS1Peaks(filepath = fl, featlist = PFSA_frags, numTopIons = 3)
+#' 
+#' fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_mzMLQC_rep1.mzML"
+#' Br_frags <- data.frame(name = c("Br79", "Br81"), mz = c(78.9183, 80.9163), ms_level = c("ms2", "ms2"))
+#' plotTopMS1Peaks(filepath = fl, featlist = Br_frags, numTopIons = 3)
 
 
 plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, mserr = 0.01, rtWindow = 0.3) {
