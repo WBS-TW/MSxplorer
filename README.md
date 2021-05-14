@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gt <img src="man/figures/MSxplorer_logo.png" align="right" height="250px" />
-
 # MSxplorer
+
+<img src="man/figures/MSxplorer_logo.png" align="right" height="250px" />
 
 <!-- badges: start -->
 <!-- badges: end -->
