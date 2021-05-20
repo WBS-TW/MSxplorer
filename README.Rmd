@@ -5,6 +5,8 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # MSxplorer
+
+<!-- badges: start -->
 <img src="man/figures/MSxplorer_logo.png" align="right" height="250px" />
 
 
@@ -17,9 +19,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
-<!-- badges: start -->
 <!-- badges: end -->
 
 The goal of MSxplorer is to provide interactive tools to explore data independent analysis (DIA) LC-HRMS runs (currently only tested on Waters MSe data).
@@ -32,7 +31,7 @@ The goal of MSxplorer is to provide interactive tools to explore data independen
 <!-- install.packages("MSxplorer") -->
 <!-- ``` -->
 
-And the development version from [GitHub](https://github.com/) with:
+The development version is available at [GitHub](https://github.com/):
 
 ``` r
 # install.packages("devtools")
@@ -43,6 +42,7 @@ devtools::install_github("WBS-TW/MSxplorer")
 
 ```{r example}
 library(MSxplorer)
-## basic example code
+
+
 ```
 
