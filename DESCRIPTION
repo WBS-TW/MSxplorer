@@ -27,4 +27,5 @@ Imports:
     DT,
     crosstalk,
     rcdk,
-    rJava
+    rJava,
+    nontarget

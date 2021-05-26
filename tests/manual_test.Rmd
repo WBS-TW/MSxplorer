@@ -77,10 +77,8 @@ plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 3, diff = 0.008
 ```
 
 
-```{r}
-library(MetNet)
-data("x_test", package = "MetNet")
-x_test <- as.matrix(x_test)
+```{r find_homolog}
+
 
 
 ```
