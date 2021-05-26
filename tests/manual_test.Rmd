@@ -79,7 +79,7 @@ plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 3, diff = 0.008
 
 ```{r find_homolog}
 
-
+find_homologs("./data/LCneg_ComponentsRC.csv", plotdefect = FALSE)
 
 ```
 

@@ -1,201 +1,107 @@
 
 
-# Need to implement this also or just use nontarget?
-# according to https://pubs.acs.org/doi/suppl/10.1021/acs.est.0c06685/suppl_file/es0c06685_si_001.pdf and 
-# Yu, N. Y.; https://pubs.acs.org/doi/abs/10.1021/acs.est.8b02492
-
-
-
-
-
-
-
 # Using homol.search in "nontarget" package
-library(nontarget)
-library(plotly)
 
 
-
-df <- vroom::vroom("./data/LCneg_ComponentsRC.csv")
+find_homologs <- function(file, 
+                          plotdefect = FALSE,
+                          p_isotopes = p_isotopes,
+                          p_elements=c("C","H", "F", "O", "S"),
+                          p_use_C=FALSE,
+                          p_minmz=49.96,
+                          p_maxmz=49.99,
+                          p_minrt=1,
+                          p_maxrt=4,
+                          p_ppm=TRUE,
+                          p_mztol=10,
+                          p_rttol=0.5,
+                          p_minlength = 3,
+                          p_mzfilter=FALSE,
+                          p_vec_size=3E6,
+                          p_mat_size=3,
+                          p_R2=.98,
+                          p_spar=.45,
+                          p_plotit=FALSE,
+                          p_deb=0) {
 
 data("isotopes")
+p_isotopes <- isotopes
+
+
+df <- vroom::vroom(file)
 
 df <- df %>%
-  select(mz, N_rep1, rt) %>% #Choose the correct intensity sample!
-  rename(mass = mz) %>%
-  mutate(rt = round(rt/60, 2)) %>%
-  mutate(intensity = as.integer(N_rep1), .keep = "unused") %>% #Need to rename each time, put in function!
-  select(mass, intensity, rt) %>%
-  filter(intensity > 0) %>%
-  arrange(rt) %>%
+  dplyr::select(mz, intensity, rt) %>% #Choose the correct intensity sample!
+  dplyr::rename(mass = mz) %>%
+  dplyr::mutate(rt = round(rt/60, 2)) %>%
+  dplyr::mutate(intensity = as.integer(intensity), .keep = "unused") %>% #Need to rename each time, put in function!
+  dplyr::select(mass, intensity, rt) %>%
+  dplyr::filter(intensity > 0) %>%
+  dplyr::arrange(rt) %>%
   as.data.frame() #need to convert to dataframe, otherwise nontarget cannot recognize
 
 res_homologs <-  nontarget::homol.search(peaklist = df,
-                             isotopes = isotopes,
-                             elements=c("C","H", "F", "O", "S"),
-                             use_C=FALSE,
-                             minmz=49.8,
-                             maxmz=50,
-                             minrt=1,
-                             maxrt=4,
-                             ppm=TRUE,
-                             mztol=15,
-                             rttol=0.5,
-                             minlength = 3,
-                             mzfilter=FALSE,
-                             vec_size=3E6,
-                             mat_size=3,
-                             R2=.98,
-                             spar=.45,
-                             plotit=FALSE,
-                             deb=0)
+                             isotopes = p_isotopes,
+                             elements= p_elements,
+                             use_C=p_use_C,
+                             minmz=p_minmz,
+                             maxmz=p_maxmz,
+                             minrt=p_minrt,
+                             maxrt=p_maxrt,
+                             ppm=p_ppm,
+                             mztol=p_mztol,
+                             rttol=p_rttol,
+                             minlength = p_minlength,
+                             mzfilter=p_mzfilter,
+                             vec_size=p_vec_size,
+                             mat_size=p_mat_size,
+                             R2=p_R2,
+                             spar=p_spar,
+                             plotit=p_plotit,
+                             deb=p_deb)
 
-nontarget::plothomol(res_homologs)
-
-
+if (plotdefect == FALSE) {
+# Using plotly
 res_homologs[[1]] %>%
-  filter(`HS IDs` > 0) %>%
-  mutate(`m/z increment` = as.numeric(`m/z increment`)) %>%
-  plot_ly() %>%
-  add_markers(x = df$rt, 
+    dplyr::filter(`HS IDs` > 0) %>%
+    dplyr::mutate(`m/z increment` = round(as.numeric(`m/z increment`), 3)) %>%
+    dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) %>%
+  plotly::plot_ly() %>%
+    plotly::add_markers(x = df$rt, 
               y = df$mass, 
               type = "scatter", 
               name = "All peaks",
               opacity = 0.9,
+              colors = "BrBG",
               marker = list(color = "lightgrey")) %>%
-  add_trace(x = ~RT, 
+    plotly::add_trace(x = ~RT, 
             y = ~mz, 
             color = ~`HS IDs`,
             type = "scatter",
             mode = "lines+markers",
             name = ~`m/z increment`)
 
- 
+} else {
+# Plot mass defect
+res_homologs[[1]] %>%
+    dplyr::filter(`HS IDs` > 0) %>%
+    dplyr::mutate(`m/z increment` = round(as.numeric(`m/z increment`), 3)) %>%
+    dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) %>%
+    plotly::plot_ly() %>%
+    plotly::add_markers(x = df$mass, 
+              y = (df$mass - round(df$mass)), 
+              type = "scatter", 
+              name = "All peaks",
+              opacity = 0.9,
+              colors = "BrBG",
+              marker = list(color = "lightgrey")) %>%
+    plotly::add_trace(x = ~mz, 
+            y = ~(mz-round(mz)), 
+            color = ~`HS IDs`,
+            type = "scatter",
+            mode = "lines+markers",
+            name = ~`m/z increment`)
 
-
-
-#######
-function (homol, xlim = FALSE, ylim = FALSE, plotlegend = TRUE, 
-          plotdefect = FALSE) 
-{
-  if (xlim[1] != FALSE) {
-    if (length(xlim) > 2) {
-      stop("xlim not correct!")
-    }
-  }
-  if (ylim[1] != FALSE) {
-    if (length(ylim) > 2) {
-      stop("xlim not correct!")
-    }
-  }
-  if (length(homol[[5]]) < 1) {
-    stop("no homologue series found!")
-  }
-  if (!is.logical(plotlegend)) {
-    stop("plotlegend must be TRUE or FALSE")
-  }
-  if (!is.logical(plotdefect)) {
-    stop("plotdefect must be TRUE or FALSE")
-  }
-  if (plotdefect) {
-    mass_def <- c(homol[[1]][, 1] - round(homol[[1]][, 1]))
-    homol[[1]][, 3] <- mass_def
-  }
-  sc <- close.screen()
-  if (sc[1] != FALSE) {
-    for (m in 1:length(sc)) {
-      close.screen(sc[m])
-    }
-  }
-  plot.new()
-  if (xlim[1] != FALSE & ylim[1] == FALSE) {
-    plot.window(ylim = ylim, xlim = c(min(homol[[1]][, 1]), 
-                                      max(homol[[1]][, 1])))
-  }
-  if (ylim[1] != FALSE & xlim[1] == FALSE) {
-    if (plotlegend == TRUE) {
-      plot.window(ylim = c(min(homol[[1]][, 3]), max(homol[[1]][, 
-                                                                3]) * 1.2), xlim = xlim)
-    }
-    else {
-      plot.window(ylim = c(min(homol[[1]][, 3]), max(homol[[1]][, 
-                                                                3])), xlim = xlim)
-    }
-  }
-  if (xlim[1] == FALSE & ylim[1] == FALSE) {
-    if (plotlegend == TRUE) {
-      plot.window(ylim = c(min(homol[[1]][, 3]), max(homol[[1]][, 
-                                                                3]) * 1.2), xlim = c(min(homol[[1]][, 1]), max(homol[[1]][, 
-                                                                                                                          1])))
-    }
-    else {
-      plot.window(ylim = c(min(homol[[1]][, 3]), max(homol[[1]][, 
-                                                                3])), xlim = c(min(homol[[1]][, 1]), max(homol[[1]][, 
-                                                                                                                    1])))
-    }
-  }
-  if (xlim[1] != FALSE & ylim[1] != FALSE) {
-    plot.window(xlim = xlim, ylim = ylim)
-  }
-  box()
-  axis(1)
-  axis(2)
-  if (!plotdefect) {
-    title(ylab = "Retention time", xlab = "m/z")
-  }
-  else {
-    title(ylab = "mass defect", xlab = "m/z")
-  }
-  points(homol[[1]][, 1], homol[[1]][, 3], cex = 0.3, pch = 19, 
-         col = "lightgrey")
-  this <- round(homol[[3]][, 3], digits = 2)
-  that <- levels(as.factor(this))
-  colo <- rainbow(length(that))
-  for (i in 1:length(homol[[5]])) {
-    for (j in 2:length(homol[[5]][[i]])) {
-      for (k in 1:length(homol[[5]][[i]][j - 1])) {
-        for (m in 1:length(homol[[5]][[i]][j])) {
-          lines(c(homol[[1]][homol[[5]][[i]][[j - 1]][k], 
-                             1], homol[[1]][homol[[5]][[i]][[j]][m], 1]), 
-                c(homol[[1]][homol[[5]][[i]][[j - 1]][k], 
-                             3], homol[[1]][homol[[5]][[i]][[j]][m], 
-                                            3]), col = colo[that == this[i]], lwd = 1.8)
-          points(homol[[1]][homol[[5]][[i]][[j - 1]][k], 
-                            1], homol[[1]][homol[[5]][[i]][[j - 1]][k], 
-                                           3], col = colo[that == this[i]], pch = 19, 
-                 cex = 0.5)
-          points(homol[[1]][homol[[5]][[i]][[j]][m], 
-                            1], homol[[1]][homol[[5]][[i]][[j]][m], 3], 
-                 col = colo[that == this[i]], pch = 19, cex = 0.5)
-        }
-      }
-    }
-  }
-  if (plotlegend == TRUE) {
-    plot.window(xlim = c(0, 1), ylim = c(min(as.numeric(that)), 
-                                         max(as.numeric(that))))
-    lines(c(0.95, 0.95), c(min(as.numeric(that)), max(as.numeric(that))), 
-          col = "lightgrey", lwd = 6)
-    it <- 2
-    for (i in 1:length(that)) {
-      points(0.95, as.numeric(that[i]), pch = 19, col = colo[i])
-      text(0.95, as.numeric(that[i]), labels = that[i], 
-           col = colo[i], cex = 0.65, pos = it)
-      if (it == 2) {
-        it <- 4
-      }
-      else {
-        it <- 2
-      }
-    }
-  }
-  
-  
-  
 }
-
-
-
-
-
+}
 
