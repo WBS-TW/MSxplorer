@@ -1,17 +1,38 @@
-
-
-# Using homol.search in "nontarget" package
-
-
+#' find_homologs
+#' A wrapper for homol.search and plothomol from the nontarget package with explorative output using plotly
+#' 
+#' @param file a csv file containing 'mz', 'intensity' and 'rt' as variable names. 'rt' should be in minutes.
+#' @param plotdefect logical. Whether or not to plot mass defect (mz-round(mz)) instead of rt. Defaults to FALSE.
+#' @param p_elements character vector. FALSE or chemical elements in the changing units of the homologue series, e.g. c("C","H") for alkane chains or c("C", "F") for perfluorinated compounds. Used to restrict search.Elements to include in the homolog search. Defaults to: c("C", "H", "O")
+#' @param p_use_C logical. For elements: take element ratio to C-atoms into account? Used to restrict search
+#' @param p_minmz Defines the lower limit of the m/z window to search homologue series peaks, relative to the m/z of the one peak to search from. Absolute m/z value [u].
+#' @param p_maxmz Defines the upper limit of the m/z window to search homologue series peaks, relative to the m/z of the one peak to search from. Absolute m/z value [u].
+#' @param p_minrt Defines the lower limit of the retention time (RT) window to look for other homologue peaks, relative to the RT of the one peak to search from, i.e., RT+minrt. For decreasing RT with increasing HS mass, use negative values of minrt.
+#' @param p_maxrt Defines the upper limit of the RT window to look for other homologue peaks, relative to the RT of the one peak to search from, i.e., RT+maxrt. See minrt.
+#' @param p_ppm Should mztol be set in ppm (TRUE) or in absolute m/z [u] (FALSE)?
+#' @param p_mztol m/z tolerance setting: +/- value by which the m/z of a peak may vary from its expected value. If parameter ppm=TRUE (see below) given in ppm, otherwise, if ppm=FALSE, in absolute m/z [u].
+#' @param p_rttol Retention time (RT) tolerance by which the RT between two adjacent pairs of a homologue series is allowed to differ. Units as given in column 3 of peaklist argument, e.g. [min].
+#' @param p_minlength Minimum number of peaks in a homologue series.
+#' @param p_mzfilter Vector of numerics to filter for homologue series with specific m/z differences of their repeating units, given the tolerances in mztol. Mind charge z!
+#' @param p_vec_size Vector size. Ignore unless a relevant error message is printed (then try to increase size).
+#' @param p_mat_size Matrix size for recombining, multiple of input tuples. Ignore unless a relevant error message is printed (then try to increase size).
+#' @param p_R2 FALSE or 0<numeric<=1. Coefficient of determination for cubic smoothing spline fits of m/z versus retention time; homologue series with lower R2 are rejected. See smooth.spline.
+#' @param p_spar Smoothing parameter, typically (but not necessarily) in (0,1]. See smooth.spline.
+#' @param p_plotit Logical FALSE or 0<integer<5. Intermediate plots of nearest neigbour paths, spline fits of individual homologues series >=minlength, clustered HS pairs, etc .
+#' @param p_deb Debug returns, ignore.
+#'
+#' @return
+#' @export
+#'
+#' @examples
 find_homologs <- function(file, 
                           plotdefect = FALSE,
-                          p_isotopes = p_isotopes,
-                          p_elements=c("C","H", "F", "O", "S"),
+                          p_elements=c("C","H", "O"),
                           p_use_C=FALSE,
-                          p_minmz=49.96,
-                          p_maxmz=49.99,
-                          p_minrt=1,
-                          p_maxrt=4,
+                          p_minmz=5,
+                          p_maxmz=120,
+                          p_minrt=-2,
+                          p_maxrt=2,
                           p_ppm=TRUE,
                           p_mztol=10,
                           p_rttol=0.5,
