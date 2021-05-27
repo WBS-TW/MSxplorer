@@ -1,8 +1,9 @@
 #' find_homologs
-#' A wrapper for homol.search and plothomol from the nontarget package with explorative output using plotly
+#' A wrapper for homol.search and plothomol from the nontarget package with explorative output using plotly. Default values are for PFAS search.
 #' 
 #' @param file a csv file containing 'mz', 'intensity' and 'rt' as variable names. 'rt' should be in minutes.
 #' @param plotdefect logical. Whether or not to plot mass defect (mz-round(mz)) instead of rt. Defaults to FALSE.
+#' @param intensity variable name. If multiple sample intensities are in the dataframe, then you can choose the specific sample intensity. Defaults to 'intensity'. 
 #' @param p_elements character vector. FALSE or chemical elements in the changing units of the homologue series, e.g. c("C","H") for alkane chains or c("C", "F") for perfluorinated compounds. Used to restrict search.Elements to include in the homolog search. Defaults to: c("C", "H", "O")
 #' @param p_use_C logical. For elements: take element ratio to C-atoms into account? Used to restrict search
 #' @param p_minmz Defines the lower limit of the m/z window to search homologue series peaks, relative to the m/z of the one peak to search from. Absolute m/z value [u].
@@ -25,16 +26,41 @@
 #' @export
 #'
 #' @examples
+#' find_homologs("./data/LCneg_ComponentsRC.csv", 
+#' plotdefect = FALSE,
+#' intensity = N_rep1,
+#' p_elements=c("C","H", "O", "S", "F"),
+#' p_use_C=FALSE,
+#' p_minmz=49.9,
+#' p_maxmz=50,
+#' p_minrt=0.5,
+#' p_maxrt=2,
+#' p_ppm=TRUE,
+#' p_mztol=10,
+#' p_rttol=0.5,
+#' p_minlength = 3,
+#' p_mzfilter=FALSE,
+#' p_vec_size=3E6,
+#' p_mat_size=3,
+#' p_R2=.98,
+#' p_spar=.45,
+#' p_plotit=FALSE,
+#' p_deb=0)
+
+ 
+
+
 find_homologs <- function(file, 
                           plotdefect = FALSE,
-                          p_elements=c("C","H", "O"),
+                          intensity = intensity,
+                          p_elements=c("C","H", "O", "S", "F", "N"),
                           p_use_C=FALSE,
-                          p_minmz=5,
-                          p_maxmz=120,
-                          p_minrt=-2,
+                          p_minmz=49.9,
+                          p_maxmz=50,
+                          p_minrt=0.5,
                           p_maxrt=2,
                           p_ppm=TRUE,
-                          p_mztol=10,
+                          p_mztol=12,
                           p_rttol=0.5,
                           p_minlength = 3,
                           p_mzfilter=FALSE,
@@ -52,10 +78,10 @@ p_isotopes <- isotopes
 df <- vroom::vroom(file)
 
 df <- df %>%
-  dplyr::select(mz, intensity, rt) %>% #Choose the correct intensity sample!
+  dplyr::select(mz, {{intensity}}, rt) %>% #uses embrace to specify sample intensity
   dplyr::rename(mass = mz) %>%
   dplyr::mutate(rt = round(rt/60, 2)) %>%
-  dplyr::mutate(intensity = as.integer(intensity), .keep = "unused") %>% #Need to rename each time, put in function!
+  dplyr::mutate(intensity = as.integer({{intensity}}), .keep = "unused") %>% 
   dplyr::select(mass, intensity, rt) %>%
   dplyr::filter(intensity > 0) %>%
   dplyr::arrange(rt) %>%
