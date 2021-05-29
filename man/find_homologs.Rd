@@ -76,3 +76,25 @@ find_homologs(
 find_homologs
 A wrapper for homol.search and plothomol from the nontarget package with explorative output using plotly. Default values are for PFAS search.
 }
+\examples{
+find_homologs("./data/LCneg_ComponentsRC.csv", 
+plotdefect = FALSE,
+intensity = N_rep1,
+p_elements=c("C","H", "O", "S", "F"),
+p_use_C=FALSE,
+p_minmz=49.9,
+p_maxmz=50,
+p_minrt=0.5,
+p_maxrt=2,
+p_ppm=TRUE,
+p_mztol=10,
+p_rttol=0.5,
+p_minlength = 3,
+p_mzfilter=FALSE,
+p_vec_size=3E6,
+p_mat_size=3,
+p_R2=.98,
+p_spar=.45,
+p_plotit=FALSE,
+p_deb=0)
+}

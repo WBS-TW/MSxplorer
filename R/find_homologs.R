@@ -19,7 +19,7 @@
 #' @param p_mat_size Matrix size for recombining, multiple of input tuples. Ignore unless a relevant error message is printed (then try to increase size).
 #' @param p_R2 FALSE or 0<numeric<=1. Coefficient of determination for cubic smoothing spline fits of m/z versus retention time; homologue series with lower R2 are rejected. See smooth.spline.
 #' @param p_spar Smoothing parameter, typically (but not necessarily) in (0,1]. See smooth.spline.
-#' @param p_plotit Logical FALSE or 0<integer<5. Intermediate plots of nearest neigbour paths, spline fits of individual homologues series >=minlength, clustered HS pairs, etc .
+#' @param p_plotit Logical FALSE or 0<integer<5. Intermediate plots of nearest neighbor paths, spline fits of individual homologues series >=minlength, clustered HS pairs, etc .
 #' @param p_deb Debug returns, ignore.
 #'
 #' @return
@@ -47,7 +47,7 @@
 #' p_plotit=FALSE,
 #' p_deb=0)
 
- 
+
 
 
 find_homologs <- function(file, 
@@ -71,16 +71,16 @@ find_homologs <- function(file,
                           p_plotit=FALSE,
                           p_deb=0) {
 
-data("isotopes")
-p_isotopes <- isotopes
 
+
+p_isotopes <- read.csv("./data/isotopes.csv")
 
 df <- vroom::vroom(file)
 
 df <- df %>%
   dplyr::select(mz, {{intensity}}, rt) %>% #uses embrace to specify sample intensity
   dplyr::rename(mass = mz) %>%
-  dplyr::mutate(rt = round(rt/60, 2)) %>%
+  dplyr::mutate(rt = round(rt/60, 2)) %>% # convert rt in file from sec to min
   dplyr::mutate(intensity = as.integer({{intensity}}), .keep = "unused") %>% 
   dplyr::select(mass, intensity, rt) %>%
   dplyr::filter(intensity > 0) %>%
@@ -126,7 +126,13 @@ res_homologs[[1]] %>%
             color = ~`HS IDs`,
             type = "scatter",
             mode = "lines+markers",
-            name = ~`m/z increment`)
+            name = ~`m/z increment`) %>%
+    plotly::layout(
+      yaxis = list(
+        title = "m/z"),
+      xaxis = list(
+        title = "Retention time")
+    )
 
 } else {
 # Plot mass defect
@@ -147,8 +153,13 @@ res_homologs[[1]] %>%
             color = ~`HS IDs`,
             type = "scatter",
             mode = "lines+markers",
-            name = ~`m/z increment`)
-
+            name = ~`m/z increment`) %>%
+    plotly::layout(
+      yaxis = list(
+        title = "Mass defect"),
+      xaxis = list(
+        title = "m/z")
+      )
 }
 }
 
