@@ -107,31 +107,10 @@ find_homologs_MDPlot <- function(file,
                                            deb=p_deb)
   
    # Using plotly
-    res_homologs[[1]] %>%
+  res_homolog <-  res_homologs[[1]] %>%
       dplyr::filter(`HS IDs` > 0) %>%
       dplyr::mutate(`m/z increment` = round(as.numeric(`m/z increment`), 3)) %>%
-      dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) %>%
-      plotly::plot_ly() %>%
-      plotly::add_markers(x = df$rt, 
-                          y = df$mass, 
-                          type = "scatter", 
-                          name = "All peaks",
-                          opacity = 0.9,
-                          colors = "BrBG",
-                          marker = list(color = "lightgrey")) %>%
-      plotly::add_trace(x = ~RT, 
-                        y = ~mz, 
-                        color = ~`HS IDs`,
-                        type = "scatter",
-                        mode = "lines+markers",
-                        name = ~`m/z increment`) %>%
-      plotly::layout(
-        yaxis = list(
-          title = "m/z"),
-        xaxis = list(
-          title = "Retention time")
-      )
-    
+      dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) 
   } 
 
 

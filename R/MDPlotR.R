@@ -293,7 +293,7 @@ server = function(input, output, session) {
 #-----Plot 1-------
     output$DTPlot1 <- plotly::renderPlotly({
       s <- input$x1_rows_selected
-      if (!length(s)) {
+      if (!length(s) & input$findhomolog == FALSE) {
         p <- d %>%
           plotly::plot_ly(
             x = MDplot_x1,
@@ -328,6 +328,80 @@ server = function(input, output, session) {
             color = I('red'),
             selected = plotly::attrs_selected(name = 'Filtered')
           )
+      } else if(!length(s) && input$findhomolog == TRUE) {
+          
+          p_isotopes <- read.csv("./data/isotopes.csv")
+          
+          df <- m %>%
+            dplyr::select(mz, intensity, rt) %>% 
+            dplyr::rename(mass = mz) %>%
+            dplyr::mutate(rt = round(rt/60, 2)) %>% # convert rt in file from sec to min
+            dplyr::mutate(intensity = as.integer(intensity), .keep = "unused") %>% 
+            dplyr::select(mass, intensity, rt) %>%
+            dplyr::filter(intensity > 0) %>%
+            dplyr::arrange(rt) %>%
+            as.data.frame() 
+          
+          res_homologs <-  nontarget::homol.search(peaklist = df,
+                                                   isotopes = p_isotopes,
+                                                   elements= c("C","H", "O", "S", "F", "N"),
+                                                   use_C= FALSE,
+                                                   minmz= 49.9,
+                                                   maxmz= 50,
+                                                   minrt= 0.5,
+                                                   maxrt= 2,
+                                                   ppm= TRUE,
+                                                   mztol= 12,
+                                                   rttol= 0.5,
+                                                   minlength = 3,
+                                                   mzfilter= FALSE,
+                                                   vec_size= 3E6,
+                                                   mat_size= 3,
+                                                   R2= 0.98,
+                                                   spar= 0.45,
+                                                   plotit= FALSE,
+                                                   deb= 0)
+          
+          res_homologs <-  res_homologs[[1]] %>%
+            dplyr::filter(`m/z increment` > 0) %>%
+            #dplyr::mutate(`m/z increment` = round(as.numeric(`m/z increment`), 3)) %>%
+            dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) 
+          
+          
+          p <- d %>%
+            plotly::plot_ly(
+              x = MDplot_x1,
+              y = MDplot_y1,
+              symbol = MDplot_z1,
+              showlegend = input$show_leg,
+              type = "scatter",
+              size = intensity,
+              mode = "markers",
+              marker = list(
+                line = list(
+                  width = 1,
+                  color = '#FFFFFF'
+                )
+              ),
+              color = I('black'),
+              name = 'Unfiltered'
+            ) %>%
+            plotly::add_trace(x = res_homologs$RT*60, 
+                              y = res_homologs$mz, 
+                              type = "scatter",
+                              mode = "lines+markers") %>%
+            plotly::layout(
+              legend = list(
+                orientation = "h",
+                xanchor = "center",
+                x = 0.5,
+                y = 100
+              ),
+              showlegend = T,
+              xaxis = list(title = input$x1),
+              yaxis = list(title = input$y1)
+            ) 
+
       } else if (length(s)) {
         pp <- m %>%
           plotly::plot_ly() %>%
@@ -380,9 +454,7 @@ server = function(input, output, session) {
           )
       }
       
-      if (input$findhomolog == TRUE) {
-        find_homologs_MDPlot(m)
-      }
+
       
     })
     
