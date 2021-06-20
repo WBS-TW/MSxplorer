@@ -41,14 +41,6 @@ ui <- shiny::navbarPage(
               shiny::actionButton('go', 'Plot', width = '100%'),
               shiny::br(),
               shiny::radioButtons(
-                 inputId = "single",
-                 label = "Single or Double plots",
-                 choices = c("Single", "Double"),
-                 selected = "Double",
-                 inline = TRUE
-               ),
-              shiny::br(),
-              shiny::radioButtons(
                 inputId = "rounding",
                 label = "Rounding",
                 choices = c("round", "ceiling", "floor"),
@@ -59,6 +51,7 @@ ui <- shiny::navbarPage(
               shiny::checkboxInput("show_leg", "Show plot legends", T),
               shiny::uiOutput("plotctr"),
               shiny::uiOutput("plotctr2"),
+              shiny::checkboxInput("findhomolog", "Find homologs", F),
               shiny::uiOutput("slide1"),
               shiny::uiOutput("slide2"),
               shiny::uiOutput("slide3"),
@@ -95,238 +88,6 @@ ui <- shiny::navbarPage(
 #-----------------------Shiny Server function----------#
 
 
-#--MASS DEFECT FUNCTIONS---------------------------
-
-# Initiate rcdk functions parsed from EnviGCMS
-# getmass <- function(data) {
-#   if (grepl('-', data)) {
-#     name <- unlist(strsplit(data, '-'))
-#     iso1 <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
-#     iso2 <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[2]))
-#     cus <- as.numeric(iso1[max(iso1[, 2]), 1]) - as.numeric(iso2[max(iso2[, 2]), 1])
-#   } else{
-#     iso <- rcdk::get.isotopes.pattern(rcdk::get.formula(data))
-#     cus <- as.numeric(iso[max(iso[, 2]), 1])
-#   }
-#   return(cus)
-# }
-
-# getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
-#   getorder <- function(input) {
-#     if (grepl(',', input)) {
-#       name <- unlist(strsplit(input, ','))
-#     } else{
-#       name <- input
-#     }
-#     return(name)
-#   }
-#   temp <- getorder(cus)
-#   cus <- NULL
-#   for (i in 1:length(temp)) {
-#     cus <- c(cus, getmass(temp[i]))
-#   }
-#   if (length(cus) == 2) {
-#     omd <- mz * round(cus[1]) / cus[1]
-#     sumd <- cus[2] * round(cus[1]) / cus[1]
-#     
-#     if (method == 'round') {
-#       # First order using "round" instead of ceiling as Roach et al. did
-#       MD1 <-
-#         round(round(omd) - omd,
-#               digits = 6)
-#       md2 <- round(round(sumd) - sumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       MD2 <-
-#         round(round(smd) - smd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2)
-#       
-#       
-#     } else if (method == 'floor') {
-#       MD1 <-
-#         round(floor(omd) - omd,
-#               digits = 6)
-#       md2 <- round(floor(sumd) - sumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       MD2 <-
-#         round(floor(smd) - smd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2)
-#       
-#     } else if (method == 'ceiling'){
-#       MD1 <-
-#         round(ceiling(signif(omd)) - omd,
-#               digits = 6)
-#       md2 <- round(ceiling(signif(sumd))- sumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       MD2 <-
-#         round(ceiling(signif(smd)) - smd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD1)
-#     }
-#   } else if (length(cus) == 3) {
-#     omd <- mz * round(cus[1]) / cus[1]
-#     sumd <- cus[2] * round(cus[1]) / cus[1]
-#     tumd <- cus[3] * round(cus[1]) / cus[1]
-#     
-#     if (method == 'round') {
-#       MD1 <-
-#         round(round(omd) - omd,
-#               digits = 6)
-#       md2 <- round(round(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(round(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(round(smd) - smd,
-#               digits = 6)
-#       md3 <- round(round(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD3 <-
-#         round(round(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     } else if (method == 'floor') {
-#       MD1 <-
-#         round(floor(omd) - omd,
-#               digits = 6)
-#       md2 <- round(floor(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(floor(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(floor(smd) - smd,
-#               digits = 6)
-#       md3 <- round(floor(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD3 <-
-#         round(floor(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     } else{
-#       MD1 <-
-#         round(ceiling(omd) - omd,
-#               digits = 6)
-#       md2 <- round(ceiling(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(ceiling(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(ceiling(smd) - smd,
-#               digits = 6)
-#       md3 <- round(ceiling(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD3 <-
-#         round(ceiling(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     }
-#     
-#   } else if (length(cus) > 3) {
-#     message("Sorry, only the first three unit would be used.")
-#     omd <- mz * round(cus[1]) / cus[1]
-#     sumd <- cus[2] * round(cus[1]) / cus[1]
-#     tumd <- cus[3] * round(cus[1]) / cus[1]
-#     
-#     if (method == 'round') {
-#       MD1 <-
-#         round(round(omd) - omd,
-#               digits = 6)
-#       md2 <- round(round(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(round(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(round(smd) - smd,
-#               digits = 6)
-#       md3 <- round(round(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD3 <-
-#         round(round(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     } else if (method == 'floor') {
-#       MD1 <-
-#         round(floor(omd) - omd,
-#               digits = 6)
-#       md2 <- round(floor(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(floor(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(floor(smd) - smd,
-#               digits = 6)
-#       md3 <- round(floor(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD1_3 <-
-#         round(floor(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     } else{
-#       MD1 <-
-#         round(ceiling(omd) - omd,
-#               digits = 6)
-#       md2 <- round(ceiling(sumd) - sumd,
-#                    digits = 6)
-#       md3 <- round(ceiling(tumd) - tumd,
-#                    digits = 6)
-#       smd <-  MD1 / md2
-#       tsmd <- md3 / md2
-#       MD2 <-
-#         round(ceiling(smd) - smd,
-#               digits = 6)
-#       md3 <- round(ceiling(tsmd) - tsmd,
-#                    digits = 6)
-#       tmd <- MD2 / md3
-#       MD3 <-
-#         round(ceiling(tmd) - tmd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1,MD2,MD3)
-#     }
-#   } else{
-#     
-#     if (method == 'round') {
-#       omd <- mz * round(cus) / cus
-#       MD1 <-
-#         round(round(omd) - omd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1)
-#     } else if (method == 'floor') {
-#       omd <- mz * floor(cus) / cus
-#       MD1 <-
-#         round(floor(omd) - omd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1)
-#     } else{
-#       omd <- mz * ceiling(cus) / cus
-#       MD1 <-
-#         round(ceiling(omd) - omd,
-#               digits = 6)
-#       re <- cbind.data.frame(mz,MD1)
-#     }
-#   }
-#   return(re)
-# }
-
-#------SERVER FUNCTION-------------------------
 
 server = function(input, output, session) {
   MD_data <- reactive({
@@ -389,48 +150,12 @@ server = function(input, output, session) {
   
   ## for plot control ##
   output$plot <- shiny::renderUI({
-    if (input$single == "Single") {
-      plotly::plotlyOutput("DTPlot1")
-    } else{
-      shiny::fluidRow(shiny::column(6, plotly::plotlyOutput("DTPlot1")),
+    shiny::fluidRow(shiny::column(6, plotly::plotlyOutput("DTPlot1")),
                       shiny::column(6, plotly::plotlyOutput("DTPlot2")))
-    }
-  })
+    })
+  
   output$plotctr <- shiny::renderUI({
-    if (input$single == "Single") {
-      shiny::fluidRow(
-        shiny::h4("Plot controls"),
-        shiny::tags$br(),
-        shiny::column(
-          6,
-          shiny::selectInput(
-            inputId = 'xvar1',
-            label = 'X variable for plot',
-            choices = names(MD_data())
-          )
-        ),
-        shiny::column(
-          6,
-          shiny::selectInput(
-            inputId = 'yvar1',
-            label = 'Y variable for plot',
-            choices = names(MD_data())
-          )
-        ),
-        shiny::column(
-          12,
-          shiny::selectInput(
-            inputId = 'zvar1',
-            label = 'Symbol variable for plot',
-            choices = list(`NULL` = 'NA',`Variable` = names(MD_data()))
-            ,
-            selected = 'NULL'
-          )
-        )
-      )
-      
-    } else{
-      shiny::fluidRow(
+        shiny::fluidRow(
         shiny::h4("Plot controls"),
         shiny::tags$br(),
         shiny::column(
@@ -488,17 +213,9 @@ server = function(input, output, session) {
           )
         )
       )
-    }
-  })
+    })
   output$plotctr2 <- shiny::renderUI({
-    if (input$single == "Single") {
-      shiny::fluidRow(
-        shiny::tags$br(),
-        shiny::textInput('x1', 'x axis label', input$xvar1),
-        shiny::textInput('y1', 'y axis label', input$yvar1)
-      )
-    } else{
-      shiny::fluidRow(
+        shiny::fluidRow(
         shiny::tags$br(),
         shiny::textInput(
           'x1',
@@ -521,9 +238,7 @@ server = function(input, output, session) {
           input$yvar2
         )
       )
-    }
-    
-  })
+    })
  
 #------For MD Plot Panel-----
   
@@ -538,6 +253,9 @@ server = function(input, output, session) {
           m$rt >= input$slide3[1] &
           m$rt <= input$slide3[2],]
     d <- crosstalk::SharedData$new(m)
+    
+    
+    
     
     MDplot_y1 <-
       m[, input$yvar1]
@@ -558,8 +276,7 @@ server = function(input, output, session) {
       intensity <- NULL
     }
     
-    if (input$single == "Double") {
-      MDplot_x2 <-
+    MDplot_x2 <-
         m[, input$xvar2]
       
       MDplot_y2 <-
@@ -571,12 +288,12 @@ server = function(input, output, session) {
         MDplot_z2 <- m[, input$zvar2]
       }
       
-    }
+
     
 #-----Plot 1-------
     output$DTPlot1 <- plotly::renderPlotly({
       s <- input$x1_rows_selected
-      if (!length(s)) {
+      if (!length(s) & input$findhomolog == FALSE) {
         p <- d %>%
           plotly::plot_ly(
             x = MDplot_x1,
@@ -611,6 +328,80 @@ server = function(input, output, session) {
             color = I('red'),
             selected = plotly::attrs_selected(name = 'Filtered')
           )
+      } else if(!length(s) && input$findhomolog == TRUE) {
+          
+          p_isotopes <- read.csv("./data/isotopes.csv")
+          
+          df <- m %>%
+            dplyr::select(mz, intensity, rt) %>% 
+            dplyr::rename(mass = mz) %>%
+            dplyr::mutate(rt = round(rt/60, 2)) %>% # convert rt in file from sec to min
+            dplyr::mutate(intensity = as.integer(intensity), .keep = "unused") %>% 
+            dplyr::select(mass, intensity, rt) %>%
+            dplyr::filter(intensity > 0) %>%
+            dplyr::arrange(rt) %>%
+            as.data.frame() 
+          
+          res_homologs <-  nontarget::homol.search(peaklist = df,
+                                                   isotopes = p_isotopes,
+                                                   elements= c("C","H", "O", "S", "F", "N"),
+                                                   use_C= FALSE,
+                                                   minmz= 49.9,
+                                                   maxmz= 50,
+                                                   minrt= 0.5,
+                                                   maxrt= 2,
+                                                   ppm= TRUE,
+                                                   mztol= 12,
+                                                   rttol= 0.5,
+                                                   minlength = 3,
+                                                   mzfilter= FALSE,
+                                                   vec_size= 3E6,
+                                                   mat_size= 3,
+                                                   R2= 0.98,
+                                                   spar= 0.45,
+                                                   plotit= FALSE,
+                                                   deb= 0)
+          
+          res_homologs <-  res_homologs[[1]] %>%
+            dplyr::filter(`m/z increment` > 0) %>%
+            #dplyr::mutate(`m/z increment` = round(as.numeric(`m/z increment`), 3)) %>%
+            dplyr::mutate(`m/z increment` = as.factor(`m/z increment`)) 
+          
+          
+          p <- d %>%
+            plotly::plot_ly(
+              x = MDplot_x1,
+              y = MDplot_y1,
+              symbol = MDplot_z1,
+              showlegend = input$show_leg,
+              type = "scatter",
+              size = intensity,
+              mode = "markers",
+              marker = list(
+                line = list(
+                  width = 1,
+                  color = '#FFFFFF'
+                )
+              ),
+              color = I('black'),
+              name = 'Unfiltered'
+            ) %>%
+            plotly::add_trace(x = res_homologs$RT*60, 
+                              y = res_homologs$mz, 
+                              type = "scatter",
+                              mode = "lines+markers") %>%
+            plotly::layout(
+              legend = list(
+                orientation = "h",
+                xanchor = "center",
+                x = 0.5,
+                y = 100
+              ),
+              showlegend = T,
+              xaxis = list(title = input$x1),
+              yaxis = list(title = input$y1)
+            ) 
+
       } else if (length(s)) {
         pp <- m %>%
           plotly::plot_ly() %>%
@@ -663,11 +454,12 @@ server = function(input, output, session) {
           )
       }
       
+
+      
     })
     
 #-----Plot 2-------
-    if (input$single == "Double") {
-      output$DTPlot2 <- plotly::renderPlotly({
+    output$DTPlot2 <- plotly::renderPlotly({
         t <- input$x1_rows_selected
         
         if (!length(t)) {
@@ -758,7 +550,7 @@ server = function(input, output, session) {
         }
         
       })
-    }
+    
 
 #----- Datatable of selected rows--------
     

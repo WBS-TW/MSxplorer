@@ -79,17 +79,23 @@ plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 3, diff = 0.008
 
 ```{r find_homolog}
 
-find_homologs("./data/LCneg_ComponentsRC.csv", 
-              plotdefect = TRUE,
-              intensity = N_rep1,
+
+file <- "./data/LCneg_ComponentsRC.csv"
+file <- "D:/Raw_data/Felicia/C1 Scotch.csv"
+
+ 
+
+find_homologs(file, 
+              plotdefect = FALSE,
+              intensity = intensity,
               p_elements=c("C","H", "O", "S", "F", "P", "N"),
               p_use_C=FALSE,
-              p_minmz=49.9,
-              p_maxmz=50,
+              p_minmz=72,
+              p_maxmz=75,
               p_minrt=0.5,
-              p_maxrt=2,
+              p_maxrt=3,
               p_ppm=TRUE,
-              p_mztol=30,
+              p_mztol=20,
               p_rttol=0.5,
               p_minlength = 3,
               p_mzfilter=FALSE,
