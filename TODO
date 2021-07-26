@@ -3,7 +3,7 @@ TODO
 
 
 //MDPlotR//
-- Add selection to choose round, ceiling, floor
+- Add a selection to choose which column to be "intensity". Can be beneficial for isotope plot since not all samples have the isotopes.
 
 
 //plotEIC/plotTopMS1Peaks/plotTopMS2Peaks//
@@ -31,5 +31,8 @@ CHECK
 Add a new function to plot the geomviolin plot of xcmsExp object
 
 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 FIXED: Only top "n"" hits will be shown.
 FIXED: Sync the two plots at x-axis (same retention time scale during zooming). Put sync buttons on left panel to sync either first or second plots.
+FIXED: Add selection to choose round, ceiling, floor
