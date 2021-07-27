@@ -5,6 +5,11 @@ TODO
 //MDPlotR//
 
 
+//find_homolog//
+- Change: use a shiny interface and select input file
+- Use if statement to ensure that input rt is in minutes and not seconds?
+
+
 
 //plotEIC/plotTopMS1Peaks/plotTopMS2Peaks//
 
