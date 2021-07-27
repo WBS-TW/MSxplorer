@@ -163,7 +163,8 @@ server = function(input, output, session) {
           shiny::selectInput(
             inputId = 'selectintensity',
             label = 'Variable for intensity',
-            choices = names(MD_data()),
+            #choices = names(MD_data()),
+            choices = names(select(MD_data(), where(is.numeric))),
             selected = names(MD_data()["intensity"])
           )
         ),
