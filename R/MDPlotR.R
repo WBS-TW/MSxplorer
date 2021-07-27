@@ -163,8 +163,7 @@ server = function(input, output, session) {
           shiny::selectInput(
             inputId = 'selectintensity',
             label = 'Variable for intensity',
-            #choices = names(MD_data()),
-            choices = names(select(MD_data(), where(is.numeric))),
+            choices = names(select(MD_data(), where(is.numeric))), # select only numeric variables
             selected = names(MD_data()["intensity"])
           )
         ),
@@ -530,7 +529,7 @@ server = function(input, output, session) {
     output$barplot <- plotly::renderPlotly({
       
       bar_out <- m[d$selection(), ]
-      selectInt <- m[d$selection(), input$selectintensity]
+      selectInt <- m[d$selection(), input$selectintensity] # intensity based on the selectintensity selectinput
       
       
       pbar <-  plotly::plot_ly() %>%
