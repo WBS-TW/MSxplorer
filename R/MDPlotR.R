@@ -39,7 +39,7 @@ ui <- shiny::navbarPage(
                  shiny::textInput("cus2", "MD formula 2", value = 'Cl-H')
                )),
               shiny::actionButton('go', 'Plot', width = '100%'),
-              shiny::br(),
+              shiny::tags$br(),
               shiny::radioButtons(
                 inputId = "rounding",
                 label = "Rounding",
@@ -49,6 +49,7 @@ ui <- shiny::navbarPage(
               ),
               shiny::checkboxInput('ins', 'Show intensity as size', F),
               shiny::checkboxInput("show_leg", "Show plot legends", T),
+              #Plot controls
               shiny::uiOutput("plotctr"),
               shiny::uiOutput("plotctr2"),
               shiny::uiOutput("slide1"),
@@ -160,10 +161,21 @@ server = function(input, output, session) {
         shiny::column(
           6,
           shiny::selectInput(
+            inputId = 'selectintensity',
+            label = 'Variable for intensity',
+            #choices = names(MD_data()),
+            choices = names(select(MD_data(), where(is.numeric))),
+            selected = names(MD_data()["intensity"])
+          )
+        ),
+        shiny::tags$br(), shiny::tags$br(), shiny::tags$br(), shiny::tags$br(), shiny::tags$br(),
+        shiny::column(
+          6,
+          shiny::selectInput(
             inputId = 'xvar1',
             label = 'X variable for Plot 1',
             choices = names(MD_data()),
-            selected = names(MD_data())[1]
+            selected = names(MD_data()["rt"])
           )
         ),
         shiny::column(
@@ -172,7 +184,7 @@ server = function(input, output, session) {
             inputId = 'yvar1',
             label = 'Y variable for Plot 1',
             choices = names(MD_data()),
-            selected = names(MD_data())[4]
+            selected = names(MD_data()["mz"])
           )
         ),
         shiny::column(
@@ -181,7 +193,7 @@ server = function(input, output, session) {
             inputId = 'xvar2',
             label = 'X variable for Plot 2',
             choices = names(MD_data()),
-            selected = names(MD_data())[1]
+            selected = names(MD_data()["RMD"])
           )
         ),
         shiny::column(
@@ -190,7 +202,7 @@ server = function(input, output, session) {
             inputId = 'yvar2',
             label = 'Y variable for Plot 2',
             choices = names(MD_data()),
-            selected = names(MD_data())[4]
+            selected = names(MD_data()["mz"])
           )
         ),
         shiny::column(
@@ -255,12 +267,11 @@ server = function(input, output, session) {
     
     
     
+    #selectInt <- m[, input$selectintensity]
     
-    MDplot_y1 <-
-      m[, input$yvar1]
+    MDplot_y1 <- m[, input$yvar1]
     
-    MDplot_x1 <-
-      m[, input$xvar1]
+    MDplot_x1 <- m[, input$xvar1]
     
     if(input$zvar1 == 'NA'){
       MDplot_z1 <- 1
@@ -270,7 +281,7 @@ server = function(input, output, session) {
     
     # Checkbox option for size of markers by intensity
     if (input$ins) {
-      intensity <- m$intensity
+      intensity <- m[, input$selectintensity]
     } else{
       intensity <- NULL
     }
@@ -517,13 +528,16 @@ server = function(input, output, session) {
     }
     # generate the barplot only when selecting data
     output$barplot <- plotly::renderPlotly({
+      
       bar_out <- m[d$selection(), ]
+      selectInt <- m[d$selection(), input$selectintensity]
+      
       
       pbar <-  plotly::plot_ly() %>%
           plotly::add_trace(
             data = bar_out,
             x = bar_out$mz,
-            y = nperc(bar_out$intensity), 
+            y = nperc(selectInt), 
             type = "bar")
       })
     
