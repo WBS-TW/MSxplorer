@@ -9,8 +9,8 @@
 <!-- badges: end -->
 
 The goal of MSxplorer is to provide interactive tools to explore data
-independent analysis (DIA) HRMS chemical analysis. It is currently only tested on Waters
-LC-HRMS MSe data. Some funtionalities can also be used on GC-HRMS data.
+independent analysis (DIA) HRMS chemical analysis. It has been mainly tested on Waters
+LC-HRMS MSe and GC-orbitrap-HRMS data.
 
 ## Installation
 
