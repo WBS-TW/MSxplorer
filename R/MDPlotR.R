@@ -566,8 +566,7 @@ server = function(input, output, session) {
           scrollX = TRUE)
       )
       
-      dt <-
-        DT::datatable(
+      dt <- DT::datatable(
           m,
           editable = TRUE,
           rownames = FALSE,
