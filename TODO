@@ -7,7 +7,7 @@ TODO
 
 //find_homolog//
 - Change: use a shiny interface and select input file
-- Use if statement to ensure that input rt is in minutes and not seconds?
+- ADD: argument to state whether input rt is in minutes or seconds, since 
 
 
 
