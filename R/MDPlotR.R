@@ -163,7 +163,7 @@ server = function(input, output, session) {
           shiny::selectInput(
             inputId = 'selectintensity',
             label = 'Variable for intensity',
-            choices = names(select(MD_data(), where(is.numeric))), # select only numeric variables
+            choices = names(dplyr::select(MD_data(), where(is.numeric))), # select only numeric variables
             selected = names(MD_data()["intensity"])
           )
         ),
@@ -537,12 +537,16 @@ server = function(input, output, session) {
             data = bar_out,
             x = bar_out$mz,
             y = nperc(selectInt), 
-            type = "bar")
+            type = "bar") %>%
+        plotly::layout(
+          xaxis = list(title = "m/z"),
+          yaxis = list(title = "Relative intensity (%)")
+        )
       })
     
 #-----Exporting the annotated data------
     
-    ##NOT WORKING YET###
+    ##NOT FULLY WORKING YET?###
     
     output$x3 <- shiny::downloadHandler(
       'MDplot_annotated_export.csv',
