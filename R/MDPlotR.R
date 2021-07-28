@@ -91,18 +91,17 @@ ui <- shiny::navbarPage(
 
 server = function(input, output, session) {
   MD_data <- reactive({
-    req(input$file1) #  require that the input is available
-    df <- vroom::vroom(input$file1$datapath)
+    req(input$file1) #requires that the input is available
+    df <- vroom::vroom(input$file1$datapath) # use vroom for faster loading of file
     df$RMD <- round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
     df$OMD <- round((round(df$mz) - df$mz) * 10 ^ 3)
     
-    # high order mass defect calculation
+    # higher-order mass defect calculation based on: doi.org/10.1021/ac200654j
     
     mdh1 <- getmdh(df$mz,cus = input$cus1, method = input$rounding)
     mdh2 <- getmdh(df$mz,cus = input$cus2, method = input$rounding)
-    # change colname
-    name1 <- paste0(colnames(mdh1),'_p1')
-    name2 <- paste0(colnames(mdh2),'_p2')
+    name1 <- paste0("Formula1_", colnames(mdh1))
+    name2 <- paste0("Formula2_", colnames(mdh2))
     mdh <- cbind(mdh1[,-1],mdh2[,-1])
     colnames(mdh) <- c(name1[-1],name2[-1])
     
