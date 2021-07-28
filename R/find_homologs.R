@@ -75,7 +75,7 @@ find_homologs <- function(file,
 
 p_isotopes <- read.csv("./data/isotopes.csv")
 
-df <- vroom::vroom(file)
+df <- vroom::vroom(file) #gives a tibble
 
 df <- df %>%
   dplyr::select(mz, {{intensity}}, rt) %>% #uses embrace to specify sample intensity
