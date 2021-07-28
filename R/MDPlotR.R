@@ -17,7 +17,7 @@ MDPlotR <- function() {
 ui <- shiny::navbarPage(
   "MDPlotR: interactive mass defect plots",
   theme = shinythemes::shinytheme('spacelab'),
-  shiny::tabPanel("Get Started",
+  shiny::tabPanel("DataAnalysis",
           shiny::fluidPage(shiny::sidebarLayout(
              shiny::sidebarPanel(
               shiny::fileInput(
@@ -68,19 +68,19 @@ ui <- shiny::navbarPage(
                shiny::tags$br(),
                )
              )
-             ))
-  # shiny::tabPanel(
-  #   "Instructions",
-  #   shiny::sidebarLayout(
-  #     shiny::sidebarPanel(shiny::h3("Table of content"),
-  #                         shiny::h4("File input"),
-  #                         shiny::h4("Equation"),
-  #                  width = 3),
-  #     shiny::mainPanel(
-  #       shiny::withMathJax(shiny::includeMarkdown("instructions.md"))
-  #     )
-  #   )
-  # )
+             )),
+  shiny::tabPanel(
+    "Instructions",
+    shiny::sidebarLayout(
+      shiny::sidebarPanel(shiny::h3("Table of content"),
+                          shiny::h4("File input"),
+                          shiny::h4("Equation"),
+                   width = 3),
+      shiny::mainPanel(
+        shiny::withMathJax(shiny::includeMarkdown("data/MDPlotR_instructions.md"))
+      )
+    )
+  )
 )
 
 
@@ -92,7 +92,7 @@ ui <- shiny::navbarPage(
 server = function(input, output, session) {
   MD_data <- reactive({
     req(input$file1) #requires that the input is available
-    df <- vroom::vroom(input$file1$datapath) # use vroom for faster loading of file
+    df <- vroom::vroom(input$file1$datapath) # use vroom for faster loading of large files
     df$RMD <- round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
     df$OMD <- round((round(df$mz) - df$mz) * 10 ^ 3)
     
