@@ -1,6 +1,6 @@
 
 
-#' Title
+#' Mass defect calculations
 #'
 #' @param mz 
 #' @param cus 
@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
+#' 
 getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
+  
   getorder <- function(input) {
     if (grepl(',', input)) {
       name <- unlist(strsplit(input, ','))
@@ -29,7 +31,7 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
     sumd <- cus[2] * round(cus[1]) / cus[1]
     
     if (method == 'round') {
-      # First order using "round" instead of ceiling as Roach et al. did
+      # Here, first order using "round" instead of ceiling as Roach et al. did
       MD1 <- round(round(omd) - omd, digits = 6)
       md2 <- round(round(sumd) - sumd, digits = 6)
       smd <-  MD1 / md2
@@ -94,7 +96,7 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
     }
     
   } else if (length(cus) > 3) {
-    message("Sorry, only the first three unit would be used.")
+    message("Sorry, only three MD base units are allowed!")
     omd <- mz * round(cus[1]) / cus[1]
     sumd <- cus[2] * round(cus[1]) / cus[1]
     tumd <- cus[3] * round(cus[1]) / cus[1]
