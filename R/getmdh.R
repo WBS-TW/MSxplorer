@@ -26,8 +26,9 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
   for (i in 1:length(temp)) {
     cus <- c(cus, getmass(temp[i]))
   }
+  
   if (length(cus) == 2) {
-    omd <- mz * round(cus[1]) / cus[1]
+    omd <- mz * round(cus[1]) / cus[1] #rename omd so not to be confused with OMD in MDPlotR.R
     sumd <- cus[2] * round(cus[1]) / cus[1]
     
     if (method == 'round') {
@@ -46,12 +47,12 @@ getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
       MD2 <- round(floor(smd) - smd, digits = 6)
       re <- cbind.data.frame(mz,MD1,MD2)
       
-    } else if (method == 'ceiling'){
-      MD1 <- round(ceiling(signif(omd)) - omd, digits = 6)
-      md2 <- round(ceiling(signif(sumd))- sumd, digits = 6)
+    } else {
+      MD1 <- round(ceiling(omd) - omd, digits = 6)
+      md2 <- round(ceiling(sumd) - sumd, digits = 6)
       smd <-  MD1 / md2
-      MD2 <- round(ceiling(signif(smd)) - smd, digits = 6)
-      re <- cbind.data.frame(mz,MD1,MD1)
+      MD2 <- round(ceiling(smd) - smd, digits = 6)
+      re <- cbind.data.frame(mz,MD1,MD2)
     }
   } else if (length(cus) == 3) {
     omd <- mz * round(cus[1]) / cus[1]
