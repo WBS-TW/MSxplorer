@@ -248,7 +248,8 @@ server = function(input, output, session) {
         )
       )
     })
- 
+  
+  
 #------For MD Plot Panel-----
   
   #OE#
@@ -296,7 +297,6 @@ server = function(input, output, session) {
       }
       
 
-    
 #-----Plot 1-------
     output$DTPlot1 <- plotly::renderPlotly({
       s <- input$x1_rows_selected
@@ -313,11 +313,12 @@ server = function(input, output, session) {
             marker = list(
               line = list(
                 width = 1,
-                color = '#FFFFFF'
-              )
+                color = '#d1d1d1'
+              ),
+              color = ~intensity,
+              colorscale = "Hot"
             ),
-            color = I('black'),
-            #color = ~intensity,
+            #color = I('black'),
             name = 'Unfiltered'
           ) %>%
           plotly::layout(
@@ -349,11 +350,12 @@ server = function(input, output, session) {
             marker = list(
               line = list(
                 width = 1,
-                color = '#FFFFFF'
-              )
+                color = '#d1d1d1'
+              ),
+              color = ~intensity,
+              colorscale = "Hot"
             ),
-            color = I('black'),
-            #color = ~intensity,
+            #color = I('black'),
             name = 'Unfiltered'
           ) %>%
           plotly::layout(
@@ -381,7 +383,7 @@ server = function(input, output, session) {
             marker = list(
               line = list(
                 width = 1,
-                color = '#FFFFFF'
+                color = '#d1d1d1'
               )
             ),
             color = I('red'),
@@ -410,10 +412,12 @@ server = function(input, output, session) {
               marker = list(
                 line = list(
                   width = 1,
-                  color = '#FFFFFF'
-                )
+                  color = '#d1d1d1'
+                ),
+                color = ~intensity,
+                colorscale = "Hot"
               ),
-              color = I('black'),
+              #color = I('black'),
               #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
@@ -446,10 +450,12 @@ server = function(input, output, session) {
               marker = list(
                 line = list(
                   width = 1,
-                  color = '#FFFFFF'
-                )
+                  color = '#d1d1d1'
+                ),
+                color = ~intensity,
+                colorscale = "Hot"
               ),
-              color = I('black'),
+              #color = I('black'),
               #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
@@ -478,7 +484,7 @@ server = function(input, output, session) {
               marker = list(
                 line = list(
                   width = 1,
-                  color = '#FFFFFF'
+                  color = '#d1d1d1'
                 )
               ),
               color = I('red'),
@@ -498,19 +504,20 @@ server = function(input, output, session) {
         m[d$selection(), ],
         editable = TRUE,
         rownames = FALSE,
+        selection = "none", #removed choice to select rows to avoid index error when select filtered data
         filter = "top",
         options = list(
           scrollX = TRUE)
       )
       
-      dt <-
-        DT::datatable(
-          m,
-          editable = TRUE,
-          rownames = FALSE,
-          filter = "top",
-          options = list(
-            scrollX = TRUE)
+      dt <- DT::datatable( 
+        m, 
+        editable = TRUE,
+        rownames = FALSE,
+        selection = "none", #removed choice to select rows to avoid index error when select filtered data
+        filter = "top",
+        options = list(
+          scrollX = TRUE)
         )
       
       if (NROW(T_out1) == 0) {
@@ -549,6 +556,7 @@ server = function(input, output, session) {
 #-----Exporting the annotated data------
     
     ##NOT FULLY WORKING YET?###
+    # To fix: Cannot export edited cells yet.
     
     output$x3 <- shiny::downloadHandler(
       'MDplot_annotated_export.csv',
