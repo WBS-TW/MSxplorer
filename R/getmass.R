@@ -20,7 +20,6 @@ getmass <- function(data) {
     } else if (grepl("/", data)) {
       name <- unlist(strsplit(data, "/"))
       frac <- as.numeric(name[2])
-      
       iso <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
       cus <- as.numeric(iso[max(iso[, 2]), 1]) / frac
       
