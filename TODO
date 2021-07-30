@@ -21,6 +21,8 @@ https://pubs.acs.org/na101/home/literatum/publisher/achs/journals/content/ancham
               
 
 - Manual: write that only 6 decimals are used in MD calculations here.
+- FAIR: output the calculation for the first m/z for transparency of the MD calculations and for educational purposes.
+
 
 Manuscript: https://docs.google.com/document/d/1TX6nZhhISuZvZDK2X8-bvFo4OcoNuYAYMM5tpiaPSgI/edit#heading=h.gdl7qhm7m6eq
 
@@ -28,8 +30,8 @@ Manuscript: https://docs.google.com/document/d/1TX6nZhhISuZvZDK2X8-bvFo4OcoNuYAY
 //------------------------------------------------------------------------------------//
 
 //find_homolog//
-- Change: use a shiny interface and select input file
-- ADD: argument to state whether input rt is in minutes or seconds, since 
+- Change: use a shiny interface and select input file and arguments
+- ADD: argument to state whether input rt is in minutes or seconds, to convert if rt is in seconds 
 
 Citations: https://pubs.acs.org/doi/10.1021/ac60206a048
 
@@ -61,7 +63,7 @@ Add a new function to plot the geomviolin plot of xcmsExp object
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ADDED 20210727: Add a selection to choose which column to be "intensity". Can be beneficial for isotope plot since not all samples have the isotopes.
-FIXED: Only top "n"" hits will be shown.
-FIXED: Sync the two plots at x-axis (same retention time scale during zooming). Put sync buttons on left panel to sync either first or second plots.
+20210727 ADDED MDPlotR: Add a selection to choose which column to be "intensity". Can be beneficial for isotope plot since not all samples have the isotopes.
+FIXED PlotEIC: Only top "n"" hits will be shown.
+FIXED PlotEIC: Sync the two plots at x-axis (same retention time scale during zooming). Put sync buttons on left panel to sync either first or second plots.
 FIXED: Add selection to choose round, ceiling, floor
