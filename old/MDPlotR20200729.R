@@ -160,7 +160,7 @@ server = function(input, output, session) {
         shiny::column(
           6,
           shiny::selectInput(
-            inputId = 'selectintensity', #select which variable to use as intensity input for bar plot (not working yet for scatterplot?)
+            inputId = 'selectintensity',
             label = 'Variable for intensity',
             choices = names(dplyr::select(MD_data(), where(is.numeric))), # select only numeric variables
             selected = names(MD_data()["intensity"])
@@ -261,10 +261,11 @@ server = function(input, output, session) {
           m$mz <= input$slide2[2] &
           m$rt >= input$slide3[1] &
           m$rt <= input$slide3[2],]
-    
     d <- crosstalk::SharedData$new(m)
     
     
+    
+    #selectInt <- m[, input$selectintensity]
     
     MDplot_y1 <- m[, input$yvar1]
     
@@ -276,7 +277,7 @@ server = function(input, output, session) {
       MDplot_z1 <- m[, input$zvar1]
     }
     
-    # Checkbox option for size of markers by intensity variable
+    # Checkbox option for size of markers by intensity
     if (input$ins) {
       intensity <- m[, input$selectintensity]
     } else{
@@ -317,7 +318,6 @@ server = function(input, output, session) {
               )
             ),
             color = I('black'),
-            #color = ~intensity,
             name = 'Unfiltered'
           ) %>%
           plotly::layout(
@@ -353,7 +353,6 @@ server = function(input, output, session) {
               )
             ),
             color = I('black'),
-            #color = ~intensity,
             name = 'Unfiltered'
           ) %>%
           plotly::layout(
@@ -414,7 +413,6 @@ server = function(input, output, session) {
                 )
               ),
               color = I('black'),
-              #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
             plotly::layout(
@@ -450,7 +448,6 @@ server = function(input, output, session) {
                 )
               ),
               color = I('black'),
-              #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
             plotly::layout(

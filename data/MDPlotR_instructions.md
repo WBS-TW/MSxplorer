@@ -58,3 +58,7 @@ Examples of chemical formula in the MD formula insert box:
 - $CH2,O$: specifies that $CH_2$ is the first-order MD unit and $O$ is the second-order MD unit, use comma without blank space to separate them. This app only support at most three-order mass defect units.
 
 - $CH2,Cl-H$:  specifies that $CH_2$ is the first-order MD unit and $Cl-H$ is the second-order MD unit. Use comma without blank space to separate the units.
+
+-Fractional base unit can also be used (but not together with subtraction) as follows:
+- $CH2/X$: where X is the divisor. If X = 10 then the input formula will be $CH2/10$.
+
