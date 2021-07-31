@@ -418,7 +418,6 @@ server = function(input, output, session) {
                 colorscale = "Hot"
               ),
               #color = I('black'),
-              #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
             plotly::layout(
@@ -456,7 +455,6 @@ server = function(input, output, session) {
                 colorscale = "Hot"
               ),
               #color = I('black'),
-              #color = ~intensity,
               name = 'Unfiltered'
             ) %>%
             plotly::layout(
