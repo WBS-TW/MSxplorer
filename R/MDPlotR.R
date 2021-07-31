@@ -202,24 +202,6 @@ server = function(input, output, session) {
             choices = names(MD_data()),
             selected = names(MD_data()["mz"])
           )
-        ),
-        shiny::column(
-          6,
-          shiny::selectInput(
-            inputId = 'zvar1',
-            label = 'Symbol variable for plot',
-            choices = list(`NULL` = 'NA',`Variable` = names(MD_data())),
-            selected = 'NULL'
-          )
-        ),
-        shiny::column(
-          6,
-          shiny::selectInput(
-            inputId = 'zvar2',
-            label = 'Symbol variable for plot 2',
-            choices = list(`NULL` = 'NA',`Variable` = names(MD_data())),
-            selected = 'NULL'
-          )
         )
       )
     })
@@ -271,12 +253,7 @@ server = function(input, output, session) {
     
     MDplot_x1 <- m[, input$xvar1]
     
-    if(input$zvar1 == 'NA'){
-      MDplot_z1 <- 1
-    }else{
-      MDplot_z1 <- m[, input$zvar1]
-    }
-    
+
     # Checkbox option for size of markers by intensity variable
     if (input$ins) {
       intensity <- m[, input$selectintensity]
@@ -290,12 +267,7 @@ server = function(input, output, session) {
       MDplot_y2 <-
         m[, input$yvar2]
       
-      if(input$zvar2 == 'NA'){
-        MDplot_z2 <- 1
-      }else{
-        MDplot_z2 <- m[, input$zvar2]
-      }
-      
+
 
 #-----Plot 1-------
     output$DTPlot1 <- plotly::renderPlotly({
@@ -305,7 +277,6 @@ server = function(input, output, session) {
           plotly::plot_ly(
             x = MDplot_x1,
             y = MDplot_y1,
-            symbol = MDplot_z1,
             showlegend = input$show_leg,
             type = "scatter",
             size = intensity,
@@ -315,7 +286,7 @@ server = function(input, output, session) {
                 width = 1,
                 color = '#d1d1d1'
               ),
-              color = ~intensity,
+              color = intensity,
               colorscale = "Hot"
             ),
             #color = I('black'),
@@ -343,7 +314,6 @@ server = function(input, output, session) {
           plotly::add_trace(
             x = MDplot_x1,
             y = MDplot_y1,
-            symbol = MDplot_z1,
             type = "scatter",
             size = intensity,
             mode = "markers",
@@ -352,7 +322,7 @@ server = function(input, output, session) {
                 width = 1,
                 color = '#d1d1d1'
               ),
-              color = ~intensity,
+              color = intensity,
               colorscale = "Hot"
             ),
             #color = I('black'),
@@ -404,7 +374,6 @@ server = function(input, output, session) {
             plotly::plot_ly(
               x = MDplot_x2,
               y = MDplot_y2,
-              symbol = MDplot_z2,
               showlegend = input$show_leg,
               type = "scatter",
               size = intensity,
@@ -414,7 +383,7 @@ server = function(input, output, session) {
                   width = 1,
                   color = '#d1d1d1'
                 ),
-                color = ~intensity,
+                color = intensity,
                 colorscale = "Hot"
               ),
               #color = I('black'),
@@ -442,7 +411,6 @@ server = function(input, output, session) {
             plotly::add_trace(
               x = MDplot_x2,
               y = MDplot_y2,
-              symbol = MDplot_z2,
               type = "scatter",
               size = intensity,
               mode = "markers",
