@@ -29,16 +29,16 @@ ui <- shiny::navbarPage(
                ),
                shiny::fluidRow(shiny::column(
                  12,
-                 shiny::textInput("cus1", "MD formula 1", value = 'CH2,O')
+                 shiny::textInput("cus1", "MD formula 1", value = "CH2,O")
                )
                
                ),
                
               shiny::fluidRow(shiny::column(
                  12,
-                 shiny::textInput("cus2", "MD formula 2", value = 'Cl-H')
+                 shiny::textInput("cus2", "MD formula 2", value = "Cl-H")
                )),
-              shiny::actionButton('go', 'Plot', width = '100%'),
+              shiny::actionButton('go', 'Plot', width = "100%"),
               shiny::tags$br(),
               shiny::radioButtons(
                 inputId = "rounding",
