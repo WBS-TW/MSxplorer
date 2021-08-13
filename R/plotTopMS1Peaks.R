@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
+#' fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_mzML/QC_rep2.mzML"
 #' 
 #' PFSA_frags <- data.frame(name = c("FSO3", "SO3"), mz = c(98.9552, 79.9558), ms_level = c("ms2", "ms2"))
 #' 
