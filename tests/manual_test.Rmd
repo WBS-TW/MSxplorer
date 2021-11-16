@@ -5,14 +5,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+Testing Fragment flagging
 ```{r LC analysis}
-library(MSXploreR)
+library(MSxplorer)
+
 #fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/6Rplant_1_C,2_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/14RInsect_1_D,7_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/QA_QC_1_F,3_1.mzML"
 #fl <-  "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/11Rwater_1_B,5_1.mzML"
-fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_centr_mzXML/V5.mzXML"
+fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_mzML/V5.mzML"
 #fl <- "D:/Raw_data/Dust_Florian/LC/LC_neg_mzML/N1.mzML"
 #fl <- "D:/Raw_data/Dust_Florian/LC/LC_pos_mzML/G1.mzML"
 
@@ -41,7 +43,7 @@ featlist <- PFSA_frags
 #                   ms_level = c("ms1"))
 
 
-plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 10, diff = 0.008, mserr = 0.001, rtWindow = 0.3)
+plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 10, diff = 0.008, mserr = 0.01, rtWindow = 0.3)
 
 
 #test_plotTopMS(filepath = fl, featlist = featlist, numTopIons = 10, diff = 0.008, mserr = 0.001, rtrange = 0.3)
@@ -50,7 +52,7 @@ plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 10, diff = 0.00
 
 
 
-
+Testing fragment flagging on GCMS
 ```{r GC analysis}
 library(MSXploreR)
 fl <- "D:/Raw_data/Dust_Florian/GC/test/GD.mzML"
@@ -77,11 +79,12 @@ plotTopMS1Peaks(filepath = fl, featlist = featlist, numTopIons = 3, diff = 0.008
 ```
 
 
+Testing find_homolog
 ```{r find_homolog}
 
 
 file <- "./data/LCneg_ComponentsRC.csv"
-file <- "D:/Raw_data/Felicia/C1 Scotch.csv"
+#file <- "D:/Raw_data/Felicia/C1 Scotch.csv"
 
  
 
