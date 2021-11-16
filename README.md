@@ -19,7 +19,7 @@ LC-HRMS MSe and GC-orbitrap-HRMS data.
 <!-- install.packages("MSxplorer") -->
 <!-- ``` -->
 
-And the development version from [GitHub](https://github.com/) with:
+The development version from [GitHub](https://github.com/):
 
 ``` r
 # install.packages("devtools")
