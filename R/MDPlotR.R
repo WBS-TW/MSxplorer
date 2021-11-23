@@ -522,7 +522,7 @@ server = function(input, output, session) {
 #-----Exporting the annotated data------
     
     ##NOT FULLY WORKING YET?###
-    # To fix: Cannot export edited cells yet.
+    # To fix: Cannot export edited cells yet. A solution is to remove edit option and manually annotate in excel
     
     output$x3 <- shiny::downloadHandler(
       'MDplot_annotated_export.csv',
