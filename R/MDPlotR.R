@@ -77,7 +77,7 @@ ui <- shiny::navbarPage(
                           shiny::h4("Equation"),
                    width = 3),
       shiny::mainPanel(
-        shiny::withMathJax(shiny::includeMarkdown("man/MDPlotR_instructions.md"))
+        shiny::withMathJax(shiny::includeMarkdown("data/MDPlotR_instructions.md"))
       )
     )
   )
