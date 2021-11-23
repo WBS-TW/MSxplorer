@@ -77,7 +77,7 @@ ui <- shiny::navbarPage(
                           shiny::h4("Equation"),
                    width = 3),
       shiny::mainPanel(
-        shiny::withMathJax(shiny::includeMarkdown("data/MDPlotR_instructions.md"))
+        shiny::withMathJax(shiny::includeMarkdown("man/MDPlotR_instructions.md"))
       )
     )
   )
@@ -96,7 +96,7 @@ server = function(input, output, session) {
     df$RMD <- round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
     df$OMD <- round((round(df$mz) - df$mz) * 10 ^ 3)
     
-    # higher-order mass defect calculation based on: doi.org/10.1021/ac200654j
+# higher-order mass defect calculation based on: doi.org/10.1021/ac200654j
     
     mdh1 <- getmdh(df$mz,cus = input$cus1, method = input$rounding)
     mdh2 <- getmdh(df$mz,cus = input$cus2, method = input$rounding)
@@ -108,7 +108,7 @@ server = function(input, output, session) {
     df <- cbind(df,mdh)
     
   })
-  # Filtering the intensity, mz, and rt
+# Filtering the intensity, mz, and rt
   output$slide1 <- renderUI({
     minZ <- min(MD_data()$intensity)
     maxZ <- max(MD_data()$intensity)
@@ -147,7 +147,7 @@ server = function(input, output, session) {
   })
   
   
-  ## for plot control ##
+## for plot control ##
   output$plot <- shiny::renderUI({
     shiny::fluidRow(shiny::column(6, plotly::plotlyOutput("DTPlot1")),
                       shiny::column(6, plotly::plotlyOutput("DTPlot2")))
