@@ -1,7 +1,6 @@
 TODO
 
 
-
 //MDPlotR//
 - ADD: remainder calculation? Use Rxx as input keytext for remainder calculation.
 
@@ -20,8 +19,7 @@ Fouguet:  https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/
 MzMine MD: https://pubs.acs.org/doi/10.1021/acs.analchem.9b03863
 https://pubs.acs.org/na101/home/literatum/publisher/achs/journals/content/ancham/2020/ancham.2020.92.issue-1/acs.analchem.9b03863/20191230/images/large/ac9b03863_0003.jpeg
       
-- ADD: van Krevelen plot option? 
-              
+           
 
 - Manual: write that only 6 decimals are used in MD calculations here.
 - FAIR: output the calculation for the first m/z for transparency of the MD calculations and for educational purposes.
