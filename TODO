@@ -3,6 +3,7 @@ TODO
 
 //MDPlotR//
 - ADD: remainder calculation? Use Rxx as input keytext for remainder calculation.
+- ADD: Kendrick-Analogous Mass Difference Networks. https://pubs.acs.org/doi/full/10.1021/acs.est.1c08143
 
 Check:  
 Mass-Remainder Analysis (MARA): a New Data Mining Tool for Copolymer Characterization. https://pubs.acs.org/doi/10.1021/acs.analchem.7b04730
