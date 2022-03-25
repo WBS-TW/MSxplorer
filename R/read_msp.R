@@ -2,9 +2,9 @@
 
 
 
-#' Title
+#' read_msp
 #'
-#' @param file 
+#' @param file, a string with the path of the msp file 
 #'
 #' @return
 #' @export
@@ -12,10 +12,14 @@
 #' @examples 
 #' file <- "./data/GC_orbitrapSTD.msp"
 #' peak_table_list <- read_msp(file)
+
 read_msp <- function(file) {
   
-# read msp file
+# reading msp file
 msp <- readLines(file, warn = FALSE)
+
+# Removing comments that include Name: to avoid incorrect indexing
+
 msp <- stringr::str_replace_all(msp, "Comments:.*(Name:)", "Comment removed due to incorrect name format")
 
 n <- grep("Name:", msp, ignore.case = TRUE)

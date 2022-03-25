@@ -196,6 +196,7 @@ ui <- dashboardPage(
                    sidebarMenu(
                      fileInput("file1", "Select msp file"),
                      checkboxInput("check_rt", "Include retention times"),
+                     numericInput("msp_id", "Which msp id to read", value = 1, min = 1),
                      actionButton("click_file", "Select"),
                      fluidRow(
                        column(4, checkboxInput("check_int", "Show intensity")),
@@ -226,7 +227,7 @@ ui <- dashboardPage(
 server <- function(input, output, session){
   raw_data <- reactive({
     req(input$file1)
-    df <- read_msp(input$file1$datapath)[[4]]
+    df <- read_msp(input$file1$datapath)[[input$msp_id]]
     return(df)
   })
   
