@@ -64,6 +64,11 @@ Add a new function to plot the geomviolin plot of xcmsExp object
 
 
 
+//------------------------------------------------------------------------------------//
+//findhalo_msp//
+- Combine findhalo with search on msp file (need to specify LC or GC?)
+
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 20210727 ADDED MDPlotR: Add a selection to choose which column to be "intensity". Can be beneficial for isotope plot since not all samples have the isotopes.
 FIXED PlotEIC: Only top "n"" hits will be shown.
