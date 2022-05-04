@@ -32,7 +32,6 @@ https://pubs.acs.org/na101/home/literatum/publisher/achs/journals/content/ancham
 
 //find_homolog//
 - Change: use a shiny interface and select input file and arguments
-- ADD: argument to state whether input rt is in minutes or seconds, to convert if rt is in seconds 
 
 Citations: https://pubs.acs.org/doi/10.1021/ac60206a048
 
@@ -67,9 +66,12 @@ Add a new function to plot the geomviolin plot of xcmsExp object
 //------------------------------------------------------------------------------------//
 //findhalo_msp//
 - Combine findhalo with search on msp file (need to specify LC or GC?)
+- Calculate cosine scores of MS2 of selected homolog series. Show spectra comparison. This can be done in the MS-DIAL output file for LC data which gives MS2 (deconvoluted) data.
 
+//-----------SOLVED-----------//
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+20220428 ADDED find_homologs: argument to state whether input rt is in minutes or seconds, to convert if rt is in seconds 
+
 20210727 ADDED MDPlotR: Add a selection to choose which column to be "intensity". Can be beneficial for isotope plot since not all samples have the isotopes.
 FIXED PlotEIC: Only top "n"" hits will be shown.
 FIXED PlotEIC: Sync the two plots at x-axis (same retention time scale during zooming). Put sync buttons on left panel to sync either first or second plots.

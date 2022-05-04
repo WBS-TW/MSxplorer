@@ -214,3 +214,219 @@ Num Peaks: 6
 205.085 999
 231.0663 116
 249.0751 762
+Name: Fumonisin Py2
+DB#: AC000939
+InChIKey: GZCJIEXTWGJVIN-MKHOGIGVSA-N
+InChI: InChI=1S/C34H56O15/c1-5-6-12-21(3)32(49-31(43)18-24(34(46)47)16-29(40)41)27(48-30(42)17-23(33(44)45)15-28(38)39)14-20(2)11-9-7-8-10-13-25(36)19-26(37)22(4)35/h20-21,23-27,32,36-37H,5-19H2,1-4H3,(H,38,39)(H,40,41)(H,44,45)(H,46,47)/t20-,21+,23+,24+,25+,26-,27-,32+/m0/s1
+SMILES: CCCC[C@H]([C@@H](OC(C[C@H](C(O)=O)CC(O)=O)=O)[C@@H](OC(C[C@H](C(O)=O)CC(O)=O)=O)C[C@H](CCCCCC[C@@H](O)C[C@H](O)C(C)=O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 703.3552
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 40(NCE)
+Formula: C34H56O15
+MW: 704
+ExactMass: 704.36191
+Comments: Parent=703.3552
+Splash: splash10-0a4i-2900000000-7d8a78fe1a32d7af6198
+Num Peaks: 4
+69.0327 318
+71.012 42
+113.0224 259
+157.0122 999
+
+Name: Patulin
+Synon: Clavacin
+Synon: Expansin
+DB#: AC000651
+InChIKey: ZRWPUFFVAOMMNM-UHFFFAOYSA-N
+InChI: InChI=1S/C7H6O4/c8-6-3-4-5(11-6)1-2-10-7(4)9/h1,3,7,9H,2H2
+SMILES: C1C=C2C(=CC(=O)O2)C(O1)O
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 153.0199
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 20(NCE)
+Formula: C7H6O4
+MW: 154
+ExactMass: 154.0266
+Comments: Parent=153.0199
+Splash: splash10-0560-5900000000-a8d241312fc6a564c5f1
+Num Peaks: 8
+81.0324 235
+83.0482 83
+97.0273 74
+109.0276 271
+111.0431 40
+125.0223 177
+125.0586 74
+151.0021 31
+
+Name: Citrinin
+Synon: Antimycin
+Synon: (3R,4S)-6-hydroxy-3,4,5-trimethyl-8-oxo-3,4-dihydroisochromene-7-carboxylic acid
+DB#: AC000428
+InChIKey: CBGDIJWINPWWJW-IYSWYEEDSA-N
+InChI: InChI=1S/C13H14O5/c1-5-7(3)18-4-8-9(5)6(2)11(14)10(12(8)15)13(16)17/h4-5,7,14H,1-3H3,(H,16,17)/t5-,7-/m1/s1
+SMILES: C[C@@H]1[C@H](OC=C2C1=C(C(=C(C2=O)C(=O)O)O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 249.0774
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 40(NCE)
+Formula: C13H14O5
+MW: 250
+ExactMass: 250.08411
+Comments: Parent=249.0774
+Splash: splash10-0a6r-0590000000-1359a159a9f5eec08bab
+Num Peaks: 9
+105.0326 34
+135.0794 76
+161.095 199
+175.0379 127
+177.09 422
+205.0506 44
+205.085 999
+231.0663 102
+249.0751 212
+
+Name: Citrinin
+Synon: Antimycin
+Synon: (3R,4S)-6-hydroxy-3,4,5-trimethyl-8-oxo-3,4-dihydroisochromene-7-carboxylic acid
+DB#: AC000427
+InChIKey: CBGDIJWINPWWJW-IYSWYEEDSA-N
+InChI: InChI=1S/C13H14O5/c1-5-7(3)18-4-8-9(5)6(2)11(14)10(12(8)15)13(16)17/h4-5,7,14H,1-3H3,(H,16,17)/t5-,7-/m1/s1
+SMILES: C[C@@H]1[C@H](OC=C2C1=C(C(=C(C2=O)C(=O)O)O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 249.0774
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 30(NCE)
+Formula: C13H14O5
+MW: 250
+ExactMass: 250.08411
+Comments: Parent=249.0774
+Splash: splash10-0a4j-0190000000-300a72aeddb48ef381be
+Num Peaks: 6
+161.0951 82
+177.09 159
+205.0506 63
+205.085 999
+231.0663 116
+249.0751 762
+Name: Fumonisin Py2
+DB#: AC000939
+InChIKey: GZCJIEXTWGJVIN-MKHOGIGVSA-N
+InChI: InChI=1S/C34H56O15/c1-5-6-12-21(3)32(49-31(43)18-24(34(46)47)16-29(40)41)27(48-30(42)17-23(33(44)45)15-28(38)39)14-20(2)11-9-7-8-10-13-25(36)19-26(37)22(4)35/h20-21,23-27,32,36-37H,5-19H2,1-4H3,(H,38,39)(H,40,41)(H,44,45)(H,46,47)/t20-,21+,23+,24+,25+,26-,27-,32+/m0/s1
+SMILES: CCCC[C@H]([C@@H](OC(C[C@H](C(O)=O)CC(O)=O)=O)[C@@H](OC(C[C@H](C(O)=O)CC(O)=O)=O)C[C@H](CCCCCC[C@@H](O)C[C@H](O)C(C)=O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 703.3552
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 40(NCE)
+Formula: C34H56O15
+MW: 704
+ExactMass: 704.36191
+Comments: Parent=703.3552
+Splash: splash10-0a4i-2900000000-7d8a78fe1a32d7af6198
+Num Peaks: 4
+69.0327 318
+71.012 42
+113.0224 259
+157.0122 999
+
+Name: Patulin
+Synon: Clavacin
+Synon: Expansin
+DB#: AC000651
+InChIKey: ZRWPUFFVAOMMNM-UHFFFAOYSA-N
+InChI: InChI=1S/C7H6O4/c8-6-3-4-5(11-6)1-2-10-7(4)9/h1,3,7,9H,2H2
+SMILES: C1C=C2C(=CC(=O)O2)C(O1)O
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 153.0199
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 20(NCE)
+Formula: C7H6O4
+MW: 154
+ExactMass: 154.0266
+Comments: Parent=153.0199
+Splash: splash10-0560-5900000000-a8d241312fc6a564c5f1
+Num Peaks: 8
+81.0324 235
+83.0482 83
+97.0273 74
+109.0276 271
+111.0431 40
+125.0223 177
+125.0586 74
+151.0021 31
+
+Name: Citrinin
+Synon: Antimycin
+Synon: (3R,4S)-6-hydroxy-3,4,5-trimethyl-8-oxo-3,4-dihydroisochromene-7-carboxylic acid
+DB#: AC000428
+InChIKey: CBGDIJWINPWWJW-IYSWYEEDSA-N
+InChI: InChI=1S/C13H14O5/c1-5-7(3)18-4-8-9(5)6(2)11(14)10(12(8)15)13(16)17/h4-5,7,14H,1-3H3,(H,16,17)/t5-,7-/m1/s1
+SMILES: C[C@@H]1[C@H](OC=C2C1=C(C(=C(C2=O)C(=O)O)O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 249.0774
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 40(NCE)
+Formula: C13H14O5
+MW: 250
+ExactMass: 250.08411
+Comments: Parent=249.0774
+Splash: splash10-0a6r-0590000000-1359a159a9f5eec08bab
+Num Peaks: 9
+105.0326 34
+135.0794 76
+161.095 199
+175.0379 127
+177.09 422
+205.0506 44
+205.085 999
+231.0663 102
+249.0751 212
+
+Name: Citrinin
+Synon: Antimycin
+Synon: (3R,4S)-6-hydroxy-3,4,5-trimethyl-8-oxo-3,4-dihydroisochromene-7-carboxylic acid
+DB#: AC000427
+InChIKey: CBGDIJWINPWWJW-IYSWYEEDSA-N
+InChI: InChI=1S/C13H14O5/c1-5-7(3)18-4-8-9(5)6(2)11(14)10(12(8)15)13(16)17/h4-5,7,14H,1-3H3,(H,16,17)/t5-,7-/m1/s1
+SMILES: C[C@@H]1[C@H](OC=C2C1=C(C(=C(C2=O)C(=O)O)O)C)C
+Precursor_type: [M-H]-
+Spectrum_type: MS2
+PrecursorMZ: 249.0774
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: NEGATIVE
+Collision_energy: 30(NCE)
+Formula: C13H14O5
+MW: 250
+ExactMass: 250.08411
+Comments: Parent=249.0774
+Splash: splash10-0a4j-0190000000-300a72aeddb48ef381be
+Num Peaks: 6
+161.0951 82
+177.09 159
+205.0506 63
+205.085 999
+231.0663 116
+249.0751 762

@@ -3,6 +3,7 @@
 
 file <- "D:/Raw_data/NormanDust/mzML/MSDIAL export/Spectrum_0_2022411232.msp"
 file <- "D:/Raw_data/Dust_Florian/GC/Raw_data/mzML/MSDIAL_export/Spectrum_2_2022382144.msp"
+file <- "D:/TEST/2022-02-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp"
 
 msp <- readLines(file, warn = FALSE)
 
