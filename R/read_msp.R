@@ -6,7 +6,7 @@
 #'
 #' @param file, a string with the path of the msp file 
 #'
-#' @return
+#' @return a list of dataframes from individual compounds in the msp file containing mz, intensity, annotation
 #' @export
 #'
 #' @examples 
@@ -67,6 +67,7 @@ peak_tbl_list <- append(peak_tbl_list, list(peak_tbl))
 
 }
 
+# rownames(peak_tbl_list) <- NULL
 
 return(peak_tbl_list)
 
