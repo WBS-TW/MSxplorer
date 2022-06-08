@@ -1,5 +1,7 @@
-# Check if any better using Sirius?
 
+# TO CHECK
+# Check if any better using Sirius?
+# check if charge mass calculations are  accurate (in isopattern use 0 or 1 charge)?
 
 
 # TODO
@@ -29,6 +31,7 @@ library(dplyr)
 library(enviPat)
 library(stringr)
 library(tidyr)
+library(rcdk)
 source("./R/read_msp.R")
 data("isotopes")
 
@@ -37,13 +40,16 @@ data("isotopes")
 
 #msp <- "./data/2-Methoxy-5-methylaniline.msp"
 #formula <- "C8H11NO"
-
-msp <- "./data/MTM00088_GC-EI-FT_POSITIVE_YATIGPZCMOYEGE-UHFFFAOYSA-N.msp"
-formula <- "C14H8Br6O2"
-
+# 
+# msp <- "./data/MTM00088_GC-EI-FT_POSITIVE_YATIGPZCMOYEGE-UHFFFAOYSA-N.msp"
+# formula <- "C14H8Br6O2"
 
 # msp <- "./data/MTM00126_GC-EI-FT_POSITIVE_WYEHFWKAOXOVJD-UHFFFAOYSA-N.msp"
 # formula <- "C19H11F5N2O2"
+
+msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
+formula <-"C18H15N5O5" 
+
 
 compound <- read_msp(msp)[[1]] %>% select(mz, intensity)
 rownames(compound) <- NULL
@@ -101,7 +107,7 @@ chemforms <- str_extract(match_list[["annodf"]][["Formula"]], "(?<=\\[).+?(?=\\]
 
 isopat <- as.data.frame(isopattern(isotopes = isotopes, chemforms = chemforms,
                                    threshold = 1, # this one needs to be used as input variable in function
-                                   charge = 1, 
+                                   charge = 0, # should be 0 charge since rcdk already is +1, check
                                    emass = 0.00054858, 
                                    plotit = FALSE, 
                                    algo=1, 
@@ -170,13 +176,16 @@ if(all_ions$IsoMass[i] > compound$mz_min[j] & all_ions$IsoMass[i] < compound$mz_
   }
 }
 
+windows2 <- mass_accuracy/10^6*all_ions$IsoMass
 
 all_ions <- all_ions %>%
   mutate(MassError_ppm = case_when(Detected_mz > 1 ~ round((Detected_mz-IsoMass)/IsoMass*10^6,1))) %>%
   group_by(MonoIsoFormula) %>%
   mutate(Detected_relab = round(Detected_int/max(Detected_int)*100, 1)) %>%
   ungroup() %>%
-  select(Annotated:Abundance, Isoformula:Detected_relab)
+  mutate(IsoMass_min = IsoMass-windows2,
+         IsoMass_max = IsoMass+windows2) %>%
+  select(Annotated:IsoMass, IsoMass_min, IsoMass_max, Abundance, Isoformula:Detected_relab)
   #filter(!is.na(MassError_ppm))
 
 
