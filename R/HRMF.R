@@ -18,6 +18,8 @@
 
 # Filter absolute intensities >50000?
 # Inputs: msp with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
+# add negative and positive charge and adduct options in case of CI?
+
 
 # use rcdk and isopattern
 # https://pubs.acs.org/doi/full/10.1021/acs.analchem.5b01503
@@ -33,7 +35,8 @@ library(stringr)
 library(tidyr)
 library(rcdk)
 source("./R/read_msp.R")
-data("isotopes")
+
+data("isotopes") # this is needed by isopattern to calculate the isotopic patterns
 
 # the read_msp was sourced. Change this when finalizing the function
 # Need to manually input formula or extract from msp file? Since unknowns are not annotated with chemical formula and not shown in msp
@@ -49,7 +52,6 @@ data("isotopes")
 
 msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
 formula <-"C18H15N5O5" 
-
 
 compound <- read_msp(msp)[[1]] %>% select(mz, intensity)
 rownames(compound) <- NULL
@@ -98,22 +100,23 @@ match_list <- list(annotated = logical(), annodf = data.frame(), isopat = data.f
 if(length(match) > 0) {
 match_list[["annotated"]] <- TRUE
 
-annodf <- data.frame(MonoIsoMass = match[[1]]@mass,
-                     Formula = match[[1]]@string,
-                     MassError_ppm = round((compound$mz[i]-match[[1]]@mass)/match[[1]]@mass*10^6, 1))
+annodf <- data.frame(MonoIso_mz = match[[1]]@mass,
+                     MonoIonFormula = match[[1]]@string,
+                     MassError_ppm = round((compound$mz[i]-match[[1]]@mass)/match[[1]]@mass*10^6, 2))
 match_list[["annodf"]] <- annodf
 
-chemforms <- str_extract(match_list[["annodf"]][["Formula"]], "(?<=\\[).+?(?=\\])")
+# extract the ion monoisotopic ion formula for input into isopattern
+chemforms <- str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
 
 isopat <- as.data.frame(isopattern(isotopes = isotopes, chemforms = chemforms,
                                    threshold = 1, # this one needs to be used as input variable in function
-                                   charge = 0, # should be 0 charge since rcdk already is +1, check
+                                   charge = 1, # should be 1 charge but rcdk already is +1, check
                                    emass = 0.00054858, 
                                    plotit = FALSE, 
                                    algo=1, 
                                    rel_to = 0,
                                    verbose = TRUE)) %>%
-  rename(IsoMass = 1, Abundance = 2) %>%
+  rename(Iso_mz = 1, Abundance = 2) %>%
   mutate(Abundance = round(Abundance, 1)) %>%
   mutate(MonoIsoFormula = chemforms) %>%
   select(MonoIsoFormula, everything()) %>%
@@ -167,35 +170,68 @@ all_ions <- all_ions %>%
   mutate(Detected_int = 0) %>%
   rename(Annotated = annotated)
 
-for (i in seq_along(all_ions$IsoMass)) {
+for (i in seq_along(all_ions$Iso_mz)) {
   for (j in seq_along(compound$mz)) {
     
-if(all_ions$IsoMass[i] > compound$mz_min[j] & all_ions$IsoMass[i] < compound$mz_max[j]){
+if(all_ions$Iso_mz[i] > compound$mz_min[j] & all_ions$Iso_mz[i] < compound$mz_max[j]){
   all_ions$Detected_mz[i] <- compound$mz[j]
   all_ions$Detected_int[i] <- compound$intensity[j]}
   }
 }
 
-windows2 <- mass_accuracy/10^6*all_ions$IsoMass
+# this mz window is for the theoretical mz to use for reversed HRF
+windows2 <- mass_accuracy/10^6*all_ions$Iso_mz
 
 all_ions <- all_ions %>%
-  mutate(MassError_ppm = case_when(Detected_mz > 1 ~ round((Detected_mz-IsoMass)/IsoMass*10^6,1))) %>%
+  mutate(MassError_ppm = case_when(Detected_mz > 1 ~ round((Detected_mz-Iso_mz)/Iso_mz*10^6,1))) %>%
   group_by(MonoIsoFormula) %>%
-  mutate(Detected_relab = round(Detected_int/max(Detected_int)*100, 1)) %>%
+  mutate(Detected_RelAb = round(Detected_int/max(Detected_int)*100, 1)) %>%
   ungroup() %>%
-  mutate(IsoMass_min = IsoMass-windows2,
-         IsoMass_max = IsoMass+windows2) %>%
-  select(Annotated:IsoMass, IsoMass_min, IsoMass_max, Abundance, Isoformula:Detected_relab)
+  mutate(Iso_mz_min = Iso_mz-windows2,
+         Iso_mz_max = Iso_mz+windows2) %>%
+  rename(Theor_RelAb = Abundance) %>%
+  select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb)
   #filter(!is.na(MassError_ppm))
 
 
+compound <- compound %>% mutate(Theor_mz = 0, MonoIsoFormula = "", IsoFormula = "", Theor_RelAb = 0)
+
+for (i in seq_along(compound$mz)) {
+  for (j in seq_along(all_ions$Iso_mz)) {
+    
+    if(compound$mz[i] > all_ions$Iso_mz_min[j] & compound$mz[i] < all_ions$Iso_mz_max[j]){
+      compound$Theor_mz[i] <- all_ions$Iso_mz[j]
+      compound$IsoFormula[i] <- all_ions$Isoformula[j]
+      compound$MonoIsoFormula[i] <- all_ions$MonoIsoFormula[j]
+      compound$Theor_RelAb[i] <- all_ions$Theor_RelAb[j]}
+  }
+}
+
+compound <- compound %>%
+  mutate(MassError_ppm = case_when(Theor_mz > 1 ~ round((mz-Theor_mz)/Theor_mz*10^6,1))) %>%
+  group_by(MonoIsoFormula) %>%
+  mutate(Detected_RelAb = round(intensity/max(intensity)*100, 1)) %>%
+  ungroup()
+  
+
 all_iso <- length(all_ions$MassError_ppm)
 
-HRMF_summary <- all_ions %>%
-  drop_na(MassError_ppm) %>%
-  summarise(det_freq_iso = round(sum(!is.na(MassError_ppm))/all_iso*100, 1),
-            HRF_score = sum(IsoMass*Abundance)/sum(Detected_mz*Detected_relab))
+HRMF_forward <- all_ions %>%
+  #drop_na(MassError_ppm) %>%
+  summarise(peak_count_forw = all_iso,
+            df_forw = round(sum(!is.na(MassError_ppm))/all_iso*100, 1),
+            HRF_score = sum(Iso_mz*Theor_RelAb)/sum(Detected_mz*Detected_RelAb))
 
+
+all_iso_cmp <- length(compound$MassError_ppm)
+HRMF_reverse <- compound %>%
+  #drop_na(MassError_ppm) %>%
+  summarise(peak_count_rev = all_iso_cmp,
+            df_rev = round(sum(!is.na(MassError_ppm))/all_iso_cmp*100, 1),
+            RHRF_score = sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb))
+            
+            
+# COMBINE SCORING OF FROWARD AND REVERSE HRF AS WELL AS THE CHEMICAL FORMULA. Iterate through all formula
 
 #' High resolution mass filtering for GC HRMS data
 #'
