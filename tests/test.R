@@ -18,3 +18,8 @@ formula <- "C2H3Br3"
 compound <- read.csv("./data/acenaphthylene_deconvolutedTraceFinder.csv") %>%
   select(mz, intensity)
 formula <- "C12H8"
+
+
+###
+
+

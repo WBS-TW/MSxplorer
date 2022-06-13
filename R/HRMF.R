@@ -47,11 +47,11 @@ data("isotopes") # this is needed by isopattern to calculate the isotopic patter
 # msp <- "./data/MTM00088_GC-EI-FT_POSITIVE_YATIGPZCMOYEGE-UHFFFAOYSA-N.msp"
 # formula <- "C14H8Br6O2"
 
-# msp <- "./data/MTM00126_GC-EI-FT_POSITIVE_WYEHFWKAOXOVJD-UHFFFAOYSA-N.msp"
-# formula <- "C19H11F5N2O2"
+msp <- "./data/MTM00126_GC-EI-FT_POSITIVE_WYEHFWKAOXOVJD-UHFFFAOYSA-N.msp"
+formula <- "C19H11F5N2O2"
 
-msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
-formula <-"C18H15N5O5" 
+# msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
+# formula <-"C18H15N5O5" 
 
 compound <- read_msp(msp)[[1]] %>% select(mz, intensity)
 rownames(compound) <- NULL
@@ -185,12 +185,13 @@ windows2 <- mass_accuracy/10^6*all_ions$Iso_mz
 all_ions <- all_ions %>%
   mutate(MassError_ppm = case_when(Detected_mz > 1 ~ round((Detected_mz-Iso_mz)/Iso_mz*10^6,1))) %>%
   group_by(MonoIsoFormula) %>%
+  mutate(Expected_int = round(Abundance/100*max(Detected_int),0)) %>% #adding the expected abundance based on the theor isotope ratio
   mutate(Detected_RelAb = round(Detected_int/max(Detected_int)*100, 1)) %>%
   ungroup() %>%
   mutate(Iso_mz_min = Iso_mz-windows2,
          Iso_mz_max = Iso_mz+windows2) %>%
   rename(Theor_RelAb = Abundance) %>%
-  select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb)
+  select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb, Expected_int)
   #filter(!is.na(MassError_ppm))
 
 
@@ -217,19 +218,25 @@ compound <- compound %>%
 all_iso <- length(all_ions$MassError_ppm)
 
 HRMF_forward <- all_ions %>%
+  mutate(Detected_RelAb = replace_na(Detected_RelAb, 0)) %>% #remove NaN in Detected_RelAb column. Check why NaN is generated..
   #drop_na(MassError_ppm) %>%
   summarise(peak_count_forw = all_iso,
             df_forw = round(sum(!is.na(MassError_ppm))/all_iso*100, 1),
-            HRF_score = sum(Iso_mz*Theor_RelAb)/sum(Detected_mz*Detected_RelAb)) # should this ratio be reversed?
+            HRF_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # is this reversed ratio correct?
+            ) 
 
 
 all_iso_cmp <- length(compound$MassError_ppm)
+
 HRMF_reverse <- compound %>%
   #drop_na(MassError_ppm) %>%
   summarise(peak_count_rev = all_iso_cmp,
             df_rev = round(sum(!is.na(MassError_ppm))/all_iso_cmp*100, 1),
-            RHRF_score = sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb))
+            RHRF_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
+  )
             
+
+HRMF_total <- cbind(HRMF_forward, HRMF_reverse)
             
 # COMBINE SCORING OF FROWARD AND REVERSE HRF AS WELL AS THE CHEMICAL FORMULA. Iterate through all formula
 
