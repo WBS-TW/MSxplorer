@@ -220,7 +220,7 @@ HRMF_forward <- all_ions %>%
   #drop_na(MassError_ppm) %>%
   summarise(peak_count_forw = all_iso,
             df_forw = round(sum(!is.na(MassError_ppm))/all_iso*100, 1),
-            HRF_score = sum(Iso_mz*Theor_RelAb)/sum(Detected_mz*Detected_RelAb))
+            HRF_score = sum(Iso_mz*Theor_RelAb)/sum(Detected_mz*Detected_RelAb)) # should this ratio be reversed?
 
 
 all_iso_cmp <- length(compound$MassError_ppm)
