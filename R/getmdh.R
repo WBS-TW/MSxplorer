@@ -1,6 +1,4 @@
-
-
-#' Mass defect calculations
+#' Mass defect calculations - helper function to MDPlotR
 #'
 #' @param mz 
 #' @param cus 

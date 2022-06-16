@@ -1,12 +1,8 @@
-
-
-
-
 #' read_msp
 #'
-#' @param file, a string with the path of the msp file 
+#' @param file, a string with the path of the msp file in either NIST or RIKEN format
 #'
-#' @return a list of dataframes from individual compounds in the msp file containing mz, intensity, annotation
+#' @return a list of dataframes from individual compounds in the msp file containing mz, intensity and annotation (if available)
 #' @export
 #'
 #' @examples 

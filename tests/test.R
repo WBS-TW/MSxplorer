@@ -23,3 +23,29 @@ formula <- "C12H8"
 ###
 
 
+
+# the read_msp was sourced. Change this when finalizing the function
+# Need to manually input formula or extract from msp file? Since unknowns are not annotated with chemical formula and not shown in msp
+
+#msp <- "./data/2-Methoxy-5-methylaniline.msp"
+#formula <- "C8H11NO"
+# 
+# msp <- "./data/MTM00088_GC-EI-FT_POSITIVE_YATIGPZCMOYEGE-UHFFFAOYSA-N.msp"
+# formula <- "C14H8Br6O2"
+
+#msp <- "./data/MTM00126_GC-EI-FT_POSITIVE_WYEHFWKAOXOVJD-UHFFFAOYSA-N.msp"
+#formula <- "C19H11F5N2O2"
+
+library(dplyr)
+library(enviPat)
+library(stringr)
+library(tidyr)
+library(rcdk)
+#from Florian dust sample MSDIAL
+msp <- "./data/benzothiazole_dust.msp"
+formula <- "C7H5NS" 
+
+HRMF_output <- HRMF(msp = msp, formula = formula)
+
+# msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
+# formula <-"C18H15N5O5" 

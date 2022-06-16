@@ -1,7 +1,4 @@
-
-
-
-#' getmass
+#' getmass - helper function to MDPlotR
 #' Get the exact mass from chemical formula using rcdk
 #' @param data 
 #'

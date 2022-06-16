@@ -61,7 +61,7 @@ for (i in seq_along(msp)) {
   peak_tbl$intensity <- as.numeric(peak_tbl$intensity)
   
   peak_tbl_list <- append(peak_tbl_list, list(peak_tbl))
-  
+}
 
 
 
