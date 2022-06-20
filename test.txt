@@ -1,0 +1,37 @@
+> MSPepSearch ver. 0.96 build Fri Feb 22 13:22:10 2019. Started 06/16/22 at 15:45:17. Command line:
+> D:/Program/MSPepSearch/MSPepSearch64.exe G u s v i q h /ZI 0.1 /ZIPPM 10 /MPPM 30 /MzLimits 50 -1 /MinMF 500 /OnlyFound /HITS 10 /LIB D:\Program\NIST14\MTM_HRMS /INP D:\Projects\Mexico_Air\NIST_Mexico.msp
+>
+Unknown	Rank	Library	Id	Mass	Score	Dot Product	Prob(%)	Rev-Dot	Peptide	Charge	FlankRes	Mods	Pep	Nreps	Tfratio	Protein
+CMP109	1	MTM_HRMS	1343	152.063	656	857	98.4	861	Acenaphthylene							
+CMP112	1	MTM_HRMS	1359	202.078	767	908	55.1	920	Pyrene							
+CMP112	2	MTM_HRMS	1360	202.078	761	909	43.3	917	Fluoranthene							
+CMP112	3	MTM_HRMS	226	202.078	614	785	1.3	844	Fluoranthene	1						
+CMP112	4	MTM_HRMS	227	202.078	561	767	0.3	846	Pyrene	1						
+CMP120	1	MTM_HRMS	1362	178.078	663	884	50.2	896	Phenanthrene							
+CMP120	2	MTM_HRMS	978	178.078	661	874	46.3	882	Anthracene							
+CMP120	3	MTM_HRMS	222	178.078	555	770	3.1	837	Phenanthrene	1						
+CMP122	1	MTM_HRMS	1041	128.063	693	917	75.3	919	Naphthalene							
+CMP122	2	MTM_HRMS	210	128.063	668	811	23.0	836	Naphthalene	1						
+CMP123	1	MTM_HRMS	1350	276.094	532	853	86.0	853	Benzo[ghi]perylene							
+CMP13	1	MTM_HRMS	124	162.116	864	931	65.5	936	o-Nicotine	1						
+CMP13	2	MTM_HRMS	1118	162.116	845	923	31.8	930	Pyridine, 2-(1-methyl-2-pyrrolidinyl)-							
+CMP133	1	MTM_HRMS	408	258.068	709	848	97.7	874	1,2-Benzanthraquinone	1						
+CMP136	1	MTM_HRMS	121	290.188	570	861	79.3	862	2-Ethylhexyl 4-methoxycinnamate	1						
+CMP14	1	MTM_HRMS	1350	276.094	738	860	64.4	870	Benzo[ghi]perylene							
+CMP14	2	MTM_HRMS	1352	276.094	721	857	35.2	865	Indeno[1,2,3-cd]pyrene							
+CMP141	1	MTM_HRMS	651	330.183	548	888	95.3	889	Dicyclohexyl phthalate							
+CMP2	1	MTM_HRMS	886	390.277	888	958	95.3	963	Bis(2-ethylhexyl) phthalate							
+CMP2	2	MTM_HRMS	651	330.183	762	929	4.2	960	Dicyclohexyl phthalate							
+CMP2	3	MTM_HRMS	1356	390.277	682	924	0.5	946	Di-n-octyl phthalate							
+CMP2	4	MTM_HRMS	887	278.152	512	886	0.0	964	Dibutyl phthalate							
+CMP21	1	MTM_HRMS	828	188.141	835	916	98.6	928	Anthracene-D10-							
+CMP21	2	MTM_HRMS	221	178.078	502	640	1.0	826	Phenanthrene_2H10	1						
+CMP3	1	MTM_HRMS	71	342.147	683	772	89.8	820	Di(propylene glycol) dibenzoate Isomer 1	1						
+CMP3	2	MTM_HRMS	75	342.147	592	736	7.6	811	Di(propylene glycol) dibenzoate Isomer 5	1						
+CMP3	3	MTM_HRMS	73	342.147	540	729	1.5	818	Di(propylene glycol) dibenzoate Isomer 3	1						
+CMP3	4	MTM_HRMS	72	342.147	524	720	0.9	853	Di(propylene glycol) dibenzoate Isomer 2	1						
+CMP45	1	MTM_HRMS	232	226.078	618	723	95.9	902	Benzo[ghi]fluoranthene	1						
+CMP59	1	MTM_HRMS	184	170.110	722	866	97.6	892	1,6,7-Trimethylnaphthalene	1						
+CMP59	2	MTM_HRMS	209	154.078	556	660	2.3	839	Biphenyl	1						
+>
+> Completed. 178 spectra in 3.278 sec, process time = 3.279 sec (read 0.008s print 0.002s init pio 0.000s aux 0.000s sp 0.000s, search only: 0.000s+3.268s=3.268s, 54.4655 spec/s) 54.3039 spec/s Compared 243504 spec (74287.7 spec/s), No spectra compared 0, No hits 9, peaks/spec 22.95

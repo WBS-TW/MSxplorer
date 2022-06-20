@@ -31,4 +31,7 @@ Imports:
     rJava,
     rcdk,
     nontarget,
-    enviPat
+    enviPat,
+    processx,
+    sys,
+    data.table
