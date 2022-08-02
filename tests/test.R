@@ -50,3 +50,11 @@ HRMF_scores <- HRMF_output$HRMF_total
 
 # msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
 # formula <-"C18H15N5O5" 
+
+
+####
+
+msp <- "./data/Spectrum_0_202111221149_NIST_cut.msp"
+formula <- "C7H5NS"
+
+HRMF_output <- HRMF(msp = msp, formula = formula)

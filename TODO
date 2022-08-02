@@ -1,12 +1,17 @@
 TODO
 
 
+//read_msp//
+
+- ADD: add NAME from msp to list elements
+
 //MDPlotR//
 - ADD: remainder calculation? Use Rxx as input keytext for remainder calculation.
 - ADD: Kendrick-Analogous Mass Difference Networks. https://pubs.acs.org/doi/full/10.1021/acs.est.1c08143
 
 Check:  
 Mass-Remainder Analysis (MARA): a New Data Mining Tool for Copolymer Characterization. https://pubs.acs.org/doi/10.1021/acs.analchem.7b04730
+- The Kendrick analysis for polymer mass spectrometry
 - MARA:https://pubs.acs.org/doi/10.1021/acs.analchem.8b04976 , check the SI excel
 - M-MARA: https://www.mdpi.com/2073-4360/12/12/2768/htm
 - Mass Spectral Filtering by Mass-Remainder Analysis (MARA) at High Resolution and Its Application to Metabolite Profiling of Flavonoids

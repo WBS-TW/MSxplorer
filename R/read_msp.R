@@ -18,9 +18,9 @@ msp <- readLines(file, warn = FALSE)
 
 msp <- stringr::str_replace_all(msp, "Comments:.*(Name:)", "Comment removed due to incorrect name format")
 
-n <- grep("Name:", msp, ignore.case = TRUE)
+Names <- grep("Name:", msp, ignore.case = TRUE)
 
-msp <- split(msp, cumsum(seq_along(msp) %in% n))
+msp <- split(msp, cumsum(seq_along(msp) %in% Names))
 
 peak_tbl_list <- list()
 

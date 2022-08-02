@@ -51,7 +51,8 @@ HRMF <- function(msp, formula, mass_accuracy = 10, intensity_cutoff = 50000, IR_
   source("./R/read_msp.R")
   data("isotopes") # this is needed by isopattern to calculate the isotopic patterns
   
-  compound <- read_msp(msp)[[1]] %>% select(mz, intensity)
+  compounds <- read_msp(msp)
+  compound <- compounds[[1]] %>% select(mz, intensity)
   rownames(compound) <- NULL
   
   # state the intensity cutoff
