@@ -113,3 +113,25 @@ find_homologs(file,
 ```
 
 
+
+HRMF forward search
+```{r}
+
+# create vectors instead of df
+formula_list <- list()
+
+for (i in 1:nrow(atoms)) {
+  formula_list[[atoms[i,1]]] <- assign(atoms[i,1], 0:as.integer(atoms[i,2]))
+}
+
+
+formula_comb <- expand.grid(formula_list)
+
+formula_comb2 <- formula_comb %>%
+  filter(C > 0) %>%
+  select(any_of(c("C", "H")), everything())
+  
+
+
+```
+
