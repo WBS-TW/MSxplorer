@@ -48,6 +48,15 @@ formula <- "C7H5NS"
 HRMF_output <- HRMF(msp = msp, formula = formula)
 HRMF_scores <- HRMF_output$HRMF_total
 
+sumint <- 0L
+for (i in seq_along(HRMF_output$all_ions$Theor_RelAb)) {
+  absint <- abs(HRMF_output$all_ions$Theor_RelAb[i] - HRMF_output$all_ions$Detected_RelAb[i]) / max(HRMF_output$all_ions$Theor_RelAb[i],HRMF_output$all_ions$Detected_RelAb[i])
+  sumint <- sumint + absint
+  }
+
+sumint <- sumint/length(HRMF_output$all_ions$Theor_RelAb)
+FoM <- round(1-sumint, 2)
+
 # msp <- "./data/CI Pigment yellow 151_QCxMS.msp"
 # formula <-"C18H15N5O5" 
 

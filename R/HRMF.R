@@ -26,6 +26,9 @@
 # 3. add score on isotopic match RMS -> % iso match score
 # 4. Combined score 
 # scores https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8779335/
+# Figure of merit (FoM): https://www.youtube.com/watch?v=8akAr3foa1o
+
+
 
 # 5. loop through top n candidates? (how to get this? from NIST? or some external file generated from NIST search)
 # 6. loop through all names in msp file. How to get annotated formula?
@@ -240,9 +243,19 @@ HRMF <- function(msp, formula, mass_accuracy = 10, intensity_cutoff = 50000, IR_
               RHRF_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
     )
   
+  # calculate figure of merit (https://www.youtube.com/watch?v=8akAr3foa1o)
   
+  sumint <- 0L
+  for (i in seq_along(HRMF_output$all_ions$Theor_RelAb)) {
+    absint <- abs(HRMF_output$all_ions$Theor_RelAb[i] - HRMF_output$all_ions$Detected_RelAb[i]) / max(HRMF_output$all_ions$Theor_RelAb[i],HRMF_output$all_ions$Detected_RelAb[i])
+    sumint <- sumint + absint
+  }
   
-  HRMF_total <- cbind(HRMF_forward, HRMF_reverse)
+  sumint <- sumint/length(HRMF_output$all_ions$Theor_RelAb)
+  FoM <- round(1-sumint, 2)
+  
+  # add all scores in one table
+  HRMF_total <- cbind(HRMF_forward, HRMF_reverse, FoM)
   
   return(list(all_ions = all_ions, compound = compound, HRMF_total = HRMF_total))
 
