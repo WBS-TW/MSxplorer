@@ -24,9 +24,9 @@
 # 2.1 Add rel ab cutoff to remove low theoretical isotopologues, (default 1% ?). Do this in isopattern (OK)
 # 2.2. Filter absolute intensities >50000 (OK)
 # 3. add score on isotopic match RMS -> % iso match score
+# 3.1. Figure of merit (FoM): https://www.youtube.com/watch?v=8akAr3foa1o
 # 4. Combined score 
-# scores https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8779335/
-# Figure of merit (FoM): https://www.youtube.com/watch?v=8akAr3foa1o
+# 4.1. scores https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8779335/
 
 
 
@@ -229,13 +229,13 @@ HRMF <- function(msp, formula, mass_accuracy = 10, intensity_cutoff = 50000, IR_
     #drop_na(MassError_ppm) %>%
     summarise(peak_count_forw = all_iso,
               df_forw = round(sum(!is.na(MassError_ppm))/all_iso*100, 0),
-              HRF_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # is this reversed ratio correct?
+              HRF_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # check if this reversed ratio correct?
     ) 
   
   
   all_iso_cmp <- length(compound$MassError_ppm)
   
-  # rename as this is not reversed HRMF
+  # rename as this is not reversed HRMF?
   HRMF_reverse <- compound %>%
     #drop_na(MassError_ppm) %>%
     summarise(peak_count_rev = all_iso_cmp,

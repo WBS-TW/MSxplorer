@@ -128,6 +128,8 @@ Test read_msp
 msp <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp")
 msp_NIST <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp")
 
+file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp"
+
 ```
 
 
