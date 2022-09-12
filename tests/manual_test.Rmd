@@ -125,10 +125,11 @@ find_homologs(file,
 Test read_msp
 ```{r read_msp}
 
-msp <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp")
-msp_NIST <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp")
-
+file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp"
 file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp"
+file <- "D:\\R_projects\\MSxplorer\\data\\Spectrum_0_202111221149_NIST_cut.msp"
+
+msp <- read_msp(file)
 
 ```
 

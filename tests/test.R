@@ -55,7 +55,7 @@ HRMF_scores <- HRMF_output$HRMF_total
 
 ####
 
-msp <- "./data/Spectrum_0_202111221149_NIST_cut.msp"
+file <- "./data/Spectrum_0_202111221149_NIST_cut.msp"
 formula <- "C7H5NS"
 
-HRMF_output <- HRMF(msp = msp, formula = formula)
+HRMF_output <- HRMF(file = file, formula = formula)

@@ -54,13 +54,12 @@ if(grepl("\t", peak_list[[1]]) == TRUE){
     }
     }
 
-find_allNA <- which(apply(peak_tbl, 1, function(x)all(is.na(x))))
-
-peak_tbl <- peak_tbl[-find_allNA,]
-
 peak_tbl$mz <- as.numeric(peak_tbl$mz)
 peak_tbl$intensity <- as.numeric(peak_tbl$intensity)
 
+find_allNA <- which(apply(peak_tbl, 1, function(x)all(is.na(x))))
+
+peak_tbl <- peak_tbl[-find_allNA,]
 
 peak_tbl_list <- append(peak_tbl_list, list(peak_tbl))
 names(peak_tbl_list)[i] <- Name

@@ -1,6 +1,6 @@
 #' HRMF: High resolution mass filtering for GC HRMS data
 #'
-#' @param msp 
+#' @param file 
 #' @param formula 
 #' @param mass_accuracy 
 #' @param intensity_cutoff 
@@ -14,7 +14,7 @@
 
 # check if charge mass calculations are  accurate (in isopattern use 0 or 1 charge)? Can compare with Tracefinder
 # rename variables and names to clarify their functions, rename "reversed"..
-# Inputs: msp with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
+# Inputs: msp file with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
 # add negative and positive charge and adduct options in case of CI? But then this should only be done for the first rcdk calc and not isopattern?
 
 
@@ -49,12 +49,12 @@
 # library(tidyr)
 # library(rcdk)
 
-HRMF <- function(msp, formula, mass_accuracy = 10, intensity_cutoff = 50000, IR_RelAb_cutoff = 1) {
+HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
-  source("./R/read_msp.R")
+  source("./R/read_msp.R") # this one should be omitted when the package can be loaded
   data("isotopes") # this is needed by isopattern to calculate the isotopic patterns
   
-  compounds <- read_msp(msp)
+  compounds <- read_msp(file)
   compound <- compounds[[1]] %>% select(mz, intensity)
   rownames(compound) <- NULL
   
@@ -246,12 +246,12 @@ HRMF <- function(msp, formula, mass_accuracy = 10, intensity_cutoff = 50000, IR_
   # calculate figure of merit (https://www.youtube.com/watch?v=8akAr3foa1o)
   
   sumint <- 0L
-  for (i in seq_along(HRMF_output$all_ions$Theor_RelAb)) {
-    absint <- abs(HRMF_output$all_ions$Theor_RelAb[i] - HRMF_output$all_ions$Detected_RelAb[i]) / max(HRMF_output$all_ions$Theor_RelAb[i],HRMF_output$all_ions$Detected_RelAb[i])
+  for (i in seq_along(all_ions$Theor_RelAb)) {
+    absint <- abs(all_ions$Theor_RelAb[i] - all_ions$Detected_RelAb[i]) / max(all_ions$Theor_RelAb[i],all_ions$Detected_RelAb[i])
     sumint <- sumint + absint
   }
   
-  sumint <- sumint/length(HRMF_output$all_ions$Theor_RelAb)
+  sumint <- sumint/length(all_ions$Theor_RelAb)
   FoM <- round(1-sumint, 2)
   
   # add all scores in one table
