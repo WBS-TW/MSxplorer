@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples 
-#' file <- "./data/GC_orbitrapSTD.msp"
+#' file <- "./data/GC_orbitrapSTD_RIKEN.msp"
 #' peak_table_list <- read_msp(file)
 
 read_msp <- function(file) {
@@ -28,6 +28,7 @@ for (i in seq_along(msp)) {
   
 m_ind <- msp[[i]]
 
+Name <- stringr::str_extract(m_ind[1], "(?<=NAME:\\s)[^;]+")
 numpeaks <- grep("Num Peaks", m_ind, ignore.case = TRUE)
 peaks <- m_ind[numpeaks+1:length(m_ind)]
 peaks <- na.omit(peaks)
@@ -39,26 +40,29 @@ maxlength <- 3L
 
 # check that some peak tables are separated by tab or space
 if(grepl("\t", peak_list[[1]]) == TRUE){
-  for (i in seq_along(peak_list)) {
-    i <- unlist(strsplit(peak_list[[i]], "\t"))
-    i <- c(i, rep(NA, maxlength-length(i)))
-    peak_tbl <- rbind(peak_tbl, i)
+  for (j in seq_along(peak_list)) {
+    j <- unlist(strsplit(peak_list[[j]], "\t"))
+    j <- c(j, rep(NA, maxlength-length(j)))
+    peak_tbl <- rbind(peak_tbl, j)
     }
   }else if (grepl("\t", peak_list[[1]]) == FALSE) {
-    for (i in seq_along(peak_list)) {
-      i <- unlist(strsplit(peak_list[[i]], " "))
-      i <- c(i, rep(NA, maxlength-length(i)))
-      peak_tbl <- rbind(peak_tbl, i)
+    for (j in seq_along(peak_list)) {
+      j <- unlist(strsplit(peak_list[[j]], " "))
+      j <- c(j, rep(NA, maxlength-length(j)))
+      peak_tbl <- rbind(peak_tbl, j)
     }
     }
 
 find_allNA <- which(apply(peak_tbl, 1, function(x)all(is.na(x))))
 
 peak_tbl <- peak_tbl[-find_allNA,]
+
 peak_tbl$mz <- as.numeric(peak_tbl$mz)
 peak_tbl$intensity <- as.numeric(peak_tbl$intensity)
 
+
 peak_tbl_list <- append(peak_tbl_list, list(peak_tbl))
+names(peak_tbl_list)[i] <- Name
 
 
 }

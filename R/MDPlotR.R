@@ -463,7 +463,7 @@ server = function(input, output, session) {
 
 #----- Datatable of selected rows--------
     
-    ## TO FIX: if highlighted twice then the DT does not index correctly
+    
     
     output$x1 <- DT::renderDT({
       T_out1 <- DT::datatable(

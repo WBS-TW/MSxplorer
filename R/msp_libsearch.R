@@ -15,15 +15,17 @@ path <- "D:/Program/MSPepSearch/"
 file <- "MSPepSearch64.exe"
 lib <- "D:\\Program\\NIST14\\MTM_HRMS_RECETOX_THERMO_20220518"
 msp <- "D:\\Raw_data\\Dust_Florian\\GC\\Raw_data\\mzML\\Spectrum_0_202111221149_NIST.msp"
-# msp <- "\\MTM_HRMS_RECETOX_THERMO_20220518"
+# msp <- "D:\\TEST\\NIST_msp\\Spectrum_0_202111221149_NIST_cropped.msp"
 
+
+# need to test with some examples and compare with Ramsearch, ppm still not optimized for HRMS
 arguments <- c("G", "u", "s", "v", "i", "q", "h", 
                "/ZI", "0.1", 
                "/ZIPPM", "10", 
                "/MPPM", "30", 
                "/MzLimits", "50", "-1", 
                #"/RI", "t60r20", # include retention index, not working yet!
-               "/MinMF", "500",
+               "/MinMF", "400",
                "/OnlyFound", 
                "/HITS", "10", 
                "/OutChemForm",

@@ -4,6 +4,15 @@ output: html_notebook
 editor_options: 
   chunk_output_type: console
 ---
+load libraries
+```{r}
+library(tidyverse)
+library(devtools)
+load_all()
+
+
+```
+
 
 Testing Fragment flagging
 ```{r LC analysis}
@@ -113,6 +122,14 @@ find_homologs(file,
 ```
 
 
+Test read_msp
+```{r read_msp}
+
+msp <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp")
+msp_NIST <- read_msp("D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp")
+
+```
+
 
 HRMF forward search
 ```{r}
@@ -131,6 +148,15 @@ formula_comb2 <- formula_comb %>%
   filter(C > 0) %>%
   select(any_of(c("C", "H")), everything())
   
+
+
+```
+
+
+PyNIST
+```{python}
+
+
 
 
 ```
