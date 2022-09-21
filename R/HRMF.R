@@ -1,28 +1,34 @@
 #' HRMF: High resolution mass filtering for GC HRMS data
 #'
 #' @param file 
-#' @param formula 
-#' @param mass_accuracy 
-#' @param intensity_cutoff 
-#' @param IR_RelAb_cutoff 
+#' @param formula character The chemical formula
+#' @param mass_accuracy integer The mass accuracy in ppm 
+#' @param intensity_cutoff integer  The absolute intensity cutoff stated in the msp
+#' @param IR_RelAb_cutoff integer The relative abundance cutoff for the isotopologues relative to the monoisotopic mass
 #'
-#' @return
+#' @return list   list of outputs consisting of dataframes 
 #' @export
 #'
 #' @examples
 #' # TO CHECK
-
+# 
 # check if charge mass calculations are  accurate (in isopattern use 0 or 1 charge)? Can compare with Tracefinder
 # rename variables and names to clarify their functions, rename "reversed"..
 # Inputs: msp file with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
 # add negative and positive charge and adduct options in case of CI? But then this should only be done for the first rcdk calc and not isopattern?
 
+# Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
+
+# TO FIX
+# rcdk::generate.formula does not take into account the charge (e.g. loss of electron for +1) when finding formula
+# Calculations m/z of fragments does not take into account the loss of electron. Double check with chemcalc.org
+# 
 
 # TODO
-# 1. first Generate the monoisotopic mass -> HRMF monoiso score (OK)
+# 1. first Generate the monoisotopic mass -> HRMF monoiso score (charge but not added to formula by rcdk)
 # 2. then add isotope patter from isopattern -> HRMF full iso score (OK)
 # 2.1 Add rel ab cutoff to remove low theoretical isotopologues, (default 1% ?). Do this in isopattern (OK)
-# 2.2. Filter absolute intensities >50000 (OK)
+# 2.2. Filter absolute intensities, e.g >50000 (OK, added intensity_cutoff)
 # 3. add score on isotopic match RMS -> % iso match score
 # 3.1. Figure of merit (FoM): https://www.youtube.com/watch?v=8akAr3foa1o
 # 4. Combined score 
@@ -42,35 +48,38 @@
 # https://pubs.acs.org/doi/full/10.1021/acs.analchem.5b01503
 # https://www.cureffi.org/2013/09/23/a-quick-intro-to-chemical-informatics-in-r/
 
+# Reverse HRM: 
+# One example is applying a high-resolution mass filter (HRMF) (Kwiecien et al., 2015). HRMF calculates the percentage of fragment ions with 
+# formulae which can be predicted when setting atom constraints for formula matching to only those contained in the proposed molecular formula. 
+#Reverse HRMF can also be used, but this approach limits scoring to only peaks found in the library, ignoring other peaks in the experimental 
+#spectra for scoring purposes. Reverse HRMF reduces influences of artifacts during deconvolution on scoring, hence reducing false negatives, 
+#but may also increase false positives when experimental peaks are real and not found in the library. 
+
 # read_msp
 # library(dplyr)
+# library(rcdk)
 # library(enviPat)
 # library(stringr)
 # library(tidyr)
-# library(rcdk)
+# 
 
-HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
+HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
   source("./R/read_msp.R") # this one should be omitted when the package can be loaded
-  data("isotopes") # this is needed by isopattern to calculate the isotopic patterns
+  data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
   
   compounds <- read_msp(file)
-  compound <- compounds[[1]] %>% select(mz, intensity)
+  compound <- compounds[[1]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later?
   rownames(compound) <- NULL
   
-  # state the intensity cutoff
-  
-  #intensity_cutoff <- intensity_cutoff
-  
-  # state the mass accuracy in ppm
-  #mass_accuracy <- mass_accuracy
   
   # the windows, in Da, defining the +- Da window from which the accurate mass is based on for setting the mass accuracy
-  windows <- mass_accuracy/10^6*compound$mz
+  # THIS STILL CAUSES ERROR WITH generate.formula with too narrow window..
+  
   
   compound <- compound %>%
-    mutate(mz_min = mz-windows,
-           mz_max = mz+windows) %>%
+    mutate(mz_min = mz - mass_accuracy/10^6*compound$mz,
+           mz_max = mz + mass_accuracy/10^6*compound$mz) %>%
     filter(intensity > {{intensity_cutoff}}) %>%
     select(mz, mz_min, mz_max, intensity)
   
@@ -88,17 +97,29 @@ HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_Rel
   # Calculating the number of matched peaks
   
   # initiate an empty list
-  match_comp <- list()
+  match_comp <- vector(mode = "list", length = length(compound$mz))
   
+  # This windows vector needs to be executed after the intensity filtering, otherwise the length is incorrect
+  windows <- mass_accuracy/10^6*compound$mz
+  
+  ############# Trick generate.formula into generating the correct mass for charged species ###########
+  if(charge > 0){
+    me <- 0.00054858
+    }else if (charge == 0){
+      me <- 0
+      }else {
+        me <- -(0.00054858)
+        }
+   ####################################################################################################
   
   for (i in seq_along(compound$mz)) {
-    
     match <- rcdk::generate.formula(
-      compound$mz[[i]],
+      compound$mz[[i]] + me, ## Workaround for generate.formula bug. Remove if bug is fixed ##
+      #compound$mz[[i]],
       window = windows[[i]],
       elements = element_range,
       validation = FALSE,
-      charge = 1
+      charge = charge
     )
     
     match_list <- list(annotated = logical(), annodf = data.frame(), isopat = data.frame())
@@ -112,11 +133,12 @@ HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_Rel
       match_list[["annodf"]] <- annodf
       
       # extract the ion monoisotopic ion formula for input into isopattern
+      # FIX ERROR: loss of electron not calculated for fragments!
       chemforms <- str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
       
-      isopat <- as.data.frame(isopattern(isotopes = isotopes, chemforms = chemforms,
+      isopat <- as.data.frame(enviPat::isopattern(isotopes = isotopes, chemforms = chemforms,
                                          threshold = IR_RelAb_cutoff, # this one needs to be used as input variable in function
-                                         charge = 1, # should be 1 charge but rcdk already is +1, check
+                                         charge = charge, # should be 1 charge. rcdk already already uses +1 but chemical formula should be the same, CHECK and VERIFY!
                                          emass = 0.00054858, 
                                          plotit = FALSE, 
                                          algo=1, 
@@ -185,7 +207,7 @@ HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_Rel
     }
   }
   
-  # this mz window is for the theoretical mz to use for reversed HRF
+  # this mz window is for the theoretical mz to use for "reversed" HRF
   windows2 <- mass_accuracy/10^6*all_ions$Iso_mz
   
   all_ions <- all_ions %>%
@@ -243,7 +265,7 @@ HRMF <- function(file, formula, mass_accuracy = 10, intensity_cutoff = 1, IR_Rel
               RHRF_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
     )
   
-  # calculate figure of merit (https://www.youtube.com/watch?v=8akAr3foa1o)
+  # calculate Figure of Merit (FoM) (https://www.youtube.com/watch?v=8akAr3foa1o)
   
   sumint <- 0L
   for (i in seq_along(all_ions$Theor_RelAb)) {

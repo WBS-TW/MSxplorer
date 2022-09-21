@@ -7,6 +7,8 @@ editor_options:
 load libraries
 ```{r}
 library(tidyverse)
+library(IsoSpecR)
+library(enviPat)
 library(devtools)
 load_all()
 
@@ -128,7 +130,7 @@ Test read_msp
 file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp"
 file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp"
 file <- "D:\\R_projects\\MSxplorer\\data\\Spectrum_0_202111221149_NIST_cut.msp"
-
+file <- "D:\\TEST\\Octocrylene_QCxMS.msp"
 msp <- read_msp(file)
 
 ```
@@ -155,6 +157,17 @@ formula_comb2 <- formula_comb %>%
 
 ```
 
+IsospecR
+```{r}
+
+molecule <- c(C=16, H = 23)
+res <- data.frame(IsoSpecify(molecule = molecule, stopCondition = 0.999))
+
+res_EI <- res$mass - 0.00054858
+
+res_EI
+```
+
 
 PyNIST
 ```{python}
@@ -163,4 +176,17 @@ PyNIST
 
 
 ```
+
+optimize read_msp
+```{r}
+library(profvis)
+file <- "D:\\Raw_data\\Dust_Florian\\GC\\Raw_data\\mzML\\Spectrum_0_202111221149_NIST.msp"
+
+profvis(read_msp(file))
+
+
+
+```
+
+
 
