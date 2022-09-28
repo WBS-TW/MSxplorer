@@ -22,6 +22,23 @@ HRMF_compound <- HRMF_output$compound
 HRMF_allions <- HRMF_output$all_ions
 
 
+# Theoretical 1,2-dibromoethane by QCxMS
+# PlotMS v6.1 still calculating exact mass on neutral formula
+file <- ".\\data\\1_2-dibromoethane_QCxMS.msp"
+
+formula <- "C2H4Br2"
+
+HRMF_output <- HRMF(file = file, formula = formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1)
+HRMF_scores <- HRMF_output$HRMF_total
+HRMF_compound <- HRMF_output$compound
+HRMF_allions <- HRMF_output$all_ions
+
+# 2,6-TDI, reanalyzed using MSDIAL in TEST folder
+file <- "D:\\TEST\\dust_std\\2-6-TDI.msp"
+formula <- "C9H6N2O2"
+
+
+
 #####Compare with HRF from Tracefinder for PAHs
 compound <- read.csv("./data/acenaphthylene_deconvolutedTraceFinder.csv") %>%
   select(mz, intensity)

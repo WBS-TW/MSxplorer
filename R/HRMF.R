@@ -48,7 +48,7 @@
 # https://pubs.acs.org/doi/full/10.1021/acs.analchem.5b01503
 # https://www.cureffi.org/2013/09/23/a-quick-intro-to-chemical-informatics-in-r/
 
-# Reverse HRM: 
+# Reverse HRMF: 
 # One example is applying a high-resolution mass filter (HRMF) (Kwiecien et al., 2015). HRMF calculates the percentage of fragment ions with 
 # formulae which can be predicted when setting atom constraints for formula matching to only those contained in the proposed molecular formula. 
 #Reverse HRMF can also be used, but this approach limits scoring to only peaks found in the library, ignoring other peaks in the experimental 
@@ -56,12 +56,12 @@
 #but may also increase false positives when experimental peaks are real and not found in the library. 
 
 # read_msp
-# library(dplyr)
-# library(rcdk)
-# library(enviPat)
-# library(stringr)
-# library(tidyr)
-# 
+library(dplyr)
+library(rcdk) #v3.6.0
+library(enviPat)
+library(stringr)
+library(tidyr)
+ 
 
 HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
@@ -74,7 +74,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   
   # the windows, in Da, defining the +- Da window from which the accurate mass is based on for setting the mass accuracy
-  # THIS STILL CAUSES ERROR WITH generate.formula with too narrow window..
+  # THIS STILL CAUSES ERROR WITH generate.formula with too narrow window. Used a workaround for this in below comment on generate.formula()
   
   
   compound <- compound %>%
