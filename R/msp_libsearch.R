@@ -1,4 +1,4 @@
-
+# Need to also export those mz peaks that matches library -> reversed HRMF
 
 #' TEST spectral library search using MSPepSearch
 #'
@@ -27,9 +27,10 @@ arguments <- c("G", "u", "s", "v", "i", "q", "h",
                #"/RI", "t60r20", # include retention index, not working yet!
                "/MinMF", "400",
                "/OnlyFound", 
-               "/HITS", "10",
+               "/HITS", "5",
                "/OutSpecNum", "1",
                "/OutChemForm",
+               "/OutNumMP",
                #"/OutSrchID",
                #"/OutEvalID",
                "/OutSrchComment",

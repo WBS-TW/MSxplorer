@@ -1,11 +1,15 @@
 
 
+
+file <- "D:\\presentations\\2022\\20221107_Monday meeting\\NormanDust_Unknown310_NIST.msp"
+formula <- "C6H5Cl2N"
+
 # test using GC orbitrap 2,6.TDI
 file <- "D:\\R_projects\\MTM_HRMS_LIB\\3_MSP\\MTM00013_GC-EI-FT_POSITIVE_RUELTTOHQODFPA-UHFFFAOYSA-N.msp"
 
 formula <- as.character(readxl::read_xlsx("D:\\R_projects\\MTM_HRMS_LIB\\0_Main_Lib\\MTM_HRMS_MAINLIB.xlsx")[10,5])
 
-HRMF_output <- HRMF(file = file, formula = formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 50000, IR_RelAb_cutoff = 1)
+HRMF_output <- HRMF(file = file, formula = formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 100000, IR_RelAb_cutoff = 1)
 HRMF_scores <- HRMF_output$HRMF_total
 HRMF_compound <- HRMF_output$compound
 HRMF_allions <- HRMF_output$all_ions
@@ -116,5 +120,55 @@ chemical <- get.formula("C4H5O", charge = 1)
 chemical@mass
 
 
+# Test MTM00176_GC-EI-FT_POSITIVE_RFVOKVIZOOXEPB-UHFFFAOYSA-N.msp
+{
+  library(dplyr)
+  library(enviPat)
+  library(stringr)
+  library(tidyr)
+  library(rcdk)
+  
+  file <- "D:/R_projects/MTM_HRMS_LIB/3_MSP/MTM00176_GC-EI-FT_POSITIVE_RFVOKVIZOOXEPB-UHFFFAOYSA-N.msp"
+  formula <- "C19H28F2O" 
+  
+  HRMF_output <- HRMF(file = file, formula = formula, mass_accuracy = 3)
+  HRMF_scores <- HRMF_output$HRMF_total
+  HRMF_compound <- HRMF_output$compound
+  HRMF_allions <- HRMF_output$all_ions
+  
+}
 
+# Test MTM00175_GC-EI-FT_POSITIVE_KYNDSYARZOJNCG-UHFFFAOYSA-N.msp
+{
+  library(dplyr)
+  library(enviPat)
+  library(stringr)
+  library(tidyr)
+  library(rcdk)
+  
+  file <- "D:/R_projects/MTM_HRMS_LIB/3_MSP/MTM00175_GC-EI-FT_POSITIVE_KYNDSYARZOJNCG-UHFFFAOYSA-N.msp"
+  formula <- "C19H28F2O" 
+  
+  HRMF_output <- HRMF(file = file, formula = formula, mass_accuracy = 3)
+  HRMF_scores <- HRMF_output$HRMF_total
+  HRMF_compound <- HRMF_output$compound
+  HRMF_allions <- HRMF_output$all_ions  
+}
+
+# Test new MSDIAL 0.005 processing
+{
+  library(dplyr)
+  library(enviPat)
+  library(stringr)
+  library(tidyr)
+  library(rcdk)
+  
+  file <- "D:/TEST/LCMtEst/test.msp"
+  formula <- "C19H28F2O" 
+  
+  HRMF_output <- HRMF(file = file, formula = formula, mass_accuracy = 3)
+  HRMF_scores <- HRMF_output$HRMF_total
+  HRMF_compound <- HRMF_output$compound
+  HRMF_allions <- HRMF_output$all_ions  
+}
 
