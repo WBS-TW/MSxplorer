@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' # TO CHECK
-# 
+# # Might try out isopwrap instead to get more accurate resolution calculations. 
 # check if charge mass calculations are  accurate (in isopattern use 0 or 1 charge)? Can compare with Tracefinder
 # rename variables and names to clarify their functions, rename "reversed"..
 # Inputs: msp file with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
@@ -102,12 +102,12 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   # This windows vector needs to be executed after the intensity filtering, otherwise the length is incorrect
   windows <- mass_accuracy/10^6*compound$mz
   
-  ############# Trick generate.formula into generating the correct mass for charged species ###########
-  if(charge > 0){
+  ############# Trick generate.formula into generating the correct mass for charged species by adding/removing electron mass (me) ###########
+  if(charge > 0){ #for positive charge
     me <- 0.00054858
-    }else if (charge == 0){
+    }else if (charge == 0){ #for neutral
       me <- 0
-      }else {
+      }else { #for negative charge
         me <- -(0.00054858)
         }
    ####################################################################################################

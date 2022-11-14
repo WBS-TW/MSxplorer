@@ -27,6 +27,7 @@ arguments <- c("G", "u", "s", "v", "i", "q", "h",
                #"/RI", "t60r20", # include retention index, not working yet!
                "/MinMF", "400",
                "/OnlyFound", 
+               #"/All",
                "/HITS", "5",
                "/OutSpecNum", "1",
                "/OutChemForm",

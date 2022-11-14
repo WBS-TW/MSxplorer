@@ -191,4 +191,33 @@ profvis(read_msp(file))
 ```
 
 
+Test modified cosine similarity
+#https://pubs.acs.org/doi/full/10.1021/acs.analchem.7b03320
+
+```{r}
+
+library(tidyverse)
+Q <- tibble::tibble(mz = c(57, 58, 59, 71, 72, 73, 75, 91, 92, 95),
+                    relab = c(235, 423, 124, 493, 32, 321, 53, 134, 413, 91))
+
+L <- tibble::tibble(mz = c(57, 58, 59, 71, 72, 73, 75, 91, 92, 95),
+                    relab = c(23.5, 42.3, 12.4, 49.3, 3.2, 32.1, 5.2, 13.4, 41.3, 9.1))
+
+# add rows to Q
+q <- tibble::tibble(mz = c(100), relab = c(10))
+Q <- rbind(Q, q)
+
+# add rows to L
+l <- tibble::tibble(mz = c(99), relab = c(50))
+L <- rbind(L, l)
+
+# join Q and L and replace the relab of non-matched mz with 0
+QL <- Q %>% full_join(L, by = "mz", suffix = c(".Q", ".L")) %>% replace_na(list(relab.Q = 0, relab.L = 0))
+
+
+# https://pubs.acs.org/doi/full/10.1021/acs.analchem.7b03320
+MF <- round(999 * (sum(sqrt(QL$relab.Q)*sqrt(QL$relab.L)))^2 /(sum(QL$relab.Q)*sum(QL$relab.L)), 0)
+
+  
+```
 
