@@ -131,7 +131,7 @@ file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO.msp"
 file <- "D:\\TEST\\2022-03-17_MTM_HRMS_LIB_RECETEOX_THERMO_combinedQCxMS_NISTformat.msp"
 file <- "D:\\R_projects\\MSxplorer\\data\\Spectrum_0_202111221149_NIST_cut.msp"
 file <- "D:\\TEST\\Octocrylene_QCxMS.msp"
-
+file <- "D:\\Raw_data\\Dust_Florian\\LC\\LC_pos_mzML\\Export\\20221123915_spectra_0.msp"
 
 msp <- read_msp(file)
 

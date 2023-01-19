@@ -16,13 +16,16 @@
 # rename variables and names to clarify their functions, rename "reversed"..
 # Inputs: msp file with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
 # add negative and positive charge and adduct options in case of CI? But then this should only be done for the first rcdk calc and not isopattern?
+# 
 
 # Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
 
 # TO FIX
 # rcdk::generate.formula does not take into account the charge (e.g. loss of electron for +1) when finding formula
 # Calculations m/z of fragments does not take into account the loss of electron. Double check with chemcalc.org
-# 
+# However, some fragments are also even electron ions which then do not need to account for loss of electrons
+# Isotopic masses differs from ChemCalc MF analysis. Check!
+# apply seven golden rules, add DBE, remove negative DBE
 
 # TODO
 # 1. first Generate the monoisotopic mass -> HRMF monoiso score (charge but not added to formula by rcdk)
