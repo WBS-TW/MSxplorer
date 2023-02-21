@@ -138,7 +138,7 @@ chemical@mass
   
 }
 
-# Test MTM00175_GC-EI-FT_POSITIVE_KYNDSYARZOJNCG-UHFFFAOYSA-N.msp
+# Test MTM00002_GC-EI-FT_POSITIVE_UPMLOUAZCHDJJD-UHFFFAOYSA-N.msp
 {
   library(dplyr)
   library(enviPat)
@@ -146,10 +146,10 @@ chemical@mass
   library(tidyr)
   library(rcdk)
   
-  file <- "D:/R_projects/MTM_HRMS_LIB/3_MSP/MTM00175_GC-EI-FT_POSITIVE_KYNDSYARZOJNCG-UHFFFAOYSA-N.msp"
-  formula <- "C19H28F2O" 
+  file <- "D:/R_projects/MTM_HRMS_LIB/3_MSP/MTM00002_GC-EI-FT_POSITIVE_UPMLOUAZCHDJJD-UHFFFAOYSA-N.msp"
+  formula <- "C15H10N2O2" 
   
-  HRMF_output <- HRMF(file = file, formula = formula, mass_accuracy = 3)
+  HRMF_output <- HRMF(file = file, formula = formula, mass_accuracy = 3, IR_RelAb_cutoff = 0)
   HRMF_scores <- HRMF_output$HRMF_total
   HRMF_compound <- HRMF_output$compound
   HRMF_allions <- HRMF_output$all_ions  
@@ -171,4 +171,3 @@ chemical@mass
   HRMF_compound <- HRMF_output$compound
   HRMF_allions <- HRMF_output$all_ions  
 }
-

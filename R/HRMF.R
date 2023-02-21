@@ -16,7 +16,7 @@
 # rename variables and names to clarify their functions, rename "reversed"..
 # Inputs: msp file with multiple msp, a csv with different chemical formula to query for each individual msp (nrow should be same as number of msps)
 # add negative and positive charge and adduct options in case of CI? But then this should only be done for the first rcdk calc and not isopattern?
-# 
+# Verify correct mass for odd vs even electron ions when matching rcdk formulae 
 
 # Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
 
@@ -115,6 +115,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
         }
    ####################################################################################################
   
+  # CHECK: some ions are even electron ions, if the electron mass taken into account for even vs odd ions?
   for (i in seq_along(compound$mz)) {
     match <- rcdk::generate.formula(
       compound$mz[[i]] + me, ## Workaround for generate.formula bug. Remove if bug is fixed ##
