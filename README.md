@@ -8,7 +8,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of MSxplorer is to provide interactive tools to explore data
+The goal of MSxplorer is to provide practical tools to explore data
 analysis from HRMS chemical analysis. It has been mainly tested on Waters
 LC-HRMS MSe and Thermo GC-orbitrap-HRMS data.
 
