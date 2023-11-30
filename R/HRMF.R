@@ -20,6 +20,8 @@
 
 # Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
 
+# Might actually be easier to implement an API to chemcalc online "from monoisotopic mass" tool.
+
 # TO FIX
 # rcdk::generate.formula does not take into account the charge (e.g. loss of electron for +1) when finding formula
 # Calculations m/z of fragments does not take into account the loss of electron. Double check with chemcalc.org
@@ -36,8 +38,6 @@
 # 3.1. Figure of merit (FoM): https://www.youtube.com/watch?v=8akAr3foa1o
 # 4. Combined score 
 # 4.1. scores https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8779335/
-
-
 
 # 5. loop through top n candidates? (how to get this? from NIST? or some external file generated from NIST search)
 # 6. loop through all names in msp file. How to get annotated formula?
@@ -65,14 +65,14 @@ library(enviPat)
 library(stringr)
 library(tidyr)
  
-
+ 
 HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
   source("./R/read_msp.R") # this one should be omitted when the package can be loaded
   data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
   
   compounds <- read_msp(file)
-  compound <- compounds[[1]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later?
+  compound <- compounds[[1]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later? But need formula for all ind hits in the msp
   rownames(compound) <- NULL
   
   
@@ -168,6 +168,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   # binding all objects in the list
   all_ions <- bind_rows(match_comp)
+  
   # This provides all theoretical ions
   all_ions <- tidyr::unnest(all_ions, cols = c(annotated, annodf, isopat)) %>%
     ungroup() %>%
@@ -211,7 +212,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
     }
   }
   
-  # this mz window is for the theoretical mz to use for "reversed" HRF
+  # this mz window is for the theoretical mz to use with "reversed" HRF
   windows2 <- mass_accuracy/10^6*all_ions$Iso_mz
   
   all_ions <- all_ions %>%
@@ -250,27 +251,28 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   all_iso <- length(all_ions$MassError_ppm)
   
-  HRMF_forward <- all_ions %>%
+  #this generates a table with all theoretical ions and isotopologues for the formula and match with msp
+  HRMF_theor_formula <- all_ions %>%
     mutate(Detected_RelAb = replace_na(Detected_RelAb, 0)) %>% #remove NaN in Detected_RelAb column. Check why NaN is generated..
     #drop_na(MassError_ppm) %>%
     summarise(peak_count_forw = all_iso,
-              df_forw = round(sum(!is.na(MassError_ppm))/all_iso*100, 0),
-              HRF_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # check if this reversed ratio correct?
+              df_theortomsp = round(sum(!is.na(MassError_ppm))/all_iso*100, 0),
+              HRMF_theor_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # check if this reversed ratio correct?
     ) 
   
   
   all_iso_cmp <- length(compound$MassError_ppm)
   
-  # rename as this is not reversed HRMF?
-  HRMF_reverse <- compound %>%
+  # #this generates a table with all match from msp to theoretical ions and isotopologues from formula
+  
+  HRMF_msp_formula <- compound %>%
     #drop_na(MassError_ppm) %>%
     summarise(peak_count_rev = all_iso_cmp,
-              df_rev = round(sum(!is.na(MassError_ppm))/all_iso_cmp*100, 0),
-              RHRF_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
+              df_msptotheor = round(sum(!is.na(MassError_ppm))/all_iso_cmp*100, 0),
+              HRMF_msp_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
     )
   
   # calculate Figure of Merit (FoM) (https://www.youtube.com/watch?v=8akAr3foa1o)
-  
   sumint <- 0L
   for (i in seq_along(all_ions$Theor_RelAb)) {
     absint <- abs(all_ions$Theor_RelAb[i] - all_ions$Detected_RelAb[i]) / max(all_ions$Theor_RelAb[i],all_ions$Detected_RelAb[i])
@@ -281,9 +283,9 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   FoM <- round(1-sumint, 2)
   
   # add all scores in one table
-  HRMF_total <- cbind(HRMF_forward, HRMF_reverse, FoM)
+  HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM)
   
-  return(list(all_ions = all_ions, compound = compound, HRMF_total = HRMF_total))
+  return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
 
 
   

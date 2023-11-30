@@ -2,7 +2,7 @@
 
 #' TEST spectral library search using MSPepSearch
 #'
-#' @param msp 
+#' @param msp has to be in NIST format
 #' @param arguments 
 #'
 #' @return
