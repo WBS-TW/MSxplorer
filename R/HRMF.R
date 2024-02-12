@@ -9,7 +9,9 @@
 #' @return list   list of outputs consisting of dataframes 
 #' @export
 #'
-#' @examples
+#' @examples hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", formula = "C8H11NO", IR_RelAb_cutoff = 1, intensity_cutoff = 100000)
+
+
 #' # TO CHECK
 # # Might try out isopwrap instead to get more accurate resolution calculations. 
 # check if charge mass calculations are  accurate (in isopattern use 0 or 1 charge)? Can compare with Tracefinder
@@ -20,13 +22,13 @@
 
 # Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
 
-# Might actually be easier to implement an API to chemcalc online "from monoisotopic mass" tool.
+# Might actually be easier to implement an API to chemcalc online "from monoisotopic mass" tool. But m/z not same as with isopattern, why?
 
 # TO FIX
 # rcdk::generate.formula does not take into account the charge (e.g. loss of electron for +1) when finding formula
 # Calculations m/z of fragments does not take into account the loss of electron. Double check with chemcalc.org
-# However, some fragments are also even electron ions which then do not need to account for loss of electrons
-# Isotopic masses differs from ChemCalc MF analysis. Check!
+# However, some fragments are also even electron ions which then do not need to account for loss of electrons?
+# Isotopic masses differs between envipat and ChemCalc MF. Check why!
 # apply seven golden rules, add DBE, remove negative DBE
 
 # TODO
@@ -46,10 +48,10 @@
 
 
 #' High resolution mass filtering for GC HRMS data
-
-#' # use rcdk and isopattern
+# 
 # https://pubs.acs.org/doi/full/10.1021/acs.analchem.5b01503
 # https://www.cureffi.org/2013/09/23/a-quick-intro-to-chemical-informatics-in-r/
+# subformula graph: https://jcheminf.biomedcentral.com/articles/10.1186/s13321-023-00776-y
 
 # Reverse HRMF: 
 # One example is applying a high-resolution mass filter (HRMF) (Kwiecien et al., 2015). HRMF calculates the percentage of fragment ions with 
@@ -57,6 +59,8 @@
 #Reverse HRMF can also be used, but this approach limits scoring to only peaks found in the library, ignoring other peaks in the experimental 
 #spectra for scoring purposes. Reverse HRMF reduces influences of artifacts during deconvolution on scoring, hence reducing false negatives, 
 #but may also increase false positives when experimental peaks are real and not found in the library. 
+
+
 
 # read_msp
 library(dplyr)
@@ -115,7 +119,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
         }
    ####################################################################################################
   
-  # CHECK: some ions are even electron ions, if the electron mass taken into account for even vs odd ions?
+  # TO CHECK: some ions are even electron ions, will the electron mass be taken into account for even vs odd ions?
   for (i in seq_along(compound$mz)) {
     match <- rcdk::generate.formula(
       compound$mz[[i]] + me, ## Workaround for generate.formula bug. Remove if bug is fixed ##
@@ -136,7 +140,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
                            MassError_ppm = round((compound$mz[i]-match[[1]]@mass)/match[[1]]@mass*10^6, 2))
       match_list[["annodf"]] <- annodf
       
-      # extract the ion monoisotopic ion formula for input into isopattern
+      # extract the monoisotopic ion formula for input into isopattern
       # FIX ERROR: loss of electron not calculated for fragments!
       chemforms <- str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
       
@@ -282,7 +286,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   sumint <- sumint/length(all_ions$Theor_RelAb)
   FoM <- round(1-sumint, 2)
   
-  # add all scores in one table
+  # combine all scores in one table
   HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM)
   
   return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))

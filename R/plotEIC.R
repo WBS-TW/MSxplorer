@@ -11,11 +11,11 @@
 #' @export
 #'
 #' @examples
-#' fl <- "D:/Raw_data/Kallinge/New_analysis_20200414/centroid/B6 batch std_1_F,2_1.mzML"
-#' featlist <- readxl::read_xlsx("D:\\R_projects\\MSXploreR\\tests\\featlist.xlsx", sheet = "PFSAs")
+#' fl <- "D:\\TEST\\28Rterr spiked 1000pg_1_D_4_1.mzML"
+
 #' plotEIC(filepath = filepath, featlist = featlist)
 
-plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
+plotHilbertCurve <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
   data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
   hd <- MSnbase::fData(data_prof)
   ms1 <- which(hd$msLevel == 1)
