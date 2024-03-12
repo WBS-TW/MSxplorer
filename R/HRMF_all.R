@@ -22,14 +22,14 @@
 
 # Check: how is the windows parameter calculated in the rcdk::get.formula function. Verify the calculations. 
 
-# Might actually be easier to implement an API to chemcalc online "from monoisotopic mass" tool. But m/z not same as with isopattern, why?
+# Might actually be easier to implement an API to chemcalc online "from monoisotopic mass" tool. But m/z not same as with isopattern, due to the electron mass?
 
 # TO FIX
 # rcdk::generate.formula does not take into account the charge (e.g. loss of electron for +1) when finding formula
 # Calculations m/z of fragments does not take into account the loss of electron. Double check with chemcalc.org
 # However, some fragments are also even electron ions which then do not need to account for loss of electrons?
-# Isotopic masses differs between envipat and ChemCalc MF. Check why!
-# apply seven golden rules, add DBE, remove negative DBE
+# Isotopic masses differs between envipat and ChemCalc MF (due to electron mass). Need to input correct adduct form and charge.
+
 
 # TODO
 # 1. first Generate the monoisotopic mass -> HRMF monoiso score (charge but not added to formula by rcdk)
@@ -53,7 +53,7 @@
 # https://www.cureffi.org/2013/09/23/a-quick-intro-to-chemical-informatics-in-r/
 # subformula graph: https://jcheminf.biomedcentral.com/articles/10.1186/s13321-023-00776-y
 
-# Reverse HRMF: 
+# Reverse HRMF (Koelmas et al. Exposome): 
 # One example is applying a high-resolution mass filter (HRMF) (Kwiecien et al., 2015). HRMF calculates the percentage of fragment ions with 
 # formulae which can be predicted when setting atom constraints for formula matching to only those contained in the proposed molecular formula. 
 #Reverse HRMF can also be used, but this approach limits scoring to only peaks found in the library, ignoring other peaks in the experimental 
@@ -70,15 +70,22 @@ library(stringr)
 library(tidyr)
 
 
-HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
-  
+HRMF_all <- function(file, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
+
   source("./R/read_msp.R") # this one should be omitted when the package can be loaded
+  source("./R/getFormulaFromMSP.R")
   data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
   
   compounds <- read_msp(file)
-  compound <- compounds[[1]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later? But need formula for all ind hits in the msp
-  rownames(compound) <- NULL
   
+  all_hrmf <- list()
+  for (a in seq_along(compounds)) {
+    
+ 
+  compound <- compounds[[a]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later? But need formula for all ind hits in the msp
+  rownames(compound) <- NULL
+  chem_formula <- getFormulaFromMSP(file)
+  formula <- chem_formula[a]
   
   # the windows, in Da, defining the +- Da window from which the accurate mass is based on for setting the mass accuracy
   # THIS STILL CAUSES ERROR WITH generate.formula with too narrow window. Used a workaround for this in below comment on generate.formula()
@@ -112,15 +119,16 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   ############# Trick generate.formula into generating the correct mass for charged species by adding/removing electron mass (me) ###########
   if(charge > 0){ #for positive charge
     me <- 0.00054858
-  }else if (charge == 0){ #for neutral
-    me <- 0
-  }else { #for negative charge
-    me <- -(0.00054858)
-  }
-  ####################################################################################################
+    }else if (charge == 0){ #for neutral
+      me <- 0
+      }else { #for negative charge
+        me <- -(0.00054858)
+        }
+   ####################################################################################################
   
   # TO CHECK: some ions are even electron ions, will the electron mass be taken into account for even vs odd ions?
   for (i in seq_along(compound$mz)) {
+    
     match <- rcdk::generate.formula(
       compound$mz[[i]] + me, ## Workaround for generate.formula bug. Remove if bug is fixed ##
       #compound$mz[[i]],
@@ -145,13 +153,13 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
       chemforms <- str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
       
       isopat <- as.data.frame(enviPat::isopattern(isotopes = isotopes, chemforms = chemforms,
-                                                  threshold = IR_RelAb_cutoff, # this one needs to be used as input variable in function
-                                                  charge = charge, # should be 1 charge. rcdk already already uses +1 but chemical formula should be the same, CHECK and VERIFY!
-                                                  emass = 0.00054858, 
-                                                  plotit = FALSE, 
-                                                  algo=1, 
-                                                  rel_to = 0,
-                                                  verbose = TRUE)) %>%
+                                         threshold = IR_RelAb_cutoff, # this one needs to be used as input variable in function
+                                         charge = charge, # should be 1 charge. rcdk already already uses +1 but chemical formula should be the same, CHECK and VERIFY!
+                                         emass = 0.00054858, 
+                                         plotit = FALSE, 
+                                         algo=1, 
+                                         rel_to = 0,
+                                         verbose = TRUE)) %>%
         rename(Iso_mz = 1, Abundance = 2) %>%
         mutate(Abundance = round(Abundance, 1)) %>%
         mutate(MonoIsoFormula = chemforms) %>%
@@ -289,8 +297,11 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   # combine all scores in one table
   HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM)
   
-  return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
+  #return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
+  hrmf_ind <- list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores)
+  all_hrmf[[formula]] <- hrmf_ind
   
-  
+  }
+  return(all_hrmf)
   
 }
