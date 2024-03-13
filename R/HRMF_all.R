@@ -1,7 +1,6 @@
 #' HRMF: High resolution mass filtering for GC HRMS data
 #'
 #' @param file 
-#' @param formula character The chemical formula
 #' @param mass_accuracy integer The mass accuracy in ppm 
 #' @param intensity_cutoff integer  The absolute intensity cutoff stated in the msp
 #' @param IR_RelAb_cutoff integer The relative abundance cutoff for the isotopologues relative to the monoisotopic mass
@@ -62,7 +61,6 @@
 
 
 
-# read_msp
 library(dplyr)
 library(rcdk) #v3.6.0
 library(enviPat)
@@ -73,7 +71,7 @@ library(tidyr)
 HRMF_all <- function(file, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
   source("./R/read_msp.R") # this one should be omitted when the package can be loaded
-  source("./R/getFormulaFromMSP.R")
+  source("./R/getFormulaFromMSP.R") # this one should be omitted when the package can be loaded
   data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
   
   compounds <- read_msp(file)
@@ -87,6 +85,10 @@ HRMF_all <- function(file, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, 
   chem_formula <- getFormulaFromMSP(file)
   formula <- chem_formula[a]
   
+  # if formula is NA then it is an unknown and then skip to next compound in the msp
+  if(is.na(formula)){
+    next
+  }
   # the windows, in Da, defining the +- Da window from which the accurate mass is based on for setting the mass accuracy
   # THIS STILL CAUSES ERROR WITH generate.formula with too narrow window. Used a workaround for this in below comment on generate.formula()
   

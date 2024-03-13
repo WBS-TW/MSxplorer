@@ -42,6 +42,7 @@
 # 4.1. scores https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8779335/
 
 # 5. loop through top n candidates? (how to get this? from NIST? or some external file generated from NIST search)
+# 5.1 alternatively: give a vector of candidate and compare
 # 6. loop through all names in msp file. How to get annotated formula?
 # 7. Use the theoretical mz of all isotopes as input to xcms to perform new peak picking?
 
@@ -90,8 +91,10 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
     filter(intensity > {{intensity_cutoff}}) %>%
     select(mz, mz_min, mz_max, intensity)
   
+  
+  
   # using rcdk to generate all elements in the chemical formula
-  atoms <- as.data.frame(rcdk::get.formula(formula)@isotopes) %>%
+    atoms <- as.data.frame(rcdk::get.formula(formula)@isotopes) %>%
     mutate(number = as.numeric(number)) %>%
     mutate(mass = as.numeric(mass))
   
