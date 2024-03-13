@@ -173,11 +173,11 @@ profvis(read_msp(file))
 Test HRMF
 ```{r}
 
-hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", formula = "C8H11NO", IR_RelAb_cutoff = 1, intensity_cutoff = 100000)
+hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", formula = "C8H11NO", IR_RelAb_cutoff = 1, intensity_cutoff = 100000, return_detailed_list = FALSE)
 
 #testing using a vector of input for candidate hits
 formula <- c("C8H11NO", "C6H9N4", "C3H11N3O3")
-file <- "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp"
+hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", formula = formula, IR_RelAb_cutoff = 1, intensity_cutoff = 100000, return_detailed_list = FALSE)
 
 ```
 
