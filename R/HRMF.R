@@ -71,7 +71,7 @@ library(stringr)
 library(tidyr)
 
 
-HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
+HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1, return_detailed_list = FALSE) {
   
   source("./R/read_msp.R") # this one should be omitted when the package can be loaded
   data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
@@ -91,10 +91,13 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
     filter(intensity > {{intensity_cutoff}}) %>%
     select(mz, mz_min, mz_max, intensity)
   
+  all_hrmf <- list()
   
-  
+  # Loop through candidate formula
+  for (a in seq_along(formula)) {
+    
   # using rcdk to generate all elements in the chemical formula
-    atoms <- as.data.frame(rcdk::get.formula(formula)@isotopes) %>%
+    atoms <- as.data.frame(rcdk::get.formula(formula[a])@isotopes) %>%
     mutate(number = as.numeric(number)) %>%
     mutate(mass = as.numeric(mass))
   
@@ -290,10 +293,33 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   FoM <- round(1-sumint, 2)
   
   # combine all scores in one table
-  HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM)
+  HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM) |> 
+    mutate(Candidate = formula[a]) |> 
+    select(Candidate, everything())
   
-  return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
+  #return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
+  hrmf_ind <- list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores)
+  all_hrmf[[formula[a]]] <- hrmf_ind
   
+  }
   
+  all_hrmf_compare <- tibble(Candidate = character(), 
+                             peak_count_forw = integer(), 
+                             df_theortomsp = integer(), 
+                             HRMF_theor_score = double(), 
+                             peak_count_rev = integer(), 
+                             df_msptotheor = integer(), 
+                             HRMF_msp_score = double(), 
+                             FoM = double())
   
+  for (i in seq_along(all_hrmf)) {
+    all_hrmf_compare[i,] <- rbind(all_hrmf[[i]][["HRMF_scores"]])
+    
+  }
+  
+  if(return_detailed_list == TRUE){
+    return(all_hrmf)
+  }else if(return_detailed_list == FALSE){
+    return(all_hrmf_compare)
+  }
 }
