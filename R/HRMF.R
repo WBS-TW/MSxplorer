@@ -179,6 +179,12 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   # binding all objects in the list
   all_ions <- bind_rows(match_comp)
   
+  #########NEED TO USE NEXT TO SKIP THIS ITERATION IF ALL all_ions$annotated are FALSE
+  if(length(all_ions$annotated[all_ions$annotated == FALSE]) == length(all_ions$annotated)){
+    print(paste0("No hit on this chemical formula: ", formula[a], " within the ", mass_accuracy,  " ppm mass accuracy. Skipping calculation for this formula"))
+    next
+  }
+  ##################################################################################
   # This provides all theoretical ions
   all_ions <- tidyr::unnest(all_ions, cols = c(annotated, annodf, isopat)) %>%
     ungroup() %>%
