@@ -3,12 +3,12 @@ Type: Package
 Title: Various tools to explore HRMS data
 Version: 0.3.0
 Author: Thanh Wang
-Maintainer: Thanh Wang <thanh.wang@oru.se>
+Maintainer: Thanh Wang <thanh.wang@liu.se>
 Description: Exploring mass spectrometric data in mzML format
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 Suggests: 
     testthat
 biocViews:
@@ -30,8 +30,8 @@ Imports:
     crosstalk,
     rJava,
     rcdk,
-    nontarget,
     enviPat,
     processx,
     sys,
-    data.table
+    data.table,
+    enviPat

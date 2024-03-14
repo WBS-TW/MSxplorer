@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmass.R
 \name{getmass}
 \alias{getmass}
-\title{getmass
+\title{getmass - helper function to MDPlotR
 Get the exact mass from chemical formula using rcdk}
 \usage{
 getmass(data)
@@ -11,9 +11,9 @@ getmass(data)
 \item{data}{}
 }
 \value{
-
+vector
 }
 \description{
-getmass
+getmass - helper function to MDPlotR
 Get the exact mass from chemical formula using rcdk
 }

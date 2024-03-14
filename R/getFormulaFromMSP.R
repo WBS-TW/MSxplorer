@@ -1,5 +1,17 @@
 # Parse the chemical formula from msp files as input to HRMF
 
+#' getFormulaFromMSO
+#'
+#' @param file 
+#'
+#' @return character vector of chemical formula
+#' @export
+#'
+#' @examples
+#' 
+#' 
+
+
 getFormulaFromMSP <- function(file) {
 msp <- readLines(file, warn = FALSE)
 

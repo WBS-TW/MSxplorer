@@ -7,18 +7,8 @@
 MDPlotR()
 }
 \value{
-
+a shiny app
 }
 \description{
 MDPlotR
-}
-\examples{
-
-
-
-
-
-
-
-
 }

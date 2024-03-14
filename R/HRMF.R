@@ -2,6 +2,7 @@
 #'
 #' @param file 
 #' @param formula character The chemical formula
+#' @param select_compound number or a character 
 #' @param mass_accuracy integer The mass accuracy in ppm 
 #' @param intensity_cutoff integer  The absolute intensity cutoff stated in the msp
 #' @param IR_RelAb_cutoff integer The relative abundance cutoff for the isotopologues relative to the monoisotopic mass
@@ -64,20 +65,20 @@
 
 
 # read_msp
-library(dplyr)
-library(rcdk) #v3.6.0
-library(enviPat)
-library(stringr)
-library(tidyr)
+# library(dplyr)
+# library(rcdk) #v3.6.0
+# library(enviPat)
+# library(stringr)
+# library(tidyr)
+#source("./R/read_msp.R") # this one should be omitted when the package can be loaded
 
-
-HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1, return_detailed_list = FALSE) {
+HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1, return_detailed_list = FALSE) {
   
-  source("./R/read_msp.R") # this one should be omitted when the package can be loaded
+   
   data(list = "isotopes", package = "enviPat") # this is needed by isopattern to calculate the isotopic patterns
   
   compounds <- read_msp(file)
-  compound <- compounds[[1]] %>% select(mz, intensity) # NOTE: need to be able to iterate through whole msp later? But need formula for all ind hits in the msp
+  compound <- compounds[[select_compound]] %>% dplyr::select(mz, intensity)  
   rownames(compound) <- NULL
   
   
@@ -86,10 +87,10 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   
   compound <- compound %>%
-    mutate(mz_min = mz - mass_accuracy/10^6*compound$mz,
-           mz_max = mz + mass_accuracy/10^6*compound$mz) %>%
-    filter(intensity > {{intensity_cutoff}}) %>%
-    select(mz, mz_min, mz_max, intensity)
+    dplyr::mutate(mz_min = mz - mass_accuracy/10^6*compound$mz,
+                  mz_max = mz + mass_accuracy/10^6*compound$mz) %>%
+    dplyr::filter(intensity > {{intensity_cutoff}}) %>%
+    dplyr::select(mz, mz_min, mz_max, intensity)
   
   all_hrmf <- list()
   
@@ -98,8 +99,8 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
     
   # using rcdk to generate all elements in the chemical formula
     atoms <- as.data.frame(rcdk::get.formula(formula[a])@isotopes) %>%
-    mutate(number = as.numeric(number)) %>%
-    mutate(mass = as.numeric(mass))
+      dplyr::mutate(number = as.numeric(number)) %>%
+      dplyr::mutate(mass = as.numeric(mass))
   
   # define the minimum (zero) and maximum elements for rcdk to match theoretical formula with measured masses 
   element_range <- list()
@@ -148,7 +149,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
       
       # extract the monoisotopic ion formula for input into isopattern
       # FIX ERROR: loss of electron not calculated for fragments!
-      chemforms <- str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
+      chemforms <-  stringr::str_extract(match_list[["annodf"]][["MonoIonFormula"]], "(?<=\\[).+?(?=\\])")
       
       isopat <- as.data.frame(enviPat::isopattern(isotopes = isotopes, chemforms = chemforms,
                                                   threshold = IR_RelAb_cutoff, # this one needs to be used as input variable in function
@@ -157,12 +158,12 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
                                                   plotit = FALSE, 
                                                   algo=1, 
                                                   rel_to = 0,
-                                                  verbose = TRUE)) %>%
-        rename(Iso_mz = 1, Abundance = 2) %>%
-        mutate(Abundance = round(Abundance, 1)) %>%
-        mutate(MonoIsoFormula = chemforms) %>%
-        select(MonoIsoFormula, everything()) %>%
-        rename_with( ~str_remove(., paste0(chemforms, ".")), .cols = -(1:3))
+                                                  verbose = FALSE)) %>%
+        dplyr::rename(Iso_mz = 1, Abundance = 2) %>%
+        dplyr::mutate(Abundance = round(Abundance, 1)) %>%
+        dplyr::mutate(MonoIsoFormula = chemforms) %>%
+        dplyr::select(MonoIsoFormula, everything()) %>%
+        dplyr::rename_with( ~stringr::str_remove(., paste0(chemforms, ".")), .cols = -(1:3))
       
       match_list[["isopat"]] <- isopat
       
@@ -177,24 +178,24 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   }
   
   # binding all objects in the list
-  all_ions <- bind_rows(match_comp)
+  all_ions <- dplyr::bind_rows(match_comp)
   
-  #########NEED TO USE NEXT TO SKIP THIS ITERATION IF ALL all_ions$annotated are FALSE
+  ######### Create message to skip current iteration if all rows of all_ions$annotated are FALSE (no match)
   if(length(all_ions$annotated[all_ions$annotated == FALSE]) == length(all_ions$annotated)){
-    print(paste0("No hit on this chemical formula: ", formula[a], " within the ", mass_accuracy,  " ppm mass accuracy. Skipping calculation for this formula"))
+    print(paste0("No match for any mass spectral peaks for the chemical formula: ", formula[a], " within the ", mass_accuracy,  " ppm mass accuracy. Calculations not performed for this formula"))
     next
   }
   ##################################################################################
   # This provides all theoretical ions
   all_ions <- tidyr::unnest(all_ions, cols = c(annotated, annodf, isopat)) %>%
-    ungroup() %>%
-    filter(annotated == TRUE) %>%
-    mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+    dplyr::ungroup() %>%
+    dplyr::filter(annotated == TRUE) %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~tidyr::replace_na(.x, 0)))
   
   all_elems <- all_ions %>%
-    select(-c(1:7)) %>%
-    mutate(IsoFormula = as.character("")) %>%
-    select(`12C`, `13C`, everything())
+    dplyr::select(-c(1:7)) %>%
+    dplyr::mutate(IsoFormula = as.character("")) %>%
+    dplyr::select(`12C`, `13C`, everything())
   
   
   for (i in 1:nrow(all_elems)) {
@@ -209,15 +210,15 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   }
   
   all_elems <- all_elems %>%
-    select(IsoFormula)
+    dplyr::select(IsoFormula)
   
   all_ions <- all_ions %>%
-    mutate(Isoformula = all_elems$IsoFormula)
+    dplyr::mutate(Isoformula = all_elems$IsoFormula)
   
   all_ions <- all_ions %>%
-    mutate(Detected_mz = 0) %>%
-    mutate(Detected_int = 0) %>%
-    rename(Annotated = annotated)
+    dplyr::mutate(Detected_mz = 0) %>%
+    dplyr::mutate(Detected_int = 0) %>%
+    dplyr::rename(Annotated = annotated)
   
   for (i in seq_along(all_ions$Iso_mz)) {
     for (j in seq_along(compound$mz)) {
@@ -232,20 +233,21 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   windows2 <- mass_accuracy/10^6*all_ions$Iso_mz
   
   all_ions <- all_ions %>%
-    mutate(MassError_ppm = case_when(Detected_mz > 1 ~ round((Detected_mz-Iso_mz)/Iso_mz*10^6,1))) %>%
-    group_by(MonoIsoFormula) %>%
-    mutate(Expected_int = round(Abundance/100*max(Detected_int),0)) %>% #adding the expected abundance based on the theor isotope ratio
-    mutate(Detected_RelAb = round(Detected_int/max(Detected_int)*100, 1)) %>%
-    ungroup() %>%
-    mutate(Iso_mz_min = Iso_mz-windows2,
+    dplyr::mutate(MassError_ppm = dplyr::case_when(Detected_mz > 1 ~ round((Detected_mz-Iso_mz)/Iso_mz*10^6,1))) %>%
+    dplyr::group_by(MonoIsoFormula) %>%
+    dplyr::mutate(Expected_int = round(Abundance/100*max(Detected_int),0)) %>% #adding the expected abundance based on the theor isotope ratio
+    dplyr::mutate(Detected_RelAb = round(Detected_int/max(Detected_int)*100, 1)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(Iso_mz_min = Iso_mz-windows2,
            Iso_mz_max = Iso_mz+windows2) %>%
-    rename(Theor_RelAb = Abundance) %>%
-    filter(Expected_int > {{intensity_cutoff}}) %>%
-    select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb, Expected_int)
+    dplyr::rename(Theor_RelAb = Abundance) %>%
+    dplyr::filter(Expected_int > {{intensity_cutoff}}) %>%
+    dplyr::select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb, Expected_int)
   #filter(!is.na(MassError_ppm))
   
   
-  compound <- compound %>% mutate(Theor_mz = 0, MonoIsoFormula = "", IsoFormula = "", Theor_RelAb = 0)
+  compound <- compound %>% 
+    dplyr::mutate(Theor_mz = 0, MonoIsoFormula = "", IsoFormula = "", Theor_RelAb = 0)
   
   for (i in seq_along(compound$mz)) {
     for (j in seq_along(all_ions$Iso_mz)) {
@@ -259,22 +261,22 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   }
   
   compound <- compound %>%
-    mutate(MassError_ppm = case_when(Theor_mz > 1 ~ round((mz-Theor_mz)/Theor_mz*10^6,1))) %>%
-    group_by(MonoIsoFormula) %>%
-    mutate(Detected_RelAb = round(intensity/max(intensity)*100, 1)) %>%
-    ungroup()
+    dplyr::mutate(MassError_ppm = dplyr::case_when(Theor_mz > 1 ~ round((mz-Theor_mz)/Theor_mz*10^6,1))) %>%
+    dplyr::group_by(MonoIsoFormula) %>%
+    dplyr::mutate(Detected_RelAb = round(intensity/max(intensity)*100, 1)) %>%
+    dplyr::ungroup()
   
   
   all_iso <- length(all_ions$MassError_ppm)
   
   #this generates a table with all theoretical ions and isotopologues for the formula and match with msp
   HRMF_theor_formula <- all_ions %>%
-    mutate(Detected_RelAb = replace_na(Detected_RelAb, 0)) %>% #remove NaN in Detected_RelAb column. Check why NaN is generated..
+    dplyr::mutate(Detected_RelAb = tidyr::replace_na(Detected_RelAb, 0)) %>% #remove NaN in Detected_RelAb column. Check why NaN is generated..
     #drop_na(MassError_ppm) %>%
-    summarise(peak_count_forw = all_iso,
+    dplyr::summarise(peak_count_forw = all_iso,
               df_theortomsp = round(sum(!is.na(MassError_ppm))/all_iso*100, 0),
               HRMF_theor_score = round(sum(Detected_mz*Detected_RelAb)/sum(Iso_mz*Theor_RelAb),2) # check if this reversed ratio correct?
-    ) 
+    )
   
   
   all_iso_cmp <- length(compound$MassError_ppm)
@@ -283,7 +285,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   HRMF_msp_formula <- compound %>%
     #drop_na(MassError_ppm) %>%
-    summarise(peak_count_rev = all_iso_cmp,
+    dplyr::summarise(peak_count_rev = all_iso_cmp,
               df_msptotheor = round(sum(!is.na(MassError_ppm))/all_iso_cmp*100, 0),
               HRMF_msp_score = round(sum(Theor_mz*Theor_RelAb)/sum(mz*Detected_RelAb),2)
     )
@@ -300,8 +302,8 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   # combine all scores in one table
   HRMF_scores <- cbind(HRMF_theor_formula, HRMF_msp_formula, FoM) |> 
-    mutate(Candidate = formula[a]) |> 
-    select(Candidate, everything())
+    dplyr::mutate(Candidate = formula[a]) |> 
+    dplyr::select(Candidate, everything())
   
   #return(list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores))
   hrmf_ind <- list(all_ions = all_ions, compound = compound, HRMF_scores = HRMF_scores)
@@ -309,7 +311,7 @@ HRMF <- function(file, formula, charge = 1, mass_accuracy = 5, intensity_cutoff 
   
   }
   
-  all_hrmf_compare <- tibble(Candidate = character(), 
+  all_hrmf_compare <- dplyr::tibble(Candidate = character(), 
                              peak_count_forw = integer(), 
                              df_theortomsp = integer(), 
                              HRMF_theor_score = double(), 

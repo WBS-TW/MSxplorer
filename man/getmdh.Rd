@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmdh.R
 \name{getmdh}
 \alias{getmdh}
-\title{Title}
+\title{Mass defect calculations - helper function to MDPlotR}
 \usage{
 getmdh(mz, cus = c("CH2,H2"), method = "round")
 }
@@ -14,8 +14,8 @@ getmdh(mz, cus = c("CH2,H2"), method = "round")
 \item{method}{}
 }
 \value{
-
+data.frame
 }
 \description{
-Title
+Mass defect calculations - helper function to MDPlotR
 }

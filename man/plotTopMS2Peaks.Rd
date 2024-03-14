@@ -32,6 +32,3 @@ overlaid EIC from MS2 and MS1 in an interactive Shiny environment
 \description{
 Extract most intense MS2 ions from MS1 EIC using Shiny
 }
-\examples{
-
-}

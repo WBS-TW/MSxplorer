@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^old$
+^functions_in_dev$

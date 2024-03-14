@@ -180,11 +180,18 @@ formula <- c("CHCl3", "C8H11NO","C10H3N", "C6H9N4", "C3H11N3O3", "C7H9N2O", "CH7
 hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", mass_accuracy = 5, formula = formula, IR_RelAb_cutoff = 1, intensity_cutoff = 10000, return_detailed_list = FALSE)
 
 file <- "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp"
+
+
+
+file <- "D://R_projects//MSxplorer//data//testHRMFcompounds.msp"
+formula <- c("CHCl3", "C8H11NO","C10H3N", "C6H9N4", "C3H11N3O3", "C7H9N2O", "CH7N5O3")
+hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", mass_accuracy = 5, formula = formula, select_compound = 1,  IR_RelAb_cutoff = 1, intensity_cutoff = 10000, return_detailed_list = FALSE)
+
 ```
 
 Test HRMF_all which uses msp with hits and unknowns. Need to add Formula in the msp
 ```{r}
-file <- "D:\\TEST\\test3compounds.msp"
+file <- "D://R_projects//MSxplorer//data//testHRMFcompounds.msp"
 hit2 <- HRMF_all(file = file, IR_RelAb_cutoff = 1, intensity_cutoff = 100000)
 
 

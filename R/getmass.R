@@ -2,10 +2,10 @@
 #' Get the exact mass from chemical formula using rcdk
 #' @param data 
 #'
-#' @return
+#' @return vector
 #' @export
 #'
-#' @examples
+#' @examples 
 #' 
 getmass <- function(data) {
   if (grepl('-', data)) {

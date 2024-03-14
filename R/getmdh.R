@@ -4,10 +4,10 @@
 #' @param cus 
 #' @param method 
 #'
-#' @return
+#' @return data.frame
 #' @export
 #'
-#' @examples
+#' @examples 
 #' 
 getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
   
