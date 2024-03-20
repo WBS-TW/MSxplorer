@@ -184,8 +184,8 @@ file <- "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp"
 
 
 file <- "D://R_projects//MSxplorer//data//testHRMFcompounds.msp"
-formula <- c("CHCl3", "C8H11NO","C10H3N", "C6H9N4", "C3H11N3O3", "C7H9N2O", "CH7N5O3")
-hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", mass_accuracy = 5, formula = formula, select_compound = 1,  IR_RelAb_cutoff = 1, intensity_cutoff = 10000, return_detailed_list = FALSE)
+formula <- c("CHCl3", "C8H11NO","C10H3N", "C7H9N", "C6H9N4", "C3H11N3O3", "C7H9N2O", "CH7N5O3")
+hit <- HRMF(file = file, mass_accuracy = 5, formula = formula, charge = 1, select_compound = 2,  IR_RelAb_cutoff = 1, intensity_cutoff = 50000, return_detailed_list = FALSE)
 
 ```
 
@@ -200,17 +200,4 @@ hit2 <- HRMF_all(file = file, IR_RelAb_cutoff = 1, intensity_cutoff = 100000)
 
 Test modified cosine similarity
 #https://pubs.acs.org/doi/full/10.1021/acs.analchem.7b03320
-
-Test Hilbert Curve
-```{r Hilbertcurve}
-# https://github.com/jokergoo/HilbertCurve
-
-
-HilbertCurve(1, 10000, reference = TRUE)
-
-
-
-
-  
-```
 

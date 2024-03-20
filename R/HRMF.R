@@ -52,6 +52,7 @@
 #' High resolution mass filtering for GC HRMS data
 # 
 # https://pubs.acs.org/doi/full/10.1021/acs.analchem.5b01503
+# Kwiecien assumed all EI peaks are radical cations (in the SI)
 # https://www.cureffi.org/2013/09/23/a-quick-intro-to-chemical-informatics-in-r/
 # subformula graph: https://jcheminf.biomedcentral.com/articles/10.1186/s13321-023-00776-y
 
@@ -70,7 +71,7 @@
 # library(enviPat)
 # library(stringr)
 # library(tidyr)
-#source("./R/read_msp.R") # this one should be omitted when the package can be loaded
+# source("./R/read_msp.R") # this one should be omitted when the package can be loaded
 
 HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy = 5, intensity_cutoff = 1, IR_RelAb_cutoff = 1, return_detailed_list = FALSE) {
   
@@ -192,12 +193,13 @@ HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy =
     dplyr::filter(annotated == TRUE) %>%
     dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~tidyr::replace_na(.x, 0)))
   
+  # creating isotope table to generate isotopic formula
   all_elems <- all_ions %>%
     dplyr::select(-c(1:7)) %>%
     dplyr::mutate(IsoFormula = as.character("")) %>%
     dplyr::select(`12C`, `13C`, everything())
   
-  
+  ###
   for (i in 1:nrow(all_elems)) {
     elem <- NULL
     for (j in 1:ncol(all_elems)) {
@@ -211,7 +213,7 @@ HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy =
   
   all_elems <- all_elems %>%
     dplyr::select(IsoFormula)
-  
+  ###
   all_ions <- all_ions %>%
     dplyr::mutate(Isoformula = all_elems$IsoFormula)
   
@@ -245,7 +247,7 @@ HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy =
     dplyr::select(MonoIsoFormula, Iso_mz, Iso_mz_min, Iso_mz_max, Theor_RelAb, Isoformula, Detected_mz, MassError_ppm, Detected_int, Detected_RelAb, Expected_int)
   #filter(!is.na(MassError_ppm))
   
-  
+  # starting with the compound df to search for match with all_ions df
   compound <- compound %>% 
     dplyr::mutate(Theor_mz = 0, MonoIsoFormula = "", IsoFormula = "", Theor_RelAb = 0)
   
