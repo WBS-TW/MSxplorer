@@ -1,0 +1,115 @@
+mz,rt,intensity,name,formula,group
+16.0313,1,729,methane,CH4,alkane
+30.046949,1.1,680,ethane,C2H6,alkane
+44.062599,1.2,580,Propane,C3H8,alkane
+58.078251,1.3,695,n-Butane,C4H10,alkane
+72.093903,1.4,345,Pentane,C5H12,alkane
+86.10955,1.5,580,Hexane,C6H14,alkane
+128.156494,1.6,1345,Nonane,C9H20,alkane
+142.17215,1.7,720,Decane,C10H22,alkane
+198.234756,1.8,635,Tetradecane,C14H30,alkane
+28.0313,1.9,597,Ethylene,C2H4,alkene
+42.046951,2,533,Propene,C3H6,alkene
+56.062599,2.1,720,1-Butene,C4H8,alkene
+70.078247,2.2,132,Pent-1-ene,C5H10,alkene
+84.093903,2.3,504,hexene,C6H12,alkene
+126.140854,2.4,1375,nonene,C9H18,alkene
+140.156494,2.5,440,decene,C10H20,alkene
+196.219101,2.6,912,Tetradecene,C14H28,alkene
+32.026215,2.7,305,Methanol,CH4O,alcohol
+46.041866,2.8,696,Ethanol,C2H6O,alcohol
+60.057514,2.9,202,1-Propanol,C3H8O,alcohol
+74.073166,3,679,n-butanol,C4H10O,alcohol
+88.088814,3.1,135,pentanol,C5H12O,alcohol
+102.104462,3.2,1082,hexanol,C6H14O,alcohol
+144.151413,3.3,1421,nonanol,C9H20O,alcohol
+158.167068,3.4,1405,Decan-1-ol,C10H22O,alcohol
+214.22966,3.5,977,1-Tetradecanol,C14H30O,alcohol
+58.041866,3.6,258,Acetone,C3H6O,ketone
+72.057518,3.7,1151,butanone,C4H8O,ketone
+86.073166,3.8,678,Pentan-2-one,C5H10O,ketone
+100.088814,3.9,1434,2-Hexanone,C6H12O,ketone
+142.135757,4,102,2-Nonanone,C9H18O,ketone
+156.151413,4.1,1017,2-Decanone,C10H20O,ketone
+212.21402,4.2,577,2-Tetradecanone,C14H28O,ketone
+46.005478,4.3,1111,formic acid,CH2O2,alkylacid
+60.02113,4.4,854,Acetic acid,C2H4O2,alkylacid
+74.036781,4.5,329,Propionic acid,C3H6O2,alkylacid
+88.052429,4.6,540,Butanoic acid,C4H8O2,alkylacid
+102.068077,4.7,398,Valeric acid,C5H10O2,alkylacid
+116.083733,4.8,841,1-Hexanoic acid,C6H12O2,alkylacid
+158.130676,4.9,472,Nonanoic acid,C9H18O2,alkylacid
+172.146332,5,272,Decanoic acid,C10H20O2,alkylacid
+228.208923,5.1,1371,Myristic acid,C14H28O2,alkylacid
+42.046951,5.2,1168,Cyclopropane,C3H6,cycloalkane
+56.062599,5.3,341,Cyclobutane,C4H8,cycloalkane
+70.078247,5.4,207,Cyclopentane,C5H10,cycloalkane
+84.093903,5.5,1373,Cyclohexane,C6H12,cycloalkane
+126.140854,5.6,597,Cyclononane,C9H18,cycloalkane
+140.156494,5.7,1177,Cyclodecane,C10H20,cycloalkane
+196.219101,5.8,909,Cyclotetradecane,C14H28,cycloalkane
+31.042198,5.9,449,methylamine,CH5N,alkylamine
+45.05785,6,1066,Ethylamine,C2H7N,alkylamine
+59.073498,6.1,493,Propylamine,C3H9N,alkylamine
+73.089149,6.2,620,n-butylamine,C4H11N,alkylamine
+87.104797,6.3,1077,1-Pentylamine,C5H13N,alkylamine
+101.120445,6.4,1223,Hexylamine,C6H15N,alkylamine
+143.167404,6.5,1103,Nonylamine,C9H21N,alkylamine
+157.183044,6.6,933,decanamine,C10H23N,alkylamine
+213.245651,6.7,1057,1-Tetradecanamine,C14H31N,alkylamine
+34.021877,6.8,1490,fluromethane,CH3F,alkylfluoride
+48.037529,6.9,627,Fluoroethane,C2H5F,alkylfluoride
+62.053177,7,899,Fluoropropane,C3H7F,alkylfluoride
+76.068825,7.1,1390,1-Fluorobutane,C4H9F,alkylfluoride
+90.08448,7.2,747,1-Fluoropentane,C5H11F,alkylfluoride
+104.100128,7.3,634,1-Fluorohexane,C6H13F,alkylfluoride
+146.147079,7.4,194,1-Fluorononane,C9H19F,alkylfluoride
+160.162735,7.5,418,1-Fluorodecane,C10H21F,alkylfluoride
+216.225327,7.6,960,myristyl fluoride,C14H29F,alkylfluoride
+49.992329,7.7,416,Chloromethane,CH3Cl,alkylchloride
+64.00798,7.8,452,monochloroethane,C2H5Cl,alkylchloride
+78.023628,7.9,898,1-Chloropropane,C3H7Cl,alkylchloride
+92.039276,8,740,1-Chlorobutane,C4H9Cl,alkylchloride
+106.054932,8.1,274,1-Chloropentane,C5H11Cl,alkylchloride
+120.07058,8.2,699,chlorohexane,C6H13Cl,alkylchloride
+162.117523,8.3,472,chlorononane,C9H19Cl,alkylchloride
+176.133179,8.4,644,1-Chlorodecane,C10H21Cl,alkylchloride
+232.195786,8.5,645,1-Chlorotetradecane,C14H29Cl,alkylchloride
+93.941803,8.6,1415,Bromomethane,CH3Br,alkylbromide
+107.957458,8.7,1290,Bromoethane,C2H5Br,alkylbromide
+121.973106,8.8,1119,1-Bromopropane,C3H7Br,alkylbromide
+135.988754,8.9,860,1-Bromobutane,C4H9Br,alkylbromide
+150.00441,9,146,bromopentane,C5H11Br,alkylbromide
+164.02005,9.1,1066,1-Bromohexane,C6H13Br,alkylbromide
+206.067001,9.2,1272,1-Bromononane,C9H19Br,alkylbromide
+220.082657,9.3,562,1-Bromodecane,C10H21Br,alkylbromide
+276.145264,9.4,293,1-Bromotetradecane,C14H29Br,alkylbromide
+78.046951,9.5,913,benzene,C6H6,alkylbenzene
+92.062599,9.6,1010,Toluene,C7H8,alkylbenzene
+106.078247,9.7,922,Ethylbenzene,C8H10,alkylbenzene
+120.093903,9.8,854,n-propylbenzene,C9H12,alkylbenzene
+134.109543,9.9,398,Butylbenzene,C10H14,alkylbenzene
+148.125198,10,1331,n-Amylbenzene,C11H16,alkylbenzene
+162.140854,10.1,1247,Hexylbenzene,C12H18,alkylbenzene
+128.062607,10.2,905,Naphthalene,C10H8,PAH
+178.078247,10.3,404,Anthracene,C14H10,PAH
+228.093903,10.4,1497,Tetracene,C18H12,PAH
+202.078247,10.5,894,Pyrene,C16H10,PAH
+252.093903,10.6,848,Benzo(a)pyrene,C20H12,PAH
+647.778,10.7,1154,Tetrabromobisphenol A bisacrylate ,C21H16Br4O4,TBBPA
+539.757082,10.8,670,Tetrabromobisphenol A ,C15H12Br4O2,TBBPA
+619.819682,11,1164,Tetrabromobisphenol A bis(allyl) ether,C21H20Br4O2,TBBPA
+651.809511,11.1,510,Tetrabromobisphenol A bis(glycidyl) ether,C21H20Br4O4,TBBPA
+627.809511,11.2,1371,Tetrabromobisphenol A bis(2-hydroxyethyl) ether,C19H20Br4O4,TBBPA
+735.83064,11.3,470,Tetrabromobisphenol A bis(2-hydroxyethyl)ether bisacrylate,C25H24Br4O6,TBBPA
+363.9591404,11.4,1035,Tetrachlorobisphenol A,C15H12Cl4O2,TBBPA
+283.953879,11.5,3423,Tris(2-chloroethyl) phosphate (TCEP),C6H12Cl3O4P,OPEs
+224.117746,11.6,242,Tripropyl phosphate (TPrP),C9H21O4P,OPEs
+326.000829,11.7,454,Tris(1-chloro-2-propyl) phosphate (TClPP),C9H18Cl3O4P,OPEs
+326.000829,11.8,463,Tris(3-chloropropyl)phosphate (TCPP),C9H18Cl3O4P,OPEs
+427.883912,11.9,453,"Tris(1,3-dichloro-2-propyl)phosphate (TDClPP)",C9H15Cl6O4P,OPEs
+326.07079,12,655,Triphenyl phosphate (TPHP),C18H15O4P,OPEs
+266.164696,12.1,3453,Tributyl phosphate (TNBP),C12H27O4P ,OPEs
+368.117746,12.2,432,Tricresyl phosphate (TMPP),C21H21O4P,OPEs
+362.164696,12.3,222,2-Ethylhexyl diphenyl phosphate (EHDPP),C20H27O4P,OPEs
+398.24334,12.4,455,Tris(2-butoxyethyl) phosphate (TBOEP),C18H39O7P,OPEs
