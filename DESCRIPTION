@@ -13,25 +13,25 @@ Suggests:
     testthat
 biocViews:
 Imports: 
+    CAMERA,
+    crosstalk,
+    data.table,
+    dplyr,
+    DT,
+    enviPat,
+    metaMS,
+    miniUI,
     MSnbase,
     plotly,
-    dplyr,
-    tidyr,
-    stringr,
-    magrittr,
-    shiny,
-    miniUI,
-    metaMS,
-    xcms,
-    CAMERA,
-    vroom,
-    shinythemes,
-    DT,
-    crosstalk,
-    rJava,
-    rcdk,
-    enviPat,
     processx,
+    rcdk,
+    rJava,
+    tidyr,
+    shiny,
+    shinythemes,
+    stringr,
     sys,
-    data.table,
-    enviPat
+    vroom,
+    xcms
+Depends: 
+    R (>= 2.10)

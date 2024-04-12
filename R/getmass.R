@@ -8,21 +8,21 @@
 #' @examples 
 #' 
 getmass <- function(data) {
+  data("isotopes")
   if (grepl('-', data)) {
     name <- unlist(strsplit(data, '-'))
-    iso1 <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
-    iso2 <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[2]))
-    cus <- as.numeric(iso1[max(iso1[, 2]), 1]) - as.numeric(iso2[max(iso2[, 2]), 1])
+    iso1 <- as.double(enviPat::isopattern(chemforms = name[1], isotopes = isotopes)[[1]][[1,1]])
+    iso2 <- as.double(enviPat::isopattern(chemforms = name[2], isotopes = isotopes)[[1]][[1,1]])
+    cus <- iso1 - iso2
     
-    } else if (grepl("/", data)) {
-      name <- unlist(strsplit(data, "/"))
-      frac <- as.numeric(name[2])
-      iso <- rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
-      cus <- as.numeric(iso[max(iso[, 2]), 1]) / frac
-      
-    }else{
-    iso <- rcdk::get.isotopes.pattern(rcdk::get.formula(data))
-    cus <- as.numeric(iso[max(iso[, 2]), 1])
+  } else if (grepl("/", data)) {
+    name <- unlist(strsplit(data, "/"))
+    frac <- as.double(name[2])
+    iso <- as.double(enviPat::isopattern(chemforms = name[1], isotopes = isotopes)[[1]][[1,1]])
+    cus <- iso / frac
+    
+  }else{
+    cus <- as.double(enviPat::isopattern(chemforms = data, isotopes = isotopes)[[1]][[1,1]])
   }
   return(cus)
 }

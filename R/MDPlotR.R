@@ -12,6 +12,7 @@
 #' 
 #' 
 #' 
+
 MDPlotR <- function() {
 
 ui <- shiny::navbarPage(
@@ -90,6 +91,7 @@ ui <- shiny::navbarPage(
 
 
 server = function(input, output, session) {
+  
   MD_data <- reactive({
     req(input$file1) #requires that the input is available
     df <- vroom::vroom(input$file1$datapath) # use vroom for faster loading of large files
@@ -273,7 +275,7 @@ server = function(input, output, session) {
     output$DTPlot1 <- plotly::renderPlotly({
       s <- input$x1_rows_selected
       if (!length(s)) {
-        p <- d %>%
+        p <- d |>
           plotly::plot_ly(
             x = MDplot_x1,
             y = MDplot_y1,
@@ -291,7 +293,7 @@ server = function(input, output, session) {
             ),
             #color = I('black'),
             name = 'Unfiltered'
-          ) %>%
+          ) |>
           plotly::layout(
             legend = list(
               orientation = "h",
@@ -302,15 +304,15 @@ server = function(input, output, session) {
             showlegend = T,
             xaxis = list(title = input$x1),
             yaxis = list(title = input$y1)
-          ) %>%
+          ) |>
           plotly::highlight(
             "plotly_selected",
             color = I('red'),
             selected = plotly::attrs_selected(name = 'Filtered')
           )
       } else if (length(s)) {
-        pp <- m %>%
-          plotly::plot_ly() %>%
+        pp <- m |>
+          plotly::plot_ly() |>
           plotly::add_trace(
             x = MDplot_x1,
             y = MDplot_y1,
@@ -327,7 +329,7 @@ server = function(input, output, session) {
             ),
             #color = I('black'),
             name = 'Unfiltered'
-          ) %>%
+          ) |>
           plotly::layout(
             legend = list(
               orientation = "h",
@@ -370,7 +372,7 @@ server = function(input, output, session) {
         t <- input$x1_rows_selected
         
         if (!length(t)) {
-          p <- d %>%
+          p <- d |>
             plotly::plot_ly(
               x = MDplot_x2,
               y = MDplot_y2,
@@ -388,7 +390,7 @@ server = function(input, output, session) {
               ),
               #color = I('black'),
               name = 'Unfiltered'
-            ) %>%
+            ) |>
             plotly::layout(
               legend = list(
                 orientation = "h",
@@ -399,15 +401,15 @@ server = function(input, output, session) {
               showlegend = T,
               xaxis = list(title = input$x2),
               yaxis = list(title = input$y2)
-            ) %>%
+            ) |>
             plotly::highlight(
               "plotly_selected",
               color = I('red'),
               selected = plotly::attrs_selected(name = 'Filtered')
             )
         } else if (length(t)) {
-          pp <- m %>%
-            plotly::plot_ly() %>%
+          pp <- m |>
+            plotly::plot_ly() |>
             plotly::add_trace(
               x = MDplot_x2,
               y = MDplot_y2,
@@ -424,7 +426,7 @@ server = function(input, output, session) {
               ),
               #color = I('black'),
               name = 'Unfiltered'
-            ) %>%
+            ) |>
             plotly::layout(
               legend = list(
                 orientation = "h",
@@ -507,12 +509,12 @@ server = function(input, output, session) {
       selectInt <- m[d$selection(), input$selectintensity] # intensity based on the selectintensity selectinput
       
       
-      pbar <-  plotly::plot_ly() %>%
+      pbar <-  plotly::plot_ly() |>
           plotly::add_trace(
             data = bar_out,
             x = bar_out$mz,
             y = nperc(selectInt), 
-            type = "bar") %>%
+            type = "bar") |>
         plotly::layout(
           xaxis = list(title = "m/z"),
           yaxis = list(title = "Relative intensity (%)")

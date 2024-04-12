@@ -68,8 +68,8 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                             resMz = mserr, 
                             hd = hd, 
                             zeroIsNA = FALSE)
-        M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
-          replace(., is.na(.), 0) %>%
+        M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
+          replace(., is.na(.), 0) |>
           dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
         p1 <- plotly::add_lines(p1, 
                                 x = M_plot[[i]][["rt"]], 
@@ -77,7 +77,7 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                                 name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
         ) # do not use $ dollar sign for subsetting list
       }
-      p1 %>% plotly::config(showTips = FALSE) %>% plotly::layout(showlegend = TRUE)
+      p1 |> plotly::config(showTips = FALSE) |> plotly::layout(showlegend = TRUE)
     })  
     
     
@@ -94,22 +94,22 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
     
     #### Plot new EIC of MS1 from the clicked point, when pressing "Get MS1"
     shiny::observeEvent(input$getMS, {
-      MS2 <- data_prof %>%
-        MSnbase::filterRt(rtr) %>% #rtr is from taken from the global environment rtr <<-
+      MS2 <- data_prof |>
+        MSnbase::filterRt(rtr) |> #rtr is from taken from the global environment rtr <<-
         MSnbase::filterMsLevel(2)
       
       
       
-      MS2_spec <- data.frame(mz = MS2[[1]]@mz, intensity = MS2[[1]]@intensity) %>%
-        dplyr::arrange(desc(intensity)) %>%
+      MS2_spec <- data.frame(mz = MS2[[1]]@mz, intensity = MS2[[1]]@intensity) |>
+        dplyr::arrange(desc(intensity)) |>
         dplyr::slice_head(n = numTopIons)
       
-      featlist2 <- MS2_spec %>%
-        dplyr::mutate(name = paste0("S", 1:numTopIons), mz = MS2_spec$mz, ms_level = "ms2") %>%
+      featlist2 <- MS2_spec |>
+        dplyr::mutate(name = paste0("S", 1:numTopIons), mz = MS2_spec$mz, ms_level = "ms2") |>
         dplyr::select(name, mz, ms_level, -intensity)
       
       
-      featlist2 <- featlist2 %>% dplyr::bind_rows(featlist)
+      featlist2 <- featlist2 |> dplyr::bind_rows(featlist)
       
       output$plot2 <- plotly::renderPlotly({
         for (i in 1:nrow(featlist2)) {
@@ -121,8 +121,8 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                               resMz = mserr, 
                               hd = hd, 
                               zeroIsNA = FALSE)
-          M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
-            replace(., is.na(.), 0) %>%
+          M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
+            replace(., is.na(.), 0) |>
             dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
           p2 <- plotly::add_lines(p2, 
                                   x = M_plot[[i]][["rt"]], 
@@ -130,7 +130,7 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                                   name = paste0(round(featlist2$mz[i],4), "_", featlist2$ms_level[i])
           ) # do not use $ dollar sign for subsetting list
         }
-        p2 %>% plotly::config(showTips = FALSE) %>% plotly::layout(showlegend = TRUE)
+        p2 |> plotly::config(showTips = FALSE) |> plotly::layout(showlegend = TRUE)
         
       })  
       
@@ -165,8 +165,8 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                               resMz = mserr, 
                               hd = hd, 
                               zeroIsNA = FALSE)
-          M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
-            replace(., is.na(.), 0) %>%
+          M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
+            replace(., is.na(.), 0) |>
             dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
           p1 <- plotly::add_lines(p1, 
                                   x = M_plot[[i]][["rt"]], 
@@ -174,8 +174,8 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                                   name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
           ) # do not use $ dollar sign for subsetting list
         }
-        p1 %>% 
-          plotly::config(showTips = FALSE) %>%
+        p1 |> 
+          plotly::config(showTips = FALSE) |>
           plotly::layout(xaxis = list(range = c(rtselection1[[1]], rtselection1[[2]])),
                          showlegend = TRUE)
         

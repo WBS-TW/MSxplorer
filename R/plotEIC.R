@@ -37,12 +37,12 @@ plotHilbertCurve <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
                resMz = mserr, 
                hd = hd, 
                zeroIsNA = FALSE)
-    M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) %>%
-      replace(., is.na(.), 0) %>%
+    M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
+      replace(., is.na(.), 0) |>
       dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
     p <- plotly::add_lines(p, x = M_plot[[i]][["rt"]], y = M_plot[[i]][["sum_int"]], name = paste0(round(featlist$mz[i],4), "_", featlist$ms_level[i])
     ) # do not use $ dollar sign for subsetting list
   }
-  p %>% plotly::config(showTips = FALSE) 
-  #%>% plotly::layout(title = grepl(filepath, ))
+  p |> plotly::config(showTips = FALSE) 
+  #|> plotly::layout(title = grepl(filepath, ))
 }
