@@ -6,6 +6,7 @@ TODO
 - ADD: add NAME from msp to list elements
 
 //MDPlotR//
+- ADD: add an id column to easier visualize names of features
 - ADD: remainder calculation? Use Rxx as input keytext for remainder calculation.
 - ADD: Kendrick-Analogous Mass Difference Networks. https://pubs.acs.org/doi/full/10.1021/acs.est.1c08143
 

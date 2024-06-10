@@ -17,7 +17,7 @@
 #' 
 #' plotTopMS1Peaks(filepath = fl, featlist = PFSA_frags, numTopIons = 3)
 #' 
-#' fl <- "D:/OneDrive - Linköpings universitet/Raw_data/Dust_Florian/LC/LC_neg_mzMLQC_rep1.mzML"
+#' fl <- "D:/OneDrive - Linköpings universitet/Raw_data/Dust_Florian/LC/LC_neg_mzML/QC_rep1.mzML"
 #' Br_frags <- data.frame(name = c("Br79", "Br81"), mz = c(78.9183, 80.9163), ms_level = c("ms2", "ms2"))
 #' plotTopMS1Peaks(filepath = fl, featlist = Br_frags, numTopIons = 3)
 
@@ -77,8 +77,10 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                             hd = hd, 
                             zeroIsNA = FALSE)
         M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
-          replace(., is.na(.), 0) |>
-          dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
+          dplyr::mutate(
+            dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, 0))) |>
+          dplyr::mutate(
+            sum_int = rowSums(dplyr::across(dplyr::starts_with("int")), na.rm = TRUE))
         p1 <- plotly::add_lines(p1, 
                                 x = M_plot[[i]][["rt"]], 
                                 y = M_plot[[i]][["sum_int"]], 
@@ -130,8 +132,10 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                               hd = hd, 
                               zeroIsNA = FALSE)
           M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
-            replace(., is.na(.), 0) |>
-            dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
+            dplyr::mutate(
+              dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, 0))) |>
+            dplyr::mutate(
+              sum_int = rowSums(dplyr::across(dplyr::starts_with("int")), na.rm = TRUE))
           p2 <- plotly::add_lines(p2, 
                                   x = M_plot[[i]][["rt"]], 
                                   y = M_plot[[i]][["sum_int"]], 
@@ -174,8 +178,10 @@ plotTopMS1Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, ms
                               hd = hd, 
                               zeroIsNA = FALSE)
           M_plot[[i]] <- data.frame(rt = M@rt, int = M@map) |>
-            replace(., is.na(.), 0) |>
-            dplyr::mutate(sum_int = rowSums(.[grep("int", names(.))], na.rm = TRUE))
+            dplyr::mutate(
+              dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, 0)))  |>
+            dplyr::mutate(
+              sum_int = rowSums(dplyr::across(dplyr::starts_with("int")), na.rm = TRUE))
           p1 <- plotly::add_lines(p1, 
                                   x = M_plot[[i]][["rt"]], 
                                   y = M_plot[[i]][["sum_int"]], 
