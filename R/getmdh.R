@@ -5,7 +5,7 @@
 #' @param method 
 #'
 #' @return data.frame
-#' 
+#' @export
 getmdh <- function(mz, cus = c("CH2,H2"), method = "round"){
   
   getorder <- function(input) {

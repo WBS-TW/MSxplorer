@@ -3,7 +3,7 @@
 #' @param data 
 #'
 #' @return vector
-#' 
+#' @export 
 getmass <- function(data) {
   data("isotopes")
   if (grepl('-', data)) {

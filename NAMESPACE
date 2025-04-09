@@ -2,6 +2,11 @@
 
 export(HRMF)
 export(HRMF_all)
+export(MDPlotR)
+export(getFormulaFromMSP)
+export(getmass)
+export(getmdh)
 export(plotEIC)
 export(plotTopMS1Peaks)
+export(plotTopMS2Peaks)
 export(read_msp)

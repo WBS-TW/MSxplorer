@@ -8,7 +8,7 @@
 #' @param rtWindow num the retention time range to extract MS2 EIC (in sec). Error occurs if set too low.
 #'
 #' @return overlaid EIC from MS2 and MS1 in an interactive Shiny environment
-#' 
+#' @export
 
 
 plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10, diff = 0.01, mserr = 0.01, rtWindow = 0.3) {
