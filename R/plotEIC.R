@@ -11,11 +11,11 @@
 #' @export
 #'
 #' @examples
-#' fl <- "D:\\TEST\\28Rterr spiked 1000pg_1_D_4_1.mzML"
+#' filepath <- "D:/TEST/NISTrep3_LC_centroid_crop_rt_100_500_mz50_500.mzML"
 
 #' plotEIC(filepath = filepath, featlist = featlist)
 
-plotHilbertCurve <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
+plotEIC <- function(filepath, featlist, diff = 0.005, mserr = 0.005) {
   data_prof <- MSnbase::readMSData(filepath, mode = "onDisk", centroided = TRUE)
   hd <- MSnbase::fData(data_prof)
   ms1 <- which(hd$msLevel == 1)

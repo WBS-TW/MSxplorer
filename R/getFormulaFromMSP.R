@@ -5,9 +5,6 @@
 #' @param file 
 #'
 #' @return character vector of chemical formula
-#' @export
-#'
-#' @examples
 #' 
 #' 
 

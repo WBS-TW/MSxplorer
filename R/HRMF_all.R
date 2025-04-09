@@ -1,4 +1,4 @@
-#' HRMF: High resolution mass filtering for GC HRMS data
+#' HRMF: High resolution mass filtering for GC HRMS data for multiple entries in a msp file
 #'
 #' @param file 
 #' @param mass_accuracy integer The mass accuracy in ppm 

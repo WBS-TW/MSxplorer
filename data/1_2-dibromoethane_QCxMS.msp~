@@ -6,7 +6,8 @@ PRECURSORMZ:
 PRECURSORTYPE: [M]+.
 IONMODE: Positive
 SPECTRUMTYPE: Centroid
-FORMULA: C2H4Br2
+FORMULA: 
+INCHIKEY: 
 INCHI: 
 SMILES: 
 AUTHORS: Wang et al, MTM Research Centre, Orebro University, Sweden

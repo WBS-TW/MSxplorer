@@ -2,7 +2,7 @@
 % Please edit documentation in R/HRMF_all.R
 \name{HRMF_all}
 \alias{HRMF_all}
-\title{HRMF: High resolution mass filtering for GC HRMS data}
+\title{HRMF: High resolution mass filtering for GC HRMS data for multiple entries in a msp file}
 \usage{
 HRMF_all(
   file,
@@ -25,7 +25,7 @@ HRMF_all(
 list   list of outputs consisting of dataframes
 }
 \description{
-HRMF: High resolution mass filtering for GC HRMS data
+HRMF: High resolution mass filtering for GC HRMS data for multiple entries in a msp file
 }
 \examples{
 hit <- HRMF(file = "D://R_projects//MSxplorer//data//2-Methoxy-5-methylaniline_C8H11NO.msp", formula = "C8H11NO", IR_RelAb_cutoff = 1, intensity_cutoff = 100000)

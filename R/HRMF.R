@@ -332,4 +332,6 @@ HRMF <- function(file, formula, select_compound = 1, charge = 1, mass_accuracy =
   }else if(return_detailed_list == FALSE){
     return(all_hrmf_compare)
   }
+  
+
 }

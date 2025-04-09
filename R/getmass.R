@@ -3,9 +3,6 @@
 #' @param data 
 #'
 #' @return vector
-#' @export
-#'
-#' @examples 
 #' 
 getmass <- function(data) {
   data("isotopes")

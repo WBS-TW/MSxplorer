@@ -8,9 +8,6 @@
 #' @param rtWindow num the retention time range to extract MS2 EIC (in sec). Error occurs if set too low.
 #'
 #' @return overlaid EIC from MS2 and MS1 in an interactive Shiny environment
-#' @export
-#'
-#' @examples
 #' 
 
 

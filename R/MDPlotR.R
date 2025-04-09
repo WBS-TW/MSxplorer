@@ -1,9 +1,8 @@
 #' MDPlotR
 #'
 #' @return a shiny app
-#' @export
+#' 
 #'
-#' @examples 
 #' 
 #' 
 #' 

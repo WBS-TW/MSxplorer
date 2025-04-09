@@ -201,3 +201,20 @@ hit2 <- HRMF_all(file = file, IR_RelAb_cutoff = 1, intensity_cutoff = 100000)
 Test modified cosine similarity
 #https://pubs.acs.org/doi/full/10.1021/acs.analchem.7b03320
 
+
+
+Test Msnbase
+```{r msnbase}
+library(MSnbase)
+mzf <- "D:/TEST/13RInsect_1_B_7_1.mzML"
+ms <- openMSfile(mzf)
+hd <- header(ms)
+ms1 <- which(hd$msLevel == 1)
+rtsel <- hd$retentionTime[ms1] / 60 > 1 & hd$retentionTime[ms1] / 60 < 10
+
+M <- MSmap(ms, ms1[rtsel], 490, 502, .01, hd, zeroIsNA = TRUE)
+plot(M, aspect = 1, allTicks = FALSE)
+plot3D(M)
+
+```
+
