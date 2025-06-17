@@ -1,6 +1,6 @@
 
 
-msp_file <- "./data/MassBankEU_NIST_cropped.msp"
+msp_file <- "D:/OneDrive - Linköpings universitet/Projects/Databases_SuspectLists/Spectral_databases/MassBank_NIST.msp"
 
 # read msp file
 m <- readLines(msp_file, warn = FALSE)
@@ -31,7 +31,7 @@ for (i in seq_along(n)) {
   }
   
   if(ion_mode=="POSITIVE" || ion_mode == "P" || ion_mode == "POS") {
-    sink("MassBankEU_NIST_POSITIVE.msp", append = TRUE)
+    sink("MassBank_NIST_POSITIVE.msp", append = TRUE)
     for (j in seq_along(ind)) {
       cat(paste0(ind[j], "\n"))
     }
@@ -52,7 +52,7 @@ for (i in seq_along(n)) {
   }
   
   if(ion_mode=="NEGATIVE" || ion_mode == "N" || ion_mode == "NEG") {
-    sink("MassBankEU_NIST_NEGATIVE.msp", append = TRUE)
+    sink("MassBank_NIST_NEGATIVE.msp", append = TRUE)
     for (j in seq_along(ind)) {
       cat(paste0(ind[j], "\n"))
     }
