@@ -279,7 +279,7 @@ MDPlotR <- function() {
               x = MDplot_x1,
               y = MDplot_y1,
               showlegend = input$show_leg,
-              type = "scatter",
+              type = "scattergl",
               size = intensity,
               mode = "markers",
               marker = list(
@@ -315,7 +315,7 @@ MDPlotR <- function() {
             plotly::add_trace(
               x = MDplot_x1,
               y = MDplot_y1,
-              type = "scatter",
+              type = "scattergl",
               size = intensity,
               mode = "markers",
               marker = list(
@@ -348,7 +348,7 @@ MDPlotR <- function() {
               data = m[s, , drop = F],
               x = MDplot_x1[s],
               y = MDplot_y1[s],
-              type = "scatter",
+              type = "scattergl",
               size = intensity[s],
               mode = "markers",
               marker = list(
@@ -376,7 +376,7 @@ MDPlotR <- function() {
               x = MDplot_x2,
               y = MDplot_y2,
               showlegend = input$show_leg,
-              type = "scatter",
+              type = "scattergl",
               size = intensity,
               mode = "markers",
               marker = list(
@@ -412,7 +412,7 @@ MDPlotR <- function() {
             plotly::add_trace(
               x = MDplot_x2,
               y = MDplot_y2,
-              type = "scatter",
+              type = "scattergl",
               size = intensity,
               mode = "markers",
               marker = list(
@@ -445,7 +445,7 @@ MDPlotR <- function() {
               data = m[t, , drop = F],
               x = MDplot_x2[t],
               y = MDplot_y2[t],
-              type = "scatter",
+              type = "scattergl",
               size = intensity[t],
               mode = "markers",
               marker = list(
